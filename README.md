@@ -179,7 +179,7 @@ This allows you to start adding requests immediately and only execute if the web
         //merge this and Queue inorder to extend 
         Object.assign(this,new Queue);
         
-        //extend 
+        //extend with some stuff your app needs, maybe npm publish your extention with js-queue as a dependancy? 
         Object.defineProperties(
             this,
             {
@@ -187,6 +187,11 @@ This allows you to start adding requests immediately and only execute if the web
                     enumerable:true,
                     get:checkStopped,
                     set:checkStopped
+                },
+                removeThirdItem:{ 
+                    enumerable:true,
+                    writable:false,
+                    value:removeThird
                 }
             }
         );
@@ -197,6 +202,17 @@ This allows you to start adding requests immediately and only execute if the web
         
         function checkStopped(){
             return this.stop;
+        }
+        
+        function removeThird(){
+            //get the queue content
+            var list=this.contents;
+            //modify the queue content
+            list.splice(2,1);
+            //save the modified queue content
+            this.contents=list;
+            
+            return this.contents;
         }
     }
     
