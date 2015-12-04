@@ -20,7 +20,7 @@ Works great in node.js, webpack, browserify, or any other commonjs loader or com
 |add|function|any number of functions|  |adds all parameter functions to queue and starts execution if autoRun is true, queue is not already running and queue is not forcibly stopped |
 |next|function|  |  |executes next item in queue if queue is not forcibly stopped|
 |clear|function|  |  |removes remaining items in the queue|
-|contents|Array|  | [] | Queue instance contents | 
+|contents|Array|  |  | Queue instance contents | 
 |autoRun|Bool|  | true |should autoRun queue when new item added|
 |stop|Bool|  | false |setting this to true will forcibly prevent the queue from executing|
 
