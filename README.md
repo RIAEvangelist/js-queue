@@ -21,6 +21,27 @@ needs more documentation
 |autoRun|bool||should autoRun queue when new item added|
 |stop|bool||setting this to true will forcibly prevent the queue from executing|
 
+# Basic queue use in node, react, browserify or webpack
+
+```javascript
+
+    var Queue=require('js-queue');
+    var queue=new Queue;
+    
+    for(var i=0; i<50; i++){
+        queue.add(makeRequest);
+    }
+    
+    function makeRequest(){
+        console.log('making some request');
+        
+        this.next();
+    }
+    
+```
+
+
+
 # Extending
 
 ```javascript
