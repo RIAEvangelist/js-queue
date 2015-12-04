@@ -1,19 +1,34 @@
-# js-queue
+# js-queue Is Great for any queue
 
-# Stable
-Works great in node.js, webpack, browserify, or any other commonjs loader or compiler. To use in plain old vanilla browser javascript without common js just replace the requires in the examples with script tags. We show that below too.
-
-## Great for
-
-1. socket communication
+1. socket message queuing
 2. async operations
 3. synchronous operations
 4. atomic operations
-3. code with requirements before executing code
-4. queues you want to start execution any time you add a new item
+3. code with requirements before executing
+4. queues you want to start running any time you add new items
 5. any simple or complex queue operations
 6. base class to extend
 7. anything else that needs a queue
+
+
+# Stable and easy to use
+Works great in node.js, webpack, browserify, or any other commonjs loader or compiler. To use in plain old vanilla browser javascript without common js just replace the requires in the examples with script tags. We show that below too.
+
+**npm install js-queue**
+
+npm info :  [See npm trends and stats for node-ipc](http://npm-stat.com/charts.html?package=js-queue&author=&from=&to=)  
+![node-ipc npm version](https://img.shields.io/npm/v/js-queue.svg) ![supported node version for js-queue](https://img.shields.io/node/v/js-queue.svg) ![total npm downloads for js-queue](https://img.shields.io/npm/dt/js-queue.svg) ![monthly npm downloads for js-queue](https://img.shields.io/npm/dm/js-queue.svg) ![npm licence for js-queue](https://img.shields.io/npm/l/js-queue.svg)
+
+[![RIAEvangelist](https://avatars3.githubusercontent.com/u/369041?v=3&s=100)](https://github.com/RIAEvangelist)
+
+GitHub info :  
+![js-queue GitHub Release](https://img.shields.io/github/release/RIAEvangelist/node-ipc.svg) ![GitHub license js-queue license](https://img.shields.io/github/license/RIAEvangelist/js-queue.svg) ![open issues for js-queue on GitHub](https://img.shields.io/github/issues/RIAEvangelist/js-queue.svg)
+
+Package details websites :
+* [GitHub.io site](http://riaevangelist.github.io/js-queue/ "js-queue documentation"). A prettier version of this site.
+* [NPM Module](https://www.npmjs.org/package/js-queue "js-queue npm module"). The npm page for the js-queue module.
+
+This work is licenced via the [DBAD Public Licence](http://www.dbad-license.org/).
 
 ## Exposed methods and values
 
