@@ -12,10 +12,15 @@ function Queue(){
                 writable:false,
                 value:run
             },
-            length:{
+            clear:{
                 enumerable:true,
-                get:getLength,
-                set:getLength
+                writable:false,
+                value:clearQueue
+            },
+            contents:{
+                enumerable:false,
+                get:getQueue,
+                set:setQueue
             },
             autoRun:{
                 enumerable:true,
@@ -33,9 +38,19 @@ function Queue(){
     var queue=[];
     var running=false;
     var stop=false;
-
-    function getLength(){
-        return queue.length;
+    
+    function clearQueue(){
+        queue=[];
+        return queue;
+    }
+    
+    function getQueue(){
+        return queue;
+    }
+    
+    function setQueue(val){
+        queue=val;
+        return queue;
     }
 
     function addToQueue(){
