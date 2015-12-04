@@ -15,6 +15,8 @@ Works great in node.js, webpack, browserify, or any other commonjs loader or com
 6. base class to extend
 7. anything else that needs a queue
 
+## Exposed methods and values
+
 |key|type|paramaters|default|description|
 |----|----|----|----|----|
 |add|function|any number of functions|  |adds all parameter functions to queue and starts execution if autoRun is true, queue is not already running and queue is not forcibly stopped |
