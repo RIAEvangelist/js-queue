@@ -37,7 +37,7 @@ This work is licenced via the [DBAD Public Licence](http://www.dbad-license.org/
 |add|function|any number of functions|  |adds all parameter functions to queue and starts execution if autoRun is true, queue is not already running and queue is not forcibly stopped |
 |next|function|  |  |executes next item in queue if queue is not forcibly stopped|
 |clear|function|  |  |removes remaining items in the queue|
-|contents|Array|  |  | Queue instance contents | 
+|contents|Array|  |  | Queue instance contents |
 |autoRun|Bool|  | true |should autoRun queue when new item added|
 |stop|Bool|  | false |setting this to true will forcibly prevent the queue from executing|
 
@@ -48,19 +48,19 @@ This work is licenced via the [DBAD Public Licence](http://www.dbad-license.org/
     var Queue=require('js-queue');
     //create a new queue instance
     var queue=new Queue;
-    
+
     for(var i=0; i<50; i++){
         //add a bunch of stuff to the queue
         queue.add(makeRequest);
     }
-    
+
     function makeRequest(){
         //do stuff
         console.log('making some request');
-        
+
         this.next();
     }
-    
+
 ```
 
 ### Basic browser use
@@ -76,14 +76,14 @@ The only difference is including via a script tag instead of using require.
                     <script>
                             console.log('my awesome app script');
                             var queue=new Queue;
-                            
+
                             for(var i=0; i<50; i++){
                                 queue.add(makeRequest);
                             }
-                            
+
                             function makeRequest(){
                                 console.log('making some request');
-                                
+
                                 this.next();
                             }
                     </script>
@@ -91,7 +91,7 @@ The only difference is including via a script tag instead of using require.
             <body>
             </body>
     </html>
-    
+
 ```
 
 ### Basic use with websockets in node, react, browserify, webpack or any other commonjs implementation
@@ -101,25 +101,25 @@ This allows you to start adding requests immediately and only execute if the web
 ```javascript
 
     var Queue=require('js-queue');
-    
-    //ws-share just makes it easier to share websocket code and ensure you don't open a websocket more than once 
+
+    //ws-share just makes it easier to share websocket code and ensure you don't open a websocket more than once
     var WS=require('ws-share');
-    
-    //js-message makes it easy to create and parse normalized JSON messages. 
+
+    //js-message makes it easy to create and parse normalized JSON messages.
     var Message=require('js-message');
-    
+
     //create a new queue instance
     var queue=new Queue;
-    
+
     //force stop until websocket opened
     queue.stop=true;
-    
+
     var ws=null;
-    
+
     function startWS(){
         //websocket.org rocks
         ws=new WS('wss://echo.websocket.org/?encoding=text');
-        
+
         ws.on(
             'open',
             function(){
@@ -127,7 +127,7 @@ This allows you to start adding requests immediately and only execute if the web
                     'message',
                     handleResponse
                 );
-                
+
                 //now that websocket is opened allow auto execution
                 queue.stop=false;
                 queue.next();
@@ -144,7 +144,7 @@ This allows you to start adding requests immediately and only execute if the web
                 throw(err);
             }
         );
-    
+
         ws.on(
             'close',
             function(){
@@ -153,34 +153,34 @@ This allows you to start adding requests immediately and only execute if the web
             }
         );
     }
-    
+
     //simulate a lot of requests being queued up for the websocket
     for(var i=0; i<50; i++){
         queue.add(makeRequest);
     }
-    
+
     var messageID=0;
-    
+
     function handleResponse(e){
         var message=new Message;
         message.load(e.data);
-        
+
         console.log(message.type,message.data);
     }
-    
+
     function makeRequest(){
         messageID++;
         var message=new Message;
         message.type='testMessage';
         message.data=messageID;
-        
+
         ws.send(message.JSON);
-        
+
         this.next();
     }
 
     startWS();
-    
+
 ```
 
 
@@ -189,12 +189,15 @@ This allows you to start adding requests immediately and only execute if the web
 ```javascript
 
     var Queue=require('js-queue');
-    
+
+    //MyAwesomeQueue inherits from Queue
+    MyAwesomeQueue.prototype = new Queue;
+    //Constructor will extend Queue
+    MyAwesomeQueue.constructor = MyAwesomeQueue;
+
     function MyAwesomeQueue(){
-        //merge this and Queue inorder to extend 
-        Object.assign(this,new Queue);
-        
-        //extend with some stuff your app needs, maybe npm publish your extention with js-queue as a dependancy? 
+        //extend with some stuff your app needs,
+        //maybe npm publish your extention with js-queue as a dependancy?
         Object.defineProperties(
             this,
             {
@@ -203,22 +206,22 @@ This allows you to start adding requests immediately and only execute if the web
                     get:checkStopped,
                     set:checkStopped
                 },
-                removeThirdItem:{ 
+                removeThirdItem:{
                     enumerable:true,
                     writable:false,
                     value:removeThird
                 }
             }
         );
-        
+
         //enforce Object.assign for extending by locking down Class structure
         //no willy nilly cowboy coding
         Object.seal(this);
-        
+
         function checkStopped(){
             return this.stop;
         }
-        
+
         function removeThird(){
             //get the queue content
             var list=this.contents;
@@ -226,9 +229,9 @@ This allows you to start adding requests immediately and only execute if the web
             list.splice(2,1);
             //save the modified queue content
             this.contents=list;
-            
+
             return this.contents;
         }
     }
-    
+
 ```
