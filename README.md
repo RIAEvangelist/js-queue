@@ -193,7 +193,7 @@ This allows you to start adding requests immediately and only execute if the web
     //MyAwesomeQueue inherits from Queue
     MyAwesomeQueue.prototype = new Queue;
     //Constructor will extend Queue
-    MyAwesomeQueue.constructor = MyAwesomeQueue;
+    MyAwesomeQueue.prototype.constructor = MyAwesomeQueue;
 
     function MyAwesomeQueue(){
         //extend with some stuff your app needs,
