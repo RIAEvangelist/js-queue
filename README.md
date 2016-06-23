@@ -72,7 +72,7 @@ The only difference is including via a script tag instead of using require.
     <html>
             <head>
                     <!-- this is the only difference -->
-                    <script src='./queue.js'></script>
+                    <script src='./queue-vanilla.js'></script>
                     <script>
                             console.log('my awesome app script');
                             var queue=new Queue;
