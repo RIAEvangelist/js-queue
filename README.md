@@ -9,10 +9,13 @@
 5. any simple or complex queue operations
 6. base class to extend
 7. anything else that needs a queue
+8. Anything which needs a stack instead of a queue.
 
 
 # Stable and easy to use
 Works great in node.js, webpack, browserify, or any other commonjs loader or compiler. To use in plain old vanilla browser javascript without common js just replace the requires in the examples with script tags. We show that below too.
+
+` js-queue ` also exposes the ` easy-stack ` stack via ` require('js-queue/stack.js') ` this file exposes an ES6 stack which allows for Last In First Out (LIFO) queuing. This can come in handy depending on your application needs, check out the [easy-stack javascript documentation](https://github.com/RIAEvangelist/easy-stack) it follows the ` js-queue ` interface but is node 6 or greater as it uses ES6 classes.  
 
 **npm install js-queue**
 

@@ -1,4 +1,4 @@
-function Queue(){
+function Queue(asStack){
     Object.defineProperties(
         this,
         {
@@ -38,16 +38,16 @@ function Queue(){
     var queue=[];
     var running=false;
     var stop=false;
-    
+
     function clearQueue(){
         queue=[];
         return queue;
     }
-    
+
     function getQueue(){
         return queue;
     }
-    
+
     function setQueue(val){
         queue=val;
         return queue;
