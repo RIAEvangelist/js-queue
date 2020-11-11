@@ -31,7 +31,7 @@ Package details websites :
 * [GitHub.io site](http://riaevangelist.github.io/js-queue/ "js-queue documentation"). A prettier version of this site.
 * [NPM Module](https://www.npmjs.org/package/js-queue "js-queue npm module"). The npm page for the js-queue module.
 
-This work is licenced via the [DBAD Public Licence](http://www.dbad-license.org/).
+This work is licenced via the MIT Licence.
 
 ## Exposed methods and values
 
