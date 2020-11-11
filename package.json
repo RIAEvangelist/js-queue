@@ -1,6 +1,6 @@
 {
   "name": "js-queue",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Simple JS queue with auto run for node and browsers",
   "main": "queue.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "react"
   ],
   "author": "Brandon Nozaki Miller",
-  "license": "DBAD",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/RIAEvangelist/js-queue/issues"
   },
