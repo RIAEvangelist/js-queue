@@ -30,6 +30,6 @@
   },
   "homepage": "https://github.com/RIAEvangelist/js-queue#readme",
   "dependencies": {
-    "easy-stack": "^1.0.0"
+    "easy-stack": "^1.0.1"
   }
 }
