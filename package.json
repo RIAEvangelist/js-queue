@@ -1,6 +1,6 @@
 {
   "name": "js-queue",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Simple JS queue with auto run for node and browsers",
   "main": "queue.js",
   "scripts": {
