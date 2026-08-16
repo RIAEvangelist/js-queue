@@ -63,7 +63,7 @@ npm run coverage:chrome</code></pre></div>
 
         <section id="ci" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">Delivery gates</p><h2>Compatibility and package shape are explicit.</h2></div><p>CI runs modern <code>vanilla-test</code> suites across platforms, the dependency-free fallback against older supported Node releases, native coverage in Chrome, and a packed-artifact install check. Pages deploys only after that <code>main</code> run succeeds.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">Delivery gates</p><h2>Compatibility and package shape are explicit.</h2></div><p>CI runs modern <code>vanilla-test</code> suites across platforms, a fallback harness with production dependencies only on older supported Node releases, native coverage in Chrome, and a packed-artifact install check. Pages deploys only after that <code>main</code> run succeeds.</p></div>
                 <div class="table-wrap"><table><caption>Continuous integration jobs</caption><thead><tr><th scope="col">Gate</th><th scope="col">Runtimes</th><th scope="col">Proves</th></tr></thead><tbody>
                     <tr><td>Platforms</td><td>Node 24 · Linux, macOS, Windows</td><td>The full suite behaves consistently across operating systems.</td></tr>
                     <tr><td>Minimum</td><td>Node 22.12</td><td>The <code>vanilla-test</code> development baseline remains valid.</td></tr>

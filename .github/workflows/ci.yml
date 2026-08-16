@@ -90,7 +90,12 @@ jobs:
       - name: Show runtime version
         run: node --version
 
-      - name: Run dependency-free behavior and package contracts
+      - name: Install production dependencies without modern test tooling
+        env:
+          NODE_ENV: production
+        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+
+      - name: Run behavior and package contracts with the fallback harness
         run: npm run test:legacy
 
   coverage:

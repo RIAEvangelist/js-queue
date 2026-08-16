@@ -81,7 +81,7 @@ Every task receives the queue as `this`. Invalid tasks are rejected before any i
 | `js-queue/queue-vanilla.js` | classic browser script | Publishes `globalThis.Queue`. |
 | `js-queue/stack` | ESM or CommonJS | The modernized `easy-stack` 2.0 LIFO entry. |
 
-The runtime supports Node.js 12.22 and newer. The development suite uses `vanilla-test` 2.1.1 on Node.js 22.12 or newer, while a dependency-free compatibility runner executes all behavior and package contracts on older supported Node releases.
+The runtime supports Node.js 12.22 and newer. The development suite uses `vanilla-test` 2.1.1 on Node.js 22.12 or newer, while a test-tooling-free compatibility runner executes all behavior and package contracts on older supported Node releases with production dependencies only.
 
 ## Test and coverage evidence
 

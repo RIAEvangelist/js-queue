@@ -127,12 +127,15 @@ test('the repository header is a substantial panoramic PNG',()=>{
 
 test('vanilla-test, coverage, package checks, and Pages deployment are wired',()=>{
     const packageData=JSON.parse(read('package.json'));
+    const ciWorkflow=read('.github/workflows/ci.yml');
     const pagesWorkflow=read('.github/workflows/pages.yml');
     equal(packageData.devDependencies['vanilla-test'],'2.1.1');
     equal(packageData.scripts.coverage,'vanilla-test coverage');
     equal(read('test/harness.js').includes("import('vanilla-test')"),true);
-    equal(read('.github/workflows/ci.yml').includes('npm run coverage'),true);
-    equal(read('.github/workflows/ci.yml').includes("VANILLA_TEST_CHROME_NO_SANDBOX: '1'"),true);
+    equal(ciWorkflow.includes('npm run coverage'),true);
+    equal(ciWorkflow.includes("VANILLA_TEST_CHROME_NO_SANDBOX: '1'"),true);
+    equal(ciWorkflow.includes('NODE_ENV: production'),true);
+    equal(ciWorkflow.includes('npm install --ignore-scripts --no-audit --no-fund --package-lock=false'),true);
     equal(pagesWorkflow.includes('workflow_run:'),true);
     equal(pagesWorkflow.includes("github.event.workflow_run.conclusion == 'success'"),true);
     equal(pagesWorkflow.includes('actions/deploy-pages'),true);
