@@ -1,13 +1,66 @@
 {
   "name": "js-queue",
-  "version": "2.0.2",
-  "description": "Simple JS queue with auto run for node and browsers",
-  "main": "queue.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "3.0.0",
+  "description": "A tiny FIFO task queue with explicit flow control for Node and browsers",
+  "type": "module",
+  "main": "./queue.cjs",
+  "module": "./queue.js",
+  "browser": "./queue.js",
+  "exports": {
+    ".": {
+      "import": "./queue.js",
+      "require": "./queue.cjs",
+      "default": "./queue.js"
+    },
+    "./queue": {
+      "import": "./queue.js",
+      "require": "./queue.cjs"
+    },
+    "./queue.js": {
+      "import": "./queue.js",
+      "require": "./queue.cjs"
+    },
+    "./queue-vanilla.js": "./queue-vanilla.js",
+    "./stack": {
+      "import": "./stack.js",
+      "require": "./stack.cjs"
+    },
+    "./stack.js": {
+      "import": "./stack.js",
+      "require": "./stack.cjs"
+    },
+    "./package.json": "./package.json"
   },
+  "files": [
+    "queue.js",
+    "queue.cjs",
+    "queue-vanilla.js",
+    "stack.js",
+    "stack.cjs",
+    "assets/js-queue-header.png",
+    "README.md",
+    "CHANGELOG.md",
+    "MIGRATION.md",
+    "licence.md"
+  ],
+  "sideEffects": [
+    "./queue-vanilla.js"
+  ],
   "engines": {
-    "node": ">=1.0.0"
+    "node": ">=12.22.0"
+  },
+  "scripts": {
+    "test": "node ./scripts/test.js",
+    "test:core": "node ./scripts/test.js core",
+    "test:package": "node ./scripts/test.js package",
+    "test:server": "node ./scripts/test.js server",
+    "test:docs": "node ./scripts/test.js docs",
+    "test:legacy": "node ./scripts/test.js legacy",
+    "coverage": "vanilla-test coverage",
+    "coverage:node": "vanilla-test coverage node",
+    "coverage:chrome": "vanilla-test coverage chrome",
+    "start": "node ./scripts/serve.js",
+    "check": "npm test && npm run coverage:node"
   },
   "repository": {
     "type": "git",
@@ -15,21 +68,25 @@
   },
   "keywords": [
     "queue",
-    "node",
-    "js",
-    "auto",
-    "run",
-    "execute",
+    "fifo",
+    "task-queue",
+    "flow-control",
+    "async",
     "browser",
-    "react"
+    "node",
+    "esm",
+    "commonjs"
   ],
   "author": "Brandon Nozaki Miller",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/RIAEvangelist/js-queue/issues"
   },
-  "homepage": "https://github.com/RIAEvangelist/js-queue#readme",
+  "homepage": "https://riaevangelist.github.io/js-queue/",
   "dependencies": {
-    "easy-stack": "^1.0.1"
+    "easy-stack": "2.0.0"
+  },
+  "devDependencies": {
+    "vanilla-test": "2.1.1"
   }
 }

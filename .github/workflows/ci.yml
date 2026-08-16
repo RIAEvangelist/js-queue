@@ -1,0 +1,198 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  platforms:
+    name: Node 24 / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run behavior, package, and documentation tests
+        run: npm test
+
+  minimum-tooling:
+    name: vanilla-test minimum / Node 22.12
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Node.js 22.12
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '22.12.0'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run full suite
+        run: npm test
+
+  compatibility:
+    name: Runtime compatibility / Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - '12.22.12'
+          - '18'
+          - '20'
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Node.js ${{ matrix.node }}
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Show runtime version
+        run: node --version
+
+      - name: Run dependency-free behavior and package contracts
+        run: npm run test:legacy
+
+  coverage:
+    name: Native V8 coverage / Node 24 + Chrome
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install Google Chrome Stable
+        id: chrome
+        uses: browser-actions/setup-chrome@2e1d749697dd1612b833dba4a722266286fbefcd # v2
+        with:
+          chrome-version: stable
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run independent Node and Chrome coverage
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          VANILLA_TEST_CHROME_NO_SANDBOX: '1'
+        run: npm run coverage -- --chrome-path "$CHROME_PATH"
+
+      - name: Upload native V8 reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: native-v8-coverage
+          path: coverage/
+          if-no-files-found: error
+          retention-days: 14
+
+  package-smoke:
+    name: Packed npm artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Pack, inspect, install, and execute the artifact
+        shell: bash
+        run: |
+          TARBALL="$(npm pack --silent)"
+          TARBALL_PATH="$GITHUB_WORKSPACE/$TARBALL"
+          PACK_FILE_LIST="$RUNNER_TEMP/js-queue-pack-files.txt"
+
+          test -f "$TARBALL_PATH"
+          tar -tf "$TARBALL_PATH" > "$PACK_FILE_LIST"
+          for REQUIRED_FILE in \
+            package/package.json \
+            package/queue.js \
+            package/queue.cjs \
+            package/queue-vanilla.js \
+            package/stack.js \
+            package/stack.cjs \
+            package/assets/js-queue-header.png \
+            package/README.md \
+            package/CHANGELOG.md \
+            package/MIGRATION.md \
+            package/licence.md
+          do
+            grep --fixed-strings --line-regexp --quiet -- "$REQUIRED_FILE" "$PACK_FILE_LIST"
+          done
+
+          if grep --extended-regexp --quiet '^package/(coverage|examples|scripts|test|\.github)/' "$PACK_FILE_LIST"; then
+            echo "Packed artifact contains repository-only files."
+            exit 1
+          fi
+
+          SMOKE_DIRECTORY="$RUNNER_TEMP/js-queue-package-smoke"
+          mkdir -p "$SMOKE_DIRECTORY"
+          cd "$SMOKE_DIRECTORY"
+          npm init --yes
+          npm install "$TARBALL_PATH"
+          node --input-type=module --eval "import Queue from 'js-queue'; const order=[]; const queue=new Queue; queue.add(function(){order.push(1);this.next();},function(){order.push(2);this.next();}); if(order.join(',') !== '1,2' || queue.running || queue.size) process.exitCode=1;"
+          node --eval "const Queue=require('js-queue'); const queue=new Queue; if(queue.size !== 0 || queue.running) process.exitCode=1;"
+          node --eval "const Stack=require('js-queue/stack.js'); const stack=new Stack; if(typeof stack.add !== 'function') process.exitCode=1;"
+
+      - name: Upload packed npm artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: packed-npm-artifact
+          path: '*.tgz'
+          if-no-files-found: error
+          retention-days: 14

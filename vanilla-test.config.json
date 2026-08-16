@@ -1,0 +1,28 @@
+{
+  "entry": "./test/CI.js",
+  "reportsDirectory": "./coverage",
+  "thresholds": {
+    "statements": 100,
+    "branches": 100,
+    "functions": 100,
+    "lines": 100
+  },
+  "node": {
+    "include": [
+      "queue.js"
+    ]
+  },
+  "chrome": {
+    "include": [
+      "queue.js"
+    ],
+    "imports": {
+      "ansi-colors-es6": "./node_modules/ansi-colors-es6/index.js",
+      "strong-type": "./node_modules/strong-type/index.js",
+      "vanilla-test": "./node_modules/vanilla-test/index.js"
+    },
+    "headless": true,
+    "executablePath": null
+  },
+  "timeoutMs": 30000
+}

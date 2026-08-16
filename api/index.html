@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Complete js-queue API reference for methods, state, return values, and errors.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="API reference · js-queue">
+    <meta property="og:description" content="Complete js-queue API reference for methods, state, return values, and errors.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/api/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="API reference · js-queue">
+    <meta name="twitter:description" content="Complete js-queue API reference for methods, state, return values, and errors.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/api/">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script type="module" src="../assets/site.js"></script>
+    <title>API reference · js-queue</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/" aria-current="page">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+
+    <main id="content">
+        <header id="api" class="page-hero shell">
+            <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>API</li></ol>
+            <p class="eyebrow">Complete surface</p>
+            <h1>Small enough to <span>hold in your head.</span></h1>
+            <p class="lede">Three methods coordinate work. Four state properties expose and control the queue.</p>
+        </header>
+
+        <section id="methods" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Methods</p><h2>Append, advance, or clear.</h2></div><p>Methods live on <code>Queue.prototype</code>. Every task is called with the queue instance as <code>this</code>.</p></div>
+                <div class="method-grid">
+                    <article class="method"><span class="tag">method</span><h3>add(...tasks)</h3><p>Validates every argument, appends them in order, and starts the queue when eligible.</p><dl><dt>Accepts</dt><dd>Zero or more functions</dd><dt>Returns</dt><dd>The queue instance</dd><dt>Throws</dt><dd><code>TypeError</code> if any value is not a function; nothing is appended from that call</dd></dl></article>
+                    <article class="method"><span class="tag">method</span><h3>next()</h3><p>Runs and removes the first pending task unless <code>stop</code> is true. Calling it on an empty queue settles the queue as idle.</p><dl><dt>Accepts</dt><dd>No arguments</dd><dt>Returns</dt><dd><code>undefined</code></dd><dt>Throws</dt><dd>Rethrows a synchronous task error after resetting <code>running</code></dd></dl></article>
+                    <article class="method"><span class="tag">method</span><h3>clear()</h3><p>Replaces pending contents with a new empty array. The currently executing task continues.</p><dl><dt>Accepts</dt><dd>No arguments</dd><dt>Returns</dt><dd>The new empty array</dd><dt>Effect</dt><dd>Pending <code>size</code> becomes <code>0</code></dd></dl></article>
+                    <article class="method"><span class="tag">constructor</span><h3>new Queue()</h3><p>Creates an idle queue with automatic start enabled and execution unblocked.</p><dl><dt>autoRun</dt><dd><code>true</code></dd><dt>stop</dt><dd><code>false</code></dd><dt>running</dt><dd><code>false</code></dd><dt>size</dt><dd><code>0</code></dd></dl></article>
+                </div>
+            </div>
+        </section>
+
+        <section id="state" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">State</p><h2>Observe two values. Control two values.</h2></div><p><code>size</code> and <code>running</code> are read-only getters. <code>autoRun</code>, <code>stop</code>, and <code>contents</code> are intentionally writable control surfaces.</p></div>
+                <div class="table-wrap"><table><caption>Queue state</caption><thead><tr><th scope="col">Member</th><th scope="col">Default</th><th scope="col">Writable</th><th scope="col">Meaning</th></tr></thead><tbody>
+                    <tr><td><code>contents</code></td><td><code>[]</code></td><td>Yes</td><td>The actual pending function array. Replacement validates the complete array.</td></tr>
+                    <tr><td><code>size</code></td><td><code>0</code></td><td>No</td><td>The current pending item count; it excludes the active task.</td></tr>
+                    <tr><td><code>running</code></td><td><code>false</code></td><td>No</td><td>Whether a task currently owns execution.</td></tr>
+                    <tr><td><code>autoRun</code></td><td><code>true</code></td><td>Yes</td><td>Whether an eligible <code>add()</code> starts the front task.</td></tr>
+                    <tr><td><code>stop</code></td><td><code>false</code></td><td>Yes</td><td>Whether <code>next()</code> should hold pending work.</td></tr>
+                </tbody></table></div>
+                <div class="callout callout--amber"><strong><code>stop=false</code> does not start work by itself.</strong><p>After opening a stop gate, call <code>next()</code> to resume existing pending work. A later <code>add()</code> can also start an idle queue when <code>autoRun</code> is true.</p></div>
+                <div class="page-next"><p>See these members composed into connection gates and recovery flows.</p><a class="button button--primary" href="../patterns/">Open patterns</a></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · API reference</p><nav aria-label="Project links"><a href="../guide/">Start</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+</body>
+</html>

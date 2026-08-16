@@ -1,76 +1,79 @@
-function Queue(asStack){
-    Object.defineProperties(
-        this,
-        {
-            add:{
-                enumerable:true,
-                writable:false,
-                value:addToQueue
-            },
-            next:{
-                enumerable:true,
-                writable:false,
-                value:run
-            },
-            clear:{
-                enumerable:true,
-                writable:false,
-                value:clearQueue
-            },
-            contents:{
-                enumerable:false,
-                get:getQueue,
-                set:setQueue
-            },
-            autoRun:{
-                enumerable:true,
-                writable:true,
-                value:true
-            },
-            stop:{
-                enumerable:true,
-                writable:true,
-                value:false
-            }
-        }
-    );
+const queues=new WeakMap;
+const states=new WeakMap;
 
-    var queue=[];
-    var running=false;
-    var stop=false;
-
-    function clearQueue(){
-        queue=[];
-        return queue;
-    }
-
-    function getQueue(){
-        return queue;
-    }
-
-    function setQueue(val){
-        queue=val;
-        return queue;
-    }
-
-    function addToQueue(){
-        for(var i in arguments){
-            queue.push(arguments[i]);
-        }
-        if(!running && !this.stop && this.autoRun){
-            this.next();
-        }
-    }
-
-    function run(){
-        running=true;
-        if(queue.length<1 || this.stop){
-            running=false;
-            return;
-        }
-
-        queue.shift().bind(this)();
+function validateTasks(tasks){
+    const invalidIndex=tasks.findIndex(task=>typeof task !== 'function');
+    if(invalidIndex !== -1){
+        throw new TypeError(`Queue task at index ${invalidIndex} must be a function.`);
     }
 }
 
-module.exports=Queue;
+class Queue{
+    constructor(){
+        queues.set(this,[]);
+        states.set(this,{running:false});
+        this.autoRun=true;
+        this.stop=false;
+    }
+
+    add(...tasks){
+        validateTasks(tasks);
+        queues.get(this).push(...tasks);
+
+        if(!this.running && !this.stop && this.autoRun){
+            this.next();
+        }
+
+        return this;
+    }
+
+    next(){
+        const queue=queues.get(this);
+        const state=states.get(this);
+
+        if(this.stop || queue.length === 0){
+            state.running=false;
+            return;
+        }
+
+        state.running=true;
+        const task=queue.shift();
+
+        try{
+            task.call(this);
+        }catch(error){
+            state.running=false;
+            throw error;
+        }
+    }
+
+    clear(){
+        const queue=[];
+        queues.set(this,queue);
+        return queue;
+    }
+
+    get contents(){
+        return queues.get(this);
+    }
+
+    set contents(tasks){
+        if(!Array.isArray(tasks)){
+            throw new TypeError('Queue contents must be an array of functions.');
+        }
+
+        validateTasks(tasks);
+        queues.set(this,tasks);
+    }
+
+    get running(){
+        return states.get(this).running;
+    }
+
+    get size(){
+        return queues.get(this).length;
+    }
+}
+
+export {Queue};
+export default Queue;

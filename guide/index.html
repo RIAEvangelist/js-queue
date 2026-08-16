@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Install js-queue and run a first explicit FIFO task sequence in Node or a browser.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="Quick start · js-queue">
+    <meta property="og:description" content="Install js-queue and run a first explicit FIFO task sequence.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/guide/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Quick start · js-queue">
+    <meta name="twitter:description" content="Install js-queue and run a first explicit FIFO task sequence.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/guide/">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script type="module" src="../assets/site.js"></script>
+    <title>Quick start · js-queue</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/" aria-current="page">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+
+    <main id="content">
+        <header id="start" class="page-hero shell">
+            <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Quick start</li></ol>
+            <p class="eyebrow">Five-minute path</p>
+            <h1>Run work <span>in order.</span></h1>
+            <p class="lede">Install one package, create one queue, and make each task explicitly release the next.</p>
+        </header>
+
+        <section id="install" class="section section--compact">
+            <div class="shell split">
+                <div class="prose"><p class="eyebrow">1 · Install</p><h2>Add the package.</h2><p>Node.js 12.22 or newer can consume the runtime. No compiler, transpiler, or bundler is required.</p><div class="code-block"><pre><code>npm install js-queue</code></pre></div></div>
+                <aside class="side-panel"><h2>Choose a loader</h2><nav><a href="../browser/#esm">Native browser ESM</a><a href="../browser/#classic">Classic script global</a><a href="../migration/#changes">Version 2 compatibility</a></nav></aside>
+            </div>
+        </section>
+
+        <section id="first-queue" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">2 · Create</p><h2>Add functions in FIFO order.</h2></div><p><code>add()</code> validates the complete batch, appends it, and starts the front item when the queue is idle, not stopped, and configured to auto-run.</p></div>
+                <div class="code-block"><pre><code>import Queue from 'js-queue';
+
+const queue=new Queue;
+
+queue.add(
+    function(){
+        console.log('prepare');
+        this.next();
+    },
+    function(){
+        console.log('send');
+        this.next();
+    },
+    function(){
+        console.log('record');
+        this.next();
+    }
+);</code></pre></div>
+                <div class="callout"><strong>Use regular functions when you need the queue context.</strong><p>An arrow function keeps its surrounding <code>this</code>; it does not receive the queue binding.</p></div>
+            </div>
+        </section>
+
+        <section id="model" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">3 · Release</p><h2>The task decides when it is done.</h2></div><p><code>js-queue</code> never treats a return value or promise as an automatic completion signal. Call <code>this.next()</code> at the exact release point.</p></div>
+                <div class="grid grid--two">
+                    <article class="card"><span class="card__label">Synchronous</span><h3>Release inline</h3><div class="code-block"><pre><code>queue.add(function(){
+    updateCache();
+    this.next();
+});</code></pre></div></article>
+                    <article class="card"><span class="card__label">Asynchronous</span><h3>Release in finally</h3><div class="code-block"><pre><code>queue.add(function(){
+    saveRecord()
+        .finally(()=>this.next());
+});</code></pre></div></article>
+                </div>
+                <div class="page-next"><p>Ready for stop gates, error recovery, and real async coordination?</p><a class="button button--primary" href="../patterns/">Open patterns</a></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · quick start</p><nav aria-label="Project links"><a href="../api/">API</a><a href="../browser/">Browser</a><a href="../migration/">Migration</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+</body>
+</html>

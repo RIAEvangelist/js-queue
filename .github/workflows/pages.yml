@@ -1,0 +1,128 @@
+name: GitHub Pages
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Verify and assemble curated site
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out verified commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install Google Chrome Stable
+        id: chrome
+        uses: browser-actions/setup-chrome@2e1d749697dd1612b833dba4a722266286fbefcd # v2
+        with:
+          chrome-version: stable
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify behavior, package, server, and documentation contracts
+        run: npm test
+
+      - name: Verify Node and Chrome coverage gates
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          VANILLA_TEST_CHROME_NO_SANDBOX: '1'
+        run: npm run coverage -- --chrome-path "$CHROME_PATH"
+
+      - name: Verify package contents
+        run: npm pack --dry-run
+
+      - name: Assemble curated GitHub Pages site
+        shell: bash
+        run: |
+          mkdir -p \
+            _site/guide \
+            _site/api \
+            _site/patterns \
+            _site/browser \
+            _site/examples \
+            _site/stack \
+            _site/migration \
+            _site/testing \
+            _site/assets \
+            _site/reports/node \
+            _site/reports/chrome
+
+          cp index.html queue.js queue-vanilla.js package.json CHANGELOG.md MIGRATION.md licence.md .nojekyll _site/
+          cp guide/index.html _site/guide/
+          cp api/index.html _site/api/
+          cp patterns/index.html _site/patterns/
+          cp browser/index.html _site/browser/
+          cp examples/index.html examples/demo.js _site/examples/
+          cp stack/index.html _site/stack/
+          cp migration/index.html _site/migration/
+          cp testing/index.html _site/testing/
+          cp assets/site.css assets/site.js assets/js-queue-header.png _site/assets/
+          cp --recursive coverage/node/. _site/reports/node/
+          cp --recursive coverage/chrome/. _site/reports/chrome/
+
+          for REQUIRED_PATH in \
+            _site/index.html \
+            _site/guide/index.html \
+            _site/api/index.html \
+            _site/patterns/index.html \
+            _site/browser/index.html \
+            _site/examples/index.html \
+            _site/examples/demo.js \
+            _site/stack/index.html \
+            _site/migration/index.html \
+            _site/testing/index.html \
+            _site/assets/js-queue-header.png \
+            _site/queue.js \
+            _site/reports/node/index.html \
+            _site/reports/chrome/index.html \
+            _site/.nojekyll
+          do
+            test -f "$REQUIRED_PATH"
+          done
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5

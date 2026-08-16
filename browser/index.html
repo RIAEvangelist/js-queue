@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Use js-queue directly in browsers with native ES modules or the classic global script.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="Browser use · js-queue">
+    <meta property="og:description" content="Use js-queue directly in browsers with native ES modules or the classic global script.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/browser/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Browser use · js-queue">
+    <meta name="twitter:description" content="Use js-queue directly in browsers with native ES modules or the classic global script.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/browser/">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script type="module" src="../assets/site.js"></script>
+    <title>Browser use · js-queue</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+
+    <main id="content">
+        <header id="browser" class="page-hero shell">
+            <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Browser</li></ol>
+            <p class="eyebrow">No bundle required</p>
+            <h1>Choose modules or <span>one global.</span></h1>
+            <p class="lede">The ESM queue has no Node imports. The classic build publishes the same queue behavior as <code>globalThis.Queue</code>.</p>
+        </header>
+
+        <section id="esm" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Native ESM</p><h2>Import the source directly.</h2></div><p>Serve the files over HTTP and load the checked-in module with <code>type="module"</code>. A bundler is optional, not required.</p></div>
+                <div class="code-block"><pre><code>&lt;script type="module"&gt;
+    import Queue from './node_modules/js-queue/queue.js';
+
+    const queue=new Queue;
+    queue.add(function(){
+        document.body.dataset.ready='true';
+        this.next();
+    });
+&lt;/script&gt;</code></pre></div>
+                <div class="callout"><strong>Package-name imports need a resolver.</strong><p>Inside a browser, use a relative file URL as above, an import map, or the package support built into your existing bundler.</p></div>
+            </div>
+        </section>
+
+        <section id="classic" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Classic script</p><h2>Keep the familiar global.</h2></div><p><code>queue-vanilla.js</code> is intentionally not an ES module. Load it with a normal script tag, then construct <code>Queue</code> from the global scope.</p></div>
+                <div class="code-block"><pre><code>&lt;script src='./node_modules/js-queue/queue-vanilla.js'&gt;&lt;/script&gt;
+&lt;script&gt;
+    const queue=new Queue;
+
+    queue.add(function(){
+        console.log('classic browser task');
+        this.next();
+    });
+&lt;/script&gt;</code></pre></div>
+                <div class="table-wrap"><table><caption>Browser choices</caption><thead><tr><th scope="col">File</th><th scope="col">Script type</th><th scope="col">Access</th></tr></thead><tbody><tr><td><code>queue.js</code></td><td><code>type="module"</code></td><td>Default or named <code>Queue</code> export</td></tr><tr><td><code>queue-vanilla.js</code></td><td>Classic</td><td><code>globalThis.Queue</code></td></tr></tbody></table></div>
+            </div>
+        </section>
+
+        <section id="serve" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Local development</p><h2>Use HTTP, not <code>file:</code>.</h2></div><p>Browser module security rules are designed around origins. This repository includes a dependency-free static server for docs and examples.</p></div>
+                <div class="code-block"><pre><code>npm start
+# open http://127.0.0.1:8000/examples/</code></pre></div>
+                <div class="page-next"><p>The live example imports the exact ESM queue published by this site.</p><a class="button button--primary" href="../examples/">Open live example</a></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · browser loading</p><nav aria-label="Project links"><a href="../guide/">Start</a><a href="../examples/">Examples</a><a href="../migration/">Migration</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+</body>
+</html>

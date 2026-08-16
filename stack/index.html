@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Use the modern easy-stack 2 LIFO entry exposed by js-queue and choose between queue and stack order.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="Stack entry · js-queue">
+    <meta property="og:description" content="Use the modern easy-stack 2 LIFO entry and choose between FIFO and LIFO order.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/stack/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stack entry · js-queue">
+    <meta name="twitter:description" content="Use the modern easy-stack 2 LIFO entry and choose between FIFO and LIFO order.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/stack/">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script type="module" src="../assets/site.js"></script>
+    <title>Stack entry · js-queue</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+
+    <main id="content">
+        <header id="stack" class="page-hero shell">
+            <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Stack</li></ol>
+            <p class="eyebrow">Modern LIFO entry</p>
+            <h1>When the newest work <span>goes first.</span></h1>
+            <p class="lede"><code>js-queue/stack</code> exposes <code>easy-stack</code> 2.0.0 for last-in-first-out execution with the same modern package baseline.</p>
+        </header>
+
+        <section id="entry" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Load it explicitly</p><h2>The stack stays a separate contract.</h2></div><p>The queue core is FIFO. Import the stack entry only when the most recently added task should execute first.</p></div>
+                <div class="grid grid--two">
+                    <article class="card"><span class="card__label">ESM</span><h3>Native import</h3><div class="code-block"><pre><code>import Stack from 'js-queue/stack';</code></pre></div></article>
+                    <article class="card"><span class="card__label">CommonJS</span><h3>Conditional require</h3><div class="code-block"><pre><code>const Stack=require('js-queue/stack.js');</code></pre></div></article>
+                </div>
+                <div class="code-block"><pre><code>const stack=new Stack;
+stack.autoRun=false;
+
+stack.add(first,second,third);
+stack.next(); // third runs first</code></pre></div>
+            </div>
+        </section>
+
+        <section id="comparison" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Choose the order</p><h2>FIFO and LIFO solve different problems.</h2></div><p>Both structures use explicit <code>next()</code> hand-offs, but they remove pending work from opposite ends.</p></div>
+                <div class="table-wrap"><table><caption>Queue versus stack</caption><thead><tr><th scope="col">Property</th><th scope="col">Queue</th><th scope="col">Stack</th></tr></thead><tbody>
+                    <tr><td>Order</td><td>First in, first out</td><td>Last in, first out</td></tr>
+                    <tr><td>Entry</td><td><code>js-queue</code></td><td><code>js-queue/stack</code></td></tr>
+                    <tr><td>Removes</td><td>Front via array shift</td><td>Back via array pop</td></tr>
+                    <tr><td>Best fit</td><td>Requests, messages, ordered pipelines</td><td>Undo-like work, nested traversal, newest-first priority</td></tr>
+                    <tr><td>State surface</td><td><code>contents</code>, <code>size</code>, <code>running</code></td><td><code>stack</code>, <code>contents()</code>, <code>size</code>, <code>running</code></td></tr>
+                </tbody></table></div>
+                <div class="callout callout--amber"><strong>The stack follows the modernized upstream contract.</strong><p><code>easy-stack</code> 2.0.0 now provides native ESM, CommonJS, classic-browser entries, validated tasks, recoverable synchronous errors, and observable <code>size</code> and <code>running</code> state. See the <a href="https://riaevangelist.github.io/easy-stack/">focused easy-stack documentation</a> for its complete API and migration guide.</p></div>
+                <div class="page-next"><p>Need predictable arrival order instead?</p><a class="button button--primary" href="../guide/">Start with Queue</a></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · LIFO compatibility</p><nav aria-label="Project links"><a href="../guide/">Queue start</a><a href="../api/">Queue API</a><a href="https://github.com/RIAEvangelist/easy-stack">easy-stack</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+</body>
+</html>

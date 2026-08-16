@@ -1,240 +1,107 @@
-# js-queue Is Great for any queue
+![js-queue — explicit FIFO flow control for JavaScript](./assets/js-queue-header.png)
 
-1. socket message queuing
-2. async operations
-3. synchronous operations
-4. atomic operations
-3. code with requirements before executing
-4. queues you want to start running any time you add new items
-5. any simple or complex queue operations
-6. base class to extend
-7. anything else that needs a queue
-8. Anything which needs a stack instead of a queue.
+# js-queue
 
+A tiny first-in-first-out task queue with explicit flow control. Add functions, let the queue start automatically, and call `this.next()` when each task is ready to release the next one.
 
-# Stable and easy to use
-Works great in node.js, webpack, browserify, or any other commonjs loader or compiler. To use in plain old vanilla browser javascript without common js just replace the requires in the examples with script tags. We show that below too.
+[Documentation](https://riaevangelist.github.io/js-queue/) · [Quick start](https://riaevangelist.github.io/js-queue/guide/) · [API](https://riaevangelist.github.io/js-queue/api/) · [Patterns](https://riaevangelist.github.io/js-queue/patterns/) · [Browser use](https://riaevangelist.github.io/js-queue/browser/) · [Examples](https://riaevangelist.github.io/js-queue/examples/) · [Testing](https://riaevangelist.github.io/js-queue/testing/)
 
-` js-queue ` also exposes the ` easy-stack ` stack via ` require('js-queue/stack.js') ` this file exposes an ES6 stack which allows for Last In First Out (LIFO) queuing. This can come in handy depending on your application needs, check out the [easy-stack javascript documentation](https://github.com/RIAEvangelist/easy-stack) it follows the ` js-queue ` interface but is node 6 or greater as it uses ES6 classes.  
+[![CI](https://github.com/RIAEvangelist/js-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/RIAEvangelist/js-queue/actions/workflows/ci.yml)
+[![Pages](https://github.com/RIAEvangelist/js-queue/actions/workflows/pages.yml/badge.svg)](https://github.com/RIAEvangelist/js-queue/actions/workflows/pages.yml)
+[![npm version](https://img.shields.io/npm/v/js-queue.svg)](https://www.npmjs.com/package/js-queue)
+[![npm downloads](https://img.shields.io/npm/dm/js-queue.svg)](https://www.npmjs.com/package/js-queue)
+[![license](https://img.shields.io/github/license/RIAEvangelist/js-queue.svg)](./licence.md)
 
-**npm install js-queue**
+## Install
 
-npm info :  [See npm trends and stats for js-queue](http://npm-stat.com/charts.html?package=js-queue&author=&from=&to=)  
-![js-queue npm version](https://img.shields.io/npm/v/js-queue.svg) ![supported node version for js-queue](https://img.shields.io/node/v/js-queue.svg) ![total npm downloads for js-queue](https://img.shields.io/npm/dt/js-queue.svg) ![monthly npm downloads for js-queue](https://img.shields.io/npm/dm/js-queue.svg) ![npm licence for js-queue](https://img.shields.io/npm/l/js-queue.svg)
+```sh
+npm install js-queue
+```
 
-[![RIAEvangelist](https://avatars3.githubusercontent.com/u/369041?v=3&s=100)](https://github.com/RIAEvangelist)
+Native ES modules:
 
-GitHub info :  
-![js-queue GitHub Release](https://img.shields.io/github/release/RIAEvangelist/js-queue.svg) ![GitHub license js-queue license](https://img.shields.io/github/license/RIAEvangelist/js-queue.svg) ![open issues for js-queue on GitHub](https://img.shields.io/github/issues/RIAEvangelist/js-queue.svg)
+```js
+import Queue from 'js-queue';
 
-Package details websites :
-* [GitHub.io site](http://riaevangelist.github.io/js-queue/ "js-queue documentation"). A prettier version of this site.
-* [NPM Module](https://www.npmjs.org/package/js-queue "js-queue npm module"). The npm page for the js-queue module.
+const queue=new Queue;
 
-This work is licenced via the MIT Licence.
-
-## Exposed methods and values
-
-|key|type|paramaters|default|description|
-|----|----|----|----|----|
-|add|function|any number of functions|  |adds all parameter functions to queue and starts execution if autoRun is true, queue is not already running and queue is not forcibly stopped |
-|next|function|  |  |executes next item in queue if queue is not forcibly stopped|
-|clear|function|  |  |removes remaining items in the queue|
-|contents|Array|  |  | Queue instance contents |
-|autoRun|Bool|  | true |should autoRun queue when new item added|
-|stop|Bool|  | false |setting this to true will forcibly prevent the queue from executing|
-
-### Basic queue use in node, react, browserify, webpack or any other commonjs implementation
-
-```javascript
-
-    var Queue=require('js-queue');
-    //create a new queue instance
-    var queue=new Queue;
-
-    for(var i=0; i<50; i++){
-        //add a bunch of stuff to the queue
-        queue.add(makeRequest);
-    }
-
-    function makeRequest(){
-        //do stuff
-        console.log('making some request');
-
+queue.add(
+    function(){
+        console.log('first');
+        this.next();
+    },
+    function(){
+        console.log('second');
         this.next();
     }
-
+);
 ```
 
-### Basic browser use
+CommonJS remains supported:
 
-The only difference is including via a script tag instead of using require.
-
-```html
-
-    <html>
-            <head>
-                    <!-- this is the only difference -->
-                    <script src='./queue-vanilla.js'></script>
-                    <script>
-                            console.log('my awesome app script');
-                            var queue=new Queue;
-
-                            for(var i=0; i<50; i++){
-                                queue.add(makeRequest);
-                            }
-
-                            function makeRequest(){
-                                console.log('making some request');
-
-                                this.next();
-                            }
-                    </script>
-            </head>
-            <body>
-            </body>
-    </html>
-
+```js
+const Queue=require('js-queue');
 ```
 
-### Basic use with websockets in node, react, browserify, webpack or any other commonjs implementation
+## The flow contract
 
-This allows you to start adding requests immediately and only execute if the websocket is connected. To use in plain browser based JS without webpack or browserify just replace the requires with the script tag.
+`js-queue` does not guess when a task is complete. A task releases the next item by calling `this.next()`—immediately, from a callback, or after an awaited operation.
 
-```javascript
-
-    var Queue=require('js-queue');
-
-    //ws-share just makes it easier to share websocket code and ensure you don't open a websocket more than once
-    var WS=require('ws-share');
-
-    //js-message makes it easy to create and parse normalized JSON messages.
-    var Message=require('js-message');
-
-    //create a new queue instance
-    var queue=new Queue;
-
-    //force stop until websocket opened
-    queue.stop=true;
-
-    var ws=null;
-
-    function startWS(){
-        //websocket.org rocks
-        ws=new WS('wss://echo.websocket.org/?encoding=text');
-
-        ws.on(
-            'open',
-            function(){
-                ws.on(
-                    'message',
-                    handleResponse
-                );
-
-                //now that websocket is opened allow auto execution
-                queue.stop=false;
-                queue.next();
-            }
-        );
-
-        ws.on(
-            'error',
-            function(err){
-                //stop execution of queue if there is an error because the websocket is likely closed
-                queue.stop=true;
-                //remove remaining items in the queue
-                queue.clear();
-                throw(err);
-            }
-        );
-
-        ws.on(
-            'close',
-            function(){
-                //stop execution of queue when the websocket closed
-                queue.stop=true;
-            }
-        );
-    }
-
-    //simulate a lot of requests being queued up for the websocket
-    for(var i=0; i<50; i++){
-        queue.add(makeRequest);
-    }
-
-    var messageID=0;
-
-    function handleResponse(e){
-        var message=new Message;
-        message.load(e.data);
-
-        console.log(message.type,message.data);
-    }
-
-    function makeRequest(){
-        messageID++;
-        var message=new Message;
-        message.type='testMessage';
-        message.data=messageID;
-
-        ws.send(message.JSON);
-
-        this.next();
-    }
-
-    startWS();
-
+```js
+queue.add(function(){
+    fetch('/work')
+        .then(handleResponse)
+        .finally(()=>this.next());
+});
 ```
 
+That explicit hand-off makes the same queue useful for synchronous steps, callback APIs, network work, connection gates, and manually controlled pipelines.
 
-# Extending Queue
+## Public surface
 
-```javascript
+| Member | Type | Purpose |
+| --- | --- | --- |
+| `add(...tasks)` | method | Validate and append functions; auto-start when idle. |
+| `next()` | method | Run the next FIFO task when the queue is not stopped. |
+| `clear()` | method | Remove pending tasks and return the new empty array. |
+| `contents` | getter/setter | Read or replace the pending function array. |
+| `size` | getter | Number of pending tasks. |
+| `running` | getter | Whether a task currently owns the queue. |
+| `autoRun` | boolean | Start automatically after `add()`; defaults to `true`. |
+| `stop` | boolean | Hold execution without discarding pending work. |
 
-    var Queue=require('js-queue');
+Every task receives the queue as `this`. Invalid tasks are rejected before any item from the same `add()` call is appended. If a task throws synchronously, the queue returns to an idle, recoverable state and preserves the remaining work.
 
-    //MyAwesomeQueue inherits from Queue
-    MyAwesomeQueue.prototype = new Queue;
-    //Constructor will extend Queue
-    MyAwesomeQueue.prototype.constructor = MyAwesomeQueue;
+## Entry points
 
-    function MyAwesomeQueue(){
-        //extend with some stuff your app needs,
-        //maybe npm publish your extention with js-queue as a dependancy?
-        Object.defineProperties(
-            this,
-            {
-                isStopped:{
-                    enumerable:true,
-                    get:checkStopped,
-                    set:checkStopped
-                },
-                removeThirdItem:{
-                    enumerable:true,
-                    writable:false,
-                    value:removeThird
-                }
-            }
-        );
+| Import | Format | Use |
+| --- | --- | --- |
+| `js-queue` | ESM or CommonJS | Conditional primary entry. |
+| `js-queue/queue.js` | ESM or CommonJS | Compatibility path to the queue. |
+| `js-queue/queue-vanilla.js` | classic browser script | Publishes `globalThis.Queue`. |
+| `js-queue/stack` | ESM or CommonJS | The modernized `easy-stack` 2.0 LIFO entry. |
 
-        //enforce Object.assign for extending by locking down Class structure
-        //no willy nilly cowboy coding
-        Object.seal(this);
+The runtime supports Node.js 12.22 and newer. The development suite uses `vanilla-test` 2.1.1 on Node.js 22.12 or newer, while a dependency-free compatibility runner executes all behavior and package contracts on older supported Node releases.
 
-        function checkStopped(){
-            return this.stop;
-        }
+## Test and coverage evidence
 
-        function removeThird(){
-            //get the queue content
-            var list=this.contents;
-            //modify the queue content
-            list.splice(2,1);
-            //save the modified queue content
-            this.contents=list;
+The shared behavioral suite runs unchanged in Node and real Google Chrome through `vanilla-test`. It covers FIFO ordering, manual flow, stop/resume gates, active-task additions, clearing, replacement contents, validation, thrown-task recovery, asynchronous hand-offs, and idle behavior.
 
-            return this.contents;
-        }
-    }
-
+```sh
+npm test
+npm run coverage
 ```
+
+Both native V8 collectors enforce 100% statement, branch, function, and line coverage for the shipped ESM queue. Package tests independently verify ESM, CommonJS, classic-browser, and stack entry points. Server tests verify pages, content types, missing files, malformed URLs, and traversal protection. Documentation tests verify every page, local target, workflow, and generated header asset.
+
+[Node coverage report](https://riaevangelist.github.io/js-queue/reports/node/) · [Chrome coverage report](https://riaevangelist.github.io/js-queue/reports/chrome/)
+
+## Version 3
+
+Version 3 adds native ESM, conditional CommonJS compatibility, validated task inputs, observable `size` and `running` state, recoverable synchronous errors, modern package boundaries, and the new documentation site. Existing `require('js-queue')`, `require('js-queue/stack.js')`, and classic `<script>` consumers have supported paths.
+
+Read the [migration guide](./MIGRATION.md) and [changelog](./CHANGELOG.md) before upgrading an application that depends on constructor enumeration, non-function queue entries, or Node versions older than 12.22.
+
+## License
+
+[MIT](./licence.md)

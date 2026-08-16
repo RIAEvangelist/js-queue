@@ -1,3 +1,4 @@
-const Stack=require('easy-stack');
+import Stack from 'easy-stack';
 
-module.exports = Stack;
+export {Stack};
+export default Stack;

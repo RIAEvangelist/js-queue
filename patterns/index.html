@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Practical js-queue patterns for asynchronous work, stop gates, cleanup, and error recovery.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="Queue patterns · js-queue">
+    <meta property="og:description" content="Practical patterns for asynchronous work, stop gates, cleanup, and error recovery.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/patterns/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Queue patterns · js-queue">
+    <meta name="twitter:description" content="Practical patterns for asynchronous work, stop gates, cleanup, and error recovery.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/patterns/">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script type="module" src="../assets/site.js"></script>
+    <title>Queue patterns · js-queue</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/" aria-current="page">Patterns</a><a href="../examples/">Examples</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+
+    <main id="content">
+        <header id="patterns" class="page-hero shell">
+            <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Patterns</li></ol>
+            <p class="eyebrow">Composition guide</p>
+            <h1>Put the release point <span>where truth lives.</span></h1>
+            <p class="lede">The task knows whether work finished, failed, paused, or lost its connection. Let that task decide when the queue advances.</p>
+        </header>
+
+        <section id="async" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Async work</p><h2>Release from <code>finally</code>.</h2></div><p>When later work should proceed whether the operation succeeds or fails, place <code>this.next()</code> in the same cleanup boundary you already trust.</p></div>
+                <div class="grid grid--two">
+                    <article class="card"><span class="card__label">Promise</span><h3>Keep the queue moving</h3><div class="code-block"><pre><code>queue.add(function(){
+    sendMessage()
+        .then(recordSuccess)
+        .catch(recordFailure)
+        .finally(()=>this.next());
+});</code></pre></div></article>
+                    <article class="card"><span class="card__label">Callback</span><h3>Release after completion</h3><div class="code-block"><pre><code>queue.add(function(){
+    writeFile(data,error=>{
+        if(error) report(error);
+        this.next();
+    });
+});</code></pre></div></article>
+                </div>
+                <div class="callout"><strong>Do not use an arrow task when you need <code>this.next()</code>.</strong><p>Arrow callbacks inside the task are fine because they preserve the task's queue-bound <code>this</code>.</p></div>
+            </div>
+        </section>
+
+        <section id="gates" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Stop gates</p><h2>Queue now. Open later.</h2></div><p>Set <code>stop=true</code> before producers add work. When the dependency is ready, clear the flag and call <code>next()</code> once.</p></div>
+                <div class="code-block"><pre><code>const outbound=new Queue;
+outbound.stop=true;
+
+outbound.add(sendGreeting,sendPresence,requestHistory);
+
+socket.addEventListener('open',()=>{
+    outbound.stop=false;
+    outbound.next();
+});
+
+socket.addEventListener('close',()=>{
+    outbound.stop=true;
+});</code></pre></div>
+                <div class="grid grid--two">
+                    <article class="card"><span class="card__label">Pause</span><h3>Preserve pending work</h3><p><code>stop</code> blocks <code>next()</code> without changing <code>contents</code>. Use it for recoverable conditions.</p></article>
+                    <article class="card"><span class="card__label">Cancel</span><h3>Discard pending work</h3><p><code>clear()</code> removes everything except the currently executing task. Use it when queued intent is no longer valid.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section id="errors" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Recovery</p><h2>Keep remaining work available.</h2></div><p>A synchronous task error is rethrown after <code>running</code> resets to <code>false</code>. Later tasks remain pending so the caller can clear, retry, or continue.</p></div>
+                <div class="code-block"><pre><code>queue.autoRun=false;
+queue.add(riskyTask,nextTask);
+
+try{
+    queue.next();
+}catch(error){
+    report(error);
+    // choose one policy:
+    queue.next();  // continue
+    // queue.clear(); // cancel
+}</code></pre></div>
+                <div class="callout callout--amber"><strong>Promise rejections are asynchronous.</strong><p>The queue cannot catch them from the original <code>next()</code> call. Handle the promise inside the task and release deliberately.</p></div>
+                <div class="page-next"><p>See stop, resume, clear, and asynchronous release happen in a live queue.</p><a class="button button--primary" href="../examples/">Run examples</a></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · coordination patterns</p><nav aria-label="Project links"><a href="../api/">API</a><a href="../examples/">Examples</a><a href="../browser/">Browser</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+</body>
+</html>

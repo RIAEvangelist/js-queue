@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="js-queue is a tiny FIFO task queue with explicit flow control for Node and browsers.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="js-queue — explicit FIFO flow control">
+    <meta property="og:description" content="A tiny FIFO task queue with native ESM, CommonJS compatibility, and classic browser support.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta property="og:image:alt" content="js-queue tasks moving through a first-in-first-out scheduler">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="js-queue — explicit FIFO flow control">
+    <meta name="twitter:description" content="A tiny FIFO task queue with native ESM, CommonJS compatibility, and classic browser support.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/">
+    <link rel="stylesheet" href="./assets/site.css">
+    <script type="module" src="./assets/site.js"></script>
+    <title>js-queue — explicit FIFO flow control</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header">
+        <div class="shell site-header__inner">
+            <a class="brand" href="./" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button>
+            <nav id="top-nav" class="site-nav" aria-label="Primary navigation">
+                <a href="./" aria-current="page">Overview</a>
+                <a href="./guide/">Start</a>
+                <a href="./api/">API</a>
+                <a href="./patterns/">Patterns</a>
+                <a href="./examples/">Examples</a>
+                <a href="./testing/">Testing</a>
+                <a href="https://github.com/RIAEvangelist/js-queue">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="content">
+        <section id="overview" class="hero">
+            <div class="shell hero-grid">
+                <div class="hero-copy">
+                    <p class="eyebrow">FIFO · explicit hand-off · zero build</p>
+                    <h1>Order work.<br><span>Release it precisely.</span></h1>
+                    <p class="lede"><code>js-queue</code> runs one function at a time and waits for that function to release the next. It stays small because your task—not the library—knows when the work is actually complete.</p>
+                    <div class="hero-actions">
+                        <a class="button button--primary" href="./guide/">Build your first queue</a>
+                        <a class="button" href="./examples/">Run the live example</a>
+                    </div>
+                    <ul class="signal-row" aria-label="Project qualities">
+                        <li>native ESM</li>
+                        <li>CommonJS compatible</li>
+                        <li>classic browser build</li>
+                    </ul>
+                </div>
+                <div class="hero-media">
+                    <img class="hero-art" src="./assets/js-queue-header.png" width="1942" height="808" alt="An ordered row of cyan tasks moves toward one active amber task in a FIFO scheduler">
+                </div>
+            </div>
+        </section>
+
+        <section id="guarantees" class="section">
+            <div class="shell">
+                <div class="section-heading">
+                    <div><p class="eyebrow">Small by design</p><h2>One explicit contract.</h2></div>
+                    <p>Add functions in order. The queue starts when idle. Each function receives the queue as <code>this</code> and calls <code>this.next()</code> when it is ready to release the following item.</p>
+                </div>
+                <div class="metric-grid" aria-label="Project facts">
+                    <div class="metric"><strong>1</strong><span>tiny runtime dependency, for the legacy stack entry</span></div>
+                    <div class="metric"><strong>3</strong><span>loading styles: ESM, CommonJS, classic script</span></div>
+                    <div class="metric"><strong>100%</strong><span>native V8 coverage gates on the queue core</span></div>
+                    <div class="metric"><strong>9</strong><span>focused documentation pages</span></div>
+                </div>
+                <div class="flow" aria-label="First-in-first-out execution flow">
+                    <div class="flow__task">task 1</div><div class="flow__arrow" aria-hidden="true">→</div>
+                    <div class="flow__task">task 2</div><div class="flow__arrow" aria-hidden="true">→</div>
+                    <div class="flow__task">task 3</div><div class="flow__arrow" aria-hidden="true">→</div>
+                    <div class="flow__task flow__task--active">active</div>
+                </div>
+                <div class="callout">
+                    <strong>Tasks can release synchronously or later.</strong>
+                    <p>Call <code>this.next()</code> inline, in a callback, after a timer, or from <code>finally</code>. Until then, the remaining queue stays ordered and still.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="routes" class="section">
+            <div class="shell">
+                <div class="section-heading">
+                    <div><p class="eyebrow">Choose one answer</p><h2>Short pages, direct routes.</h2></div>
+                    <p>Each guide owns one question so you can find the relevant contract without scrolling through a single oversized manual.</p>
+                </div>
+                <div class="grid">
+                    <a class="card card-link" href="./guide/"><span class="card__label">01 · Start</span><strong>Install and run the first queue</strong><small>The five-minute path.</small></a>
+                    <a class="card card-link" href="./api/"><span class="card__label">02 · Reference</span><strong>Read the complete API</strong><small>Methods, state, returns, and errors.</small></a>
+                    <a class="card card-link" href="./patterns/"><span class="card__label">03 · Patterns</span><strong>Coordinate real asynchronous work</strong><small>Gates, pauses, errors, and cleanup.</small></a>
+                    <a class="card card-link" href="./browser/"><span class="card__label">04 · Browser</span><strong>Use modules or a global script</strong><small>No bundle is required.</small></a>
+                    <a class="card card-link" href="./examples/"><span class="card__label">05 · Examples</span><strong>Watch a queue execute</strong><small>Interactive FIFO demo and recipes.</small></a>
+                    <a class="card card-link" href="./stack/"><span class="card__label">06 · Stack</span><strong>Choose FIFO or LIFO</strong><small>The modern easy-stack 2 entry.</small></a>
+                    <a class="card card-link" href="./migration/"><span class="card__label">07 · Upgrade</span><strong>Move from version 2 to 3</strong><small>Module paths and behavior changes.</small></a>
+                    <a class="card card-link" href="./testing/"><span class="card__label">08 · Evidence</span><strong>Inspect testing and coverage</strong><small>vanilla-test in Node and Chrome.</small></a>
+                    <a class="card card-link" href="https://www.npmjs.com/package/js-queue"><span class="card__label">09 · Package</span><strong>Open js-queue on npm</strong><small>Versions, downloads, and install metadata.</small></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="shell site-footer__inner">
+            <p>js-queue v3 · MIT licensed · explicit flow, no build</p>
+            <nav aria-label="Project links"><a href="./migration/">Migration</a><a href="./CHANGELOG.md">Changelog</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="https://www.npmjs.com/package/js-queue">npm</a><a href="./licence.md">License</a></nav>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Run a live js-queue FIFO demonstration and copy focused queue recipes.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="Examples · js-queue">
+    <meta property="og:description" content="Run a live js-queue FIFO demonstration and copy focused queue recipes.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/examples/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Examples · js-queue">
+    <meta name="twitter:description" content="Run a live js-queue FIFO demonstration and copy focused queue recipes.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/examples/">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script type="module" src="../assets/site.js"></script>
+    <script type="module" src="./demo.js"></script>
+    <title>Examples · js-queue</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/" aria-current="page">Examples</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+
+    <main id="content">
+        <header id="examples" class="page-hero shell">
+            <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Examples</li></ol>
+            <p class="eyebrow">Exact runtime source</p>
+            <h1>Watch explicit flow <span>stay ordered.</span></h1>
+            <p class="lede">This page imports the published <code>queue.js</code> directly. Run it, pause the release gate, resume, or clear pending work.</p>
+        </header>
+
+        <section id="live-demo" class="section section--compact">
+            <div class="shell">
+                <div class="demo-panel" data-queue-demo>
+                    <div class="demo-toolbar">
+                        <button class="button button--primary" type="button" data-demo-run>Run queue</button>
+                        <button class="button" type="button" data-demo-stop disabled>Pause</button>
+                        <button class="button button--danger" type="button" data-demo-clear disabled>Clear pending</button>
+                        <span class="demo-status" data-demo-status aria-live="polite">Ready · 4 tasks</span>
+                    </div>
+                    <div class="demo-track" aria-label="Queue task states">
+                        <div class="demo-task" data-demo-task="0">1 · prepare</div>
+                        <div class="demo-task" data-demo-task="1">2 · connect</div>
+                        <div class="demo-task" data-demo-task="2">3 · send</div>
+                        <div class="demo-task" data-demo-task="3">4 · record</div>
+                    </div>
+                </div>
+                <div class="callout"><strong>What you are seeing</strong><p>Each task owns the amber active state for a short delay, then calls <code>this.next()</code>. Pause closes the stop gate; clear removes only tasks that have not started.</p></div>
+            </div>
+        </section>
+
+        <section id="recipes" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">Copy a shape</p><h2>Three focused recipes.</h2></div><p>Use the queue for sequencing, manual batches, or connection-gated work. The API stays the same.</p></div>
+                <div class="grid">
+                    <article class="card"><span class="card__label">Sequential</span><h3>Wait for a callback</h3><div class="code-block"><pre><code>queue.add(function(){
+    save(data,()=>this.next());
+});</code></pre></div></article>
+                    <article class="card"><span class="card__label">Batch</span><h3>Start manually</h3><div class="code-block"><pre><code>queue.autoRun=false;
+queue.add(one,two,three);
+queue.next();</code></pre></div></article>
+                    <article class="card"><span class="card__label">Gate</span><h3>Wait for readiness</h3><div class="code-block"><pre><code>queue.stop=true;
+queue.add(send);
+ready.then(()=>{
+    queue.stop=false;
+    queue.next();
+});</code></pre></div></article>
+                </div>
+                <div class="page-next"><p>Need the full behavior behind each member?</p><a class="button button--primary" href="../api/">Open API</a></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · live examples</p><nav aria-label="Project links"><a href="../patterns/">Patterns</a><a href="../api/">API</a><a href="../browser/">Browser</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+</body>
+</html>
