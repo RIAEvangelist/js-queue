@@ -85,7 +85,9 @@ The runtime supports Node.js 12.22 and newer. The development suite uses `vanill
 
 ## Test and coverage evidence
 
-The shared behavioral suite runs unchanged in Node and real Google Chrome through `vanilla-test`. It covers FIFO ordering, manual flow, stop/resume gates, active-task additions, clearing, replacement contents, validation, thrown-task recovery, asynchronous hand-offs, and idle behavior.
+**Tested with [vanilla-test](https://riaevangelist.github.io/vanilla-test/).** The shared behavioral suite runs unchanged in Node and real Google Chrome. It covers FIFO ordering, manual flow, stop/resume gates, active-task additions, clearing, replacement contents, validation, thrown-task recovery, asynchronous hand-offs, and idle behavior.
+
+<a href="https://riaevangelist.github.io/vanilla-test/"><img src="./assets/vanilla-test-header.png" width="520" alt="vanilla-test — native JavaScript testing for Node.js and browsers"></a>
 
 ```sh
 npm test

@@ -81,7 +81,7 @@ jobs:
           cp stack/index.html _site/stack/
           cp migration/index.html _site/migration/
           cp testing/index.html _site/testing/
-          cp assets/site.css assets/site.js assets/js-queue-header.png _site/assets/
+          cp assets/site.css assets/site.js assets/js-queue-header.png assets/vanilla-test-header.png _site/assets/
           cp --recursive coverage/node/. _site/reports/node/
           cp --recursive coverage/chrome/. _site/reports/chrome/
 
@@ -97,6 +97,7 @@ jobs:
             _site/migration/index.html \
             _site/testing/index.html \
             _site/assets/js-queue-header.png \
+            _site/assets/vanilla-test-header.png \
             _site/queue.js \
             _site/reports/node/index.html \
             _site/reports/chrome/index.html \

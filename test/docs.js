@@ -120,9 +120,25 @@ test('the repository header is a substantial panoramic PNG',()=>{
     equal(image.toString('ascii',1,4),'PNG');
     const width=image.readUInt32BE(16);
     const height=image.readUInt32BE(20);
+    const heroTag=read('index.html').match(/<img class="hero-art"[^>]+>/)?.[0] || '';
     equal(width >= 1500,true);
     equal(width / height >= 2.2,true);
     equal(image.byteLength > 250000,true);
+    equal(heroTag.includes(`width="${width}"`),true);
+    equal(heroTag.includes(`height="${height}"`),true);
+    equal(/img\s*\{[^}]*height:auto;/s.test(read('assets/site.css')),true);
+});
+
+test('the repository and site credit vanilla-test with local artwork',()=>{
+    const image=fs.readFileSync(new URL('assets/vanilla-test-header.png',root));
+    const readme=read('README.md');
+    const testingPage=read('testing/index.html');
+    equal(image.toString('ascii',1,4),'PNG');
+    equal(image.readUInt32BE(16) / image.readUInt32BE(20) >= 2.2,true);
+    equal(readme.includes('Tested with [vanilla-test]'),true);
+    equal(readme.includes('./assets/vanilla-test-header.png'),true);
+    equal(testingPage.includes('Tested with vanilla-test.'),true);
+    equal(testingPage.includes('../assets/vanilla-test-header.png'),true);
 });
 
 test('vanilla-test, coverage, package checks, and Pages deployment are wired',()=>{
@@ -139,6 +155,7 @@ test('vanilla-test, coverage, package checks, and Pages deployment are wired',()
     equal(pagesWorkflow.includes('workflow_run:'),true);
     equal(pagesWorkflow.includes("github.event.workflow_run.conclusion == 'success'"),true);
     equal(pagesWorkflow.includes('actions/deploy-pages'),true);
+    equal(pagesWorkflow.includes('_site/assets/vanilla-test-header.png'),true);
     equal(pagesWorkflow.includes('_site/reports/node/index.html'),true);
     equal(pagesWorkflow.includes('_site/reports/chrome/index.html'),true);
     equal(pagesWorkflow.includes("VANILLA_TEST_CHROME_NO_SANDBOX: '1'"),true);

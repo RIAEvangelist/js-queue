@@ -29,16 +29,20 @@
             <p class="eyebrow">Behavior before tooling</p>
             <h1>One suite. <span>Two runtimes.</span></h1>
             <p class="lede"><code>vanilla-test</code> 2.1.1 runs the same untransformed queue cases in Node and real Google Chrome. Package and documentation contracts run as separate Node suites.</p>
+            <aside class="testing-brand" aria-label="Testing framework">
+                <a class="testing-brand__art" href="https://riaevangelist.github.io/vanilla-test/" aria-label="Open the vanilla-test documentation"><img src="../assets/vanilla-test-header.png" width="1983" height="793" alt="vanilla-test — native JavaScript testing for Node.js and browsers"></a>
+                <div class="testing-brand__copy"><p class="eyebrow">Repository standard</p><p><strong>Tested with vanilla-test.</strong> Web-standard JavaScript runs unchanged in Node and a real browser, with native V8 coverage from both.</p></div>
+            </aside>
         </header>
 
         <section id="suites" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">28 checks</p><h2>Four independent contracts.</h2></div><p>A behavior failure, packaging failure, server regression, or broken documentation target can each block delivery.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">30 checks</p><h2>Four independent contracts.</h2></div><p>A behavior failure, packaging failure, server regression, or broken documentation target can each block delivery.</p></div>
                 <div class="grid grid--two">
                     <article class="card"><span class="card__label">12 shared</span><h3>Queue behavior</h3><p>FIFO order, manual flow, stop and resume, context binding, additions while active, clear, contents, validation, errors, async release, and idle state.</p></article>
-                    <article class="card"><span class="card__label">5 package</span><h3>Published boundaries</h3><p>ESM, CommonJS, deep paths, classic browser global, stack behavior, and package metadata.</p></article>
+                    <article class="card"><span class="card__label">6 package</span><h3>Published boundaries</h3><p>ESM, CommonJS, deep paths, classic browser global, stack behavior, and package metadata.</p></article>
                     <article class="card"><span class="card__label">3 server</span><h3>Local HTTP boundary</h3><p>Pages, modules, image types, missing files, malformed paths, and traversal protection.</p></article>
-                    <article class="card"><span class="card__label">8 documentation</span><h3>Site integrity</h3><p>Nine pages, required sections, every local target, local-only assets, header dimensions, workflow wiring, and JavaScript-only source.</p></article>
+                    <article class="card"><span class="card__label">9 documentation</span><h3>Site integrity</h3><p>Nine pages, required sections, every local target, local-only assets, image dimensions, testing attribution, workflow wiring, and JavaScript-only source.</p></article>
                 </div>
                 <div class="code-block"><pre><code>npm test
 npm run test:core
