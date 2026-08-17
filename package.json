@@ -52,6 +52,7 @@
   "scripts": {
     "test": "node ./scripts/test.js",
     "test:core": "node ./scripts/test.js core",
+    "test:playground": "node ./scripts/test.js playground",
     "test:package": "node ./scripts/test.js package",
     "test:server": "node ./scripts/test.js server",
     "test:docs": "node ./scripts/test.js docs",

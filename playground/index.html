@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Explore js-queue with a deterministic FIFO playground for explicit hand-offs, stop gates, custom tasks, clear, reset, and related code.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="Playground · js-queue">
+    <meta property="og:description" content="Operate a real js-queue instance and see the JavaScript behind every state transition.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/playground/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta property="og:image:alt" content="js-queue tasks moving through a first-in-first-out scheduler">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Playground · js-queue">
+    <meta name="twitter:description" content="Operate a real js-queue instance and see the JavaScript behind every state transition.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/playground/">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script type="module" src="../assets/site.js"></script>
+    <script type="module" src="../assets/playground.js"></script>
+    <title>Playground · js-queue</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../playground/" aria-current="page">Playground</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+
+    <main id="content">
+        <header id="playground" class="page-hero shell">
+            <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Playground</li></ol>
+            <p class="eyebrow">Browser playground</p>
+            <h1>Operate the queue <span>one transition at a time.</span></h1>
+            <p class="lede">This lab imports the deployed <code>queue.js</code> module. Load a FIFO scenario, change its state, and inspect the exact code behind the latest activity.</p>
+        </header>
+
+        <div class="shell playground-page" data-playground>
+            <section class="playground-lab" id="controls" aria-labelledby="controls-title">
+                <div class="playground-lab__header">
+                    <div>
+                        <p class="eyebrow">Real queue state</p>
+                        <h2 id="controls-title">Build and control a batch.</h2>
+                        <p>Presets load a complete batch. The stopped scenario keeps <code>autoRun=true</code> to show that <code>stop</code> blocks the oldest task.</p>
+                    </div>
+                    <div class="playground-preset">
+                        <label for="playground-preset">Scenario</label>
+                        <div class="playground-preset__controls">
+                            <select id="playground-preset" data-playground-preset>
+                                <option value="cooperative">Cooperative FIFO batch</option>
+                                <option value="manual">Manual hand-off</option>
+                                <option value="stopped">Stopped FIFO batch</option>
+                            </select>
+                            <button class="button" type="button" data-playground-load>Load</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playground-controls">
+                    <form class="playground-add" data-playground-add>
+                        <div class="field">
+                            <label for="playground-label">Task label</label>
+                            <input id="playground-label" type="text" maxlength="60" placeholder="for example, render preview" required data-playground-label>
+                        </div>
+                        <div class="field">
+                            <label for="playground-handoff">Task behavior</label>
+                            <select id="playground-handoff" data-playground-handoff>
+                                <option value="cooperative">Calls this.next()</option>
+                                <option value="manual">Waits for manual Next</option>
+                            </select>
+                        </div>
+                        <button class="button button--primary" type="submit">Add to end</button>
+                    </form>
+
+                    <fieldset class="playground-flags">
+                        <legend>Queue flags</legend>
+                        <label><input type="checkbox" data-playground-auto-run> <span><code>autoRun</code><small>Only affects future additions</small></span></label>
+                        <label><input type="checkbox" data-playground-stop> <span><code>stop</code><small>Blocks selection without removing work</small></span></label>
+                    </fieldset>
+
+                    <div class="playground-actions" role="group" aria-label="Queue actions">
+                        <button class="button button--primary" type="button" data-playground-next>Next</button>
+                        <button class="button" type="button" data-playground-release>Release stop</button>
+                        <button class="button" type="button" data-playground-clear>Clear pending</button>
+                        <button class="button" type="button" data-playground-reset>Reset queue</button>
+                    </div>
+                </div>
+
+                <p class="playground-status" role="status" aria-live="polite" aria-atomic="true" data-playground-status>Loading the playground…</p>
+
+                <div class="playground-results">
+                    <section class="playground-result" aria-labelledby="state-title">
+                        <h2 id="state-title">State</h2>
+                        <dl class="playground-state">
+                            <div><dt>size</dt><dd data-playground-size>0</dd></div>
+                            <div><dt>running</dt><dd data-playground-running>false</dd></div>
+                            <div><dt>autoRun</dt><dd data-playground-auto-run-value>true</dd></div>
+                            <div><dt>stop</dt><dd data-playground-stop-value>false</dd></div>
+                        </dl>
+                    </section>
+
+                    <section class="playground-result" id="pending" aria-labelledby="pending-title">
+                        <h2 id="pending-title">Pending · oldest first</h2>
+                        <ol class="playground-list playground-list--pending" data-playground-pending><li class="playground-list__empty">No pending tasks.</li></ol>
+                    </section>
+
+                    <section class="playground-result playground-code" id="code" aria-labelledby="code-title">
+                        <div class="playground-code__heading"><h2 id="code-title">Related code</h2><span data-playground-code-label>Load scenario</span></div>
+                        <pre><code data-playground-code>const queue=new Queue;</code></pre>
+                    </section>
+
+                    <section class="playground-result" id="trace" aria-labelledby="trace-title">
+                        <h2 id="trace-title">Execution trace</h2>
+                        <ol class="playground-list" data-playground-trace><li class="playground-list__empty">No task has run yet.</li></ol>
+                    </section>
+                </div>
+
+                <noscript><p class="callout">JavaScript is required for the interactive lab. The rest of the documentation remains available without it.</p></noscript>
+            </section>
+
+            <aside class="playground-guide" aria-label="Playground behavior">
+                <strong>What to notice</strong>
+                <ul>
+                    <li>Pending work is displayed oldest-first.</li>
+                    <li>Cooperative tasks drain synchronously through <code>this.next()</code>.</li>
+                    <li>Manual tasks stay active until another Next hand-off.</li>
+                    <li>Releasing <code>stop</code> does not resume work by itself.</li>
+                    <li>The code panel follows the latest control or task addition.</li>
+                    <li>Clear preserves flags; Reset restores constructor defaults.</li>
+                </ul>
+                <div class="page-next"><p>Need the contract behind each control?</p><a class="button" href="../api/">Open API</a></div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · interactive FIFO playground</p><nav aria-label="Project links"><a href="../examples/">Examples</a><a href="../api/">API</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+</body>
+</html>

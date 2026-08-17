@@ -4,7 +4,7 @@
 
 A tiny first-in-first-out task queue with explicit flow control. Add functions, let the queue start automatically, and call `this.next()` when each task is ready to release the next one.
 
-[Documentation](https://riaevangelist.github.io/js-queue/) · [Quick start](https://riaevangelist.github.io/js-queue/guide/) · [API](https://riaevangelist.github.io/js-queue/api/) · [Patterns](https://riaevangelist.github.io/js-queue/patterns/) · [Browser use](https://riaevangelist.github.io/js-queue/browser/) · [Examples](https://riaevangelist.github.io/js-queue/examples/) · [Testing](https://riaevangelist.github.io/js-queue/testing/)
+[Documentation](https://riaevangelist.github.io/js-queue/) · [Quick start](https://riaevangelist.github.io/js-queue/guide/) · [API](https://riaevangelist.github.io/js-queue/api/) · [Patterns](https://riaevangelist.github.io/js-queue/patterns/) · [Browser use](https://riaevangelist.github.io/js-queue/browser/) · [Examples](https://riaevangelist.github.io/js-queue/examples/) · [Playground](https://riaevangelist.github.io/js-queue/playground/) · [Testing](https://riaevangelist.github.io/js-queue/testing/)
 
 [![CI](https://github.com/RIAEvangelist/js-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/RIAEvangelist/js-queue/actions/workflows/ci.yml)
 [![Pages](https://github.com/RIAEvangelist/js-queue/actions/workflows/pages.yml/badge.svg)](https://github.com/RIAEvangelist/js-queue/actions/workflows/pages.yml)
@@ -91,6 +91,7 @@ The runtime supports Node.js 12.22 and newer. The development suite uses `vanill
 
 ```sh
 npm test
+npm run test:playground
 npm run coverage
 ```
 

@@ -65,6 +65,7 @@ jobs:
             _site/patterns \
             _site/browser \
             _site/examples \
+            _site/playground \
             _site/stack \
             _site/migration \
             _site/testing \
@@ -78,10 +79,11 @@ jobs:
           cp patterns/index.html _site/patterns/
           cp browser/index.html _site/browser/
           cp examples/index.html examples/demo.js _site/examples/
+          cp playground/index.html _site/playground/
           cp stack/index.html _site/stack/
           cp migration/index.html _site/migration/
           cp testing/index.html _site/testing/
-          cp assets/site.css assets/site.js assets/js-queue-header.png assets/vanilla-test-header.png _site/assets/
+          cp assets/site.css assets/site.js assets/playground.js assets/js-queue-header.png assets/vanilla-test-header.png _site/assets/
           cp --recursive coverage/node/. _site/reports/node/
           cp --recursive coverage/chrome/. _site/reports/chrome/
 
@@ -93,10 +95,12 @@ jobs:
             _site/browser/index.html \
             _site/examples/index.html \
             _site/examples/demo.js \
+            _site/playground/index.html \
             _site/stack/index.html \
             _site/migration/index.html \
             _site/testing/index.html \
             _site/assets/js-queue-header.png \
+            _site/assets/playground.js \
             _site/assets/vanilla-test-header.png \
             _site/queue.js \
             _site/reports/node/index.html \

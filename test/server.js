@@ -31,6 +31,7 @@ function request(port,path){
 test('resolves valid site paths inside the canonical root',()=>{
     equal(resolveRequest('/').endsWith('js-queue'),true);
     equal(resolveRequest('/guide/').endsWith('guide'),true);
+    equal(resolveRequest('/playground/').endsWith('playground'),true);
     equal(resolveRequest('/%2e%2e%2foutside.txt'),null);
 });
 
@@ -41,14 +42,22 @@ test('serves pages, modules, and generated images with correct types',async()=>{
     try{
         const home=await request(port,'/');
         const guide=await request(port,'/guide/');
+        const playground=await request(port,'/playground/');
         const module=await request(port,'/queue.js');
+        const playgroundModule=await request(port,'/assets/playground.js');
         const image=await request(port,'/assets/js-queue-header.png');
 
         equal(home.status,200);
         equal(home.headers['content-type'],'text/html; charset=utf-8');
         equal(home.body.includes(Buffer.from('<title>js-queue')),true);
         equal(guide.status,200);
+        equal(playground.status,200);
+        equal(playground.headers['content-type'],'text/html; charset=utf-8');
+        equal(playground.body.includes(Buffer.from('data-playground-code')),true);
         equal(module.headers['content-type'],'text/javascript; charset=utf-8');
+        equal(playgroundModule.status,200);
+        equal(playgroundModule.headers['content-type'],'text/javascript; charset=utf-8');
+        equal(playgroundModule.body.includes(Buffer.from('function createPlayground()')),true);
         equal(image.headers['content-type'],'image/png');
         equal(image.body.byteLength > 250000,true);
     }finally{

@@ -9,6 +9,7 @@ const pageNames=[
     'patterns/index.html',
     'browser/index.html',
     'examples/index.html',
+    'playground/index.html',
     'stack/index.html',
     'migration/index.html',
     'testing/index.html'
@@ -54,10 +55,10 @@ function targetExists(pageName,target){
     return fs.readFileSync(resolved,'utf8').includes(`id="${decodeURIComponent(fragment)}"`);
 }
 
-test('the documentation is split into nine focused pages',()=>{
+test('the documentation is split into ten focused pages',()=>{
     const missing=pageNames.filter(name=>!fs.existsSync(new URL(name,root)));
     deepEqual(missing,[]);
-    equal(pageNames.length,9);
+    equal(pageNames.length,10);
 });
 
 test('every page exposes its short, page-specific contract',()=>{
@@ -68,6 +69,7 @@ test('every page exposes its short, page-specific contract',()=>{
         'patterns/index.html':['patterns','async','gates','errors'],
         'browser/index.html':['browser','esm','classic','serve'],
         'examples/index.html':['examples','live-demo','recipes'],
+        'playground/index.html':['playground','controls','pending','code','trace'],
         'stack/index.html':['stack','entry','comparison'],
         'migration/index.html':['migration','changes','checklist'],
         'testing/index.html':['testing','suites','coverage','ci']
@@ -77,6 +79,8 @@ test('every page exposes its short, page-specific contract',()=>{
         const source=read(name);
         const missing=ids.filter(id=>!source.includes(`id="${id}"`));
         deepEqual(missing,[],`${name} is missing required sections.`);
+        const playgroundHref=name === 'index.html' ? './playground/' : '../playground/';
+        equal(source.includes(`href="${playgroundHref}"`),true,`${name} omits the Playground route.`);
     }
 });
 
@@ -109,7 +113,7 @@ test('the site loads no remote script, stylesheet, font, or content image',()=>{
 test('README leads with the generated local header and links the focused docs',()=>{
     const readme=read('README.md');
     equal(readme.startsWith('![js-queue — explicit FIFO flow control for JavaScript](./assets/js-queue-header.png)'),true);
-    for(const path of ['guide/','api/','patterns/','browser/','examples/','testing/']){
+    for(const path of ['guide/','api/','patterns/','browser/','examples/','playground/','testing/']){
         equal(readme.includes(`https://riaevangelist.github.io/js-queue/${path}`),true,`README omits ${path}.`);
     }
     equal(/avatars\d*\.githubusercontent\.com/i.test(readme),false);
@@ -145,9 +149,16 @@ test('vanilla-test, coverage, package checks, and Pages deployment are wired',()
     const packageData=JSON.parse(read('package.json'));
     const ciWorkflow=read('.github/workflows/ci.yml');
     const pagesWorkflow=read('.github/workflows/pages.yml');
+    const playgroundPage=read('playground/index.html');
+    const playgroundSource=read('assets/playground.js');
     equal(packageData.devDependencies['vanilla-test'],'2.1.1');
+    equal(packageData.scripts['test:playground'],'node ./scripts/test.js playground');
     equal(packageData.scripts.coverage,'vanilla-test coverage');
     equal(read('test/harness.js').includes("import('vanilla-test')"),true);
+    equal(playgroundPage.includes('<script type="module" src="../assets/playground.js"></script>'),true);
+    equal(playgroundPage.includes('data-playground-code'),true);
+    equal(playgroundSource.startsWith("import Queue from '../queue.js';"),true);
+    equal(/\beval\s*\(|new\s+Function\b|\.innerHTML\s*=|set(?:Timeout|Interval)\s*\(/.test(playgroundSource),false);
     equal(ciWorkflow.includes('npm run coverage'),true);
     equal(ciWorkflow.includes("VANILLA_TEST_CHROME_NO_SANDBOX: '1'"),true);
     equal(ciWorkflow.includes('NODE_ENV: production'),true);
@@ -155,6 +166,8 @@ test('vanilla-test, coverage, package checks, and Pages deployment are wired',()
     equal(pagesWorkflow.includes('workflow_run:'),true);
     equal(pagesWorkflow.includes("github.event.workflow_run.conclusion == 'success'"),true);
     equal(pagesWorkflow.includes('actions/deploy-pages'),true);
+    equal(pagesWorkflow.includes('cp playground/index.html _site/playground/'),true);
+    equal(pagesWorkflow.includes('_site/assets/playground.js'),true);
     equal(pagesWorkflow.includes('_site/assets/vanilla-test-header.png'),true);
     equal(pagesWorkflow.includes('_site/reports/node/index.html'),true);
     equal(pagesWorkflow.includes('_site/reports/chrome/index.html'),true);

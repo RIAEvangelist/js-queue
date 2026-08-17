@@ -3,8 +3,9 @@ import {fileURLToPath} from 'node:url';
 
 const selection=process.argv[2] || 'all';
 const suites={
-    all:['test/node.js','test/package.js','test/server.js','test/docs.js'],
+    all:['test/node.js','test/playground.js','test/package.js','test/server.js','test/docs.js'],
     core:['test/node.js'],
+    playground:['test/playground.js'],
     package:['test/package.js'],
     server:['test/server.js'],
     docs:['test/docs.js'],

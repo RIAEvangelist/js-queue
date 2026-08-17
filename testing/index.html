@@ -21,14 +21,14 @@
 </head>
 <body>
     <a class="skip-link" href="#content">Skip to content</a>
-    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../testing/" aria-current="page">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../playground/">Playground</a><a href="../testing/" aria-current="page">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
 
     <main id="content">
         <header id="testing" class="page-hero shell">
             <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Testing</li></ol>
             <p class="eyebrow">Behavior before tooling</p>
             <h1>One suite. <span>Two runtimes.</span></h1>
-            <p class="lede"><code>vanilla-test</code> 2.1.1 runs the same untransformed queue cases in Node and real Google Chrome. Package and documentation contracts run as separate Node suites.</p>
+            <p class="lede"><code>vanilla-test</code> 2.1.1 runs the same untransformed queue cases in Node and real Google Chrome. Playground, package, and documentation contracts run as separate Node suites.</p>
             <aside class="testing-brand" aria-label="Testing framework">
                 <a class="testing-brand__art" href="https://riaevangelist.github.io/vanilla-test/" aria-label="Open the vanilla-test documentation"><img src="../assets/vanilla-test-header.png" width="1983" height="793" alt="vanilla-test — native JavaScript testing for Node.js and browsers"></a>
                 <div class="testing-brand__copy"><p class="eyebrow">Repository standard</p><p><strong>Tested with vanilla-test.</strong> Web-standard JavaScript runs unchanged in Node and a real browser, with native V8 coverage from both.</p></div>
@@ -37,15 +37,17 @@
 
         <section id="suites" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">30 checks</p><h2>Four independent contracts.</h2></div><p>A behavior failure, packaging failure, server regression, or broken documentation target can each block delivery.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">37 checks</p><h2>Five independent contracts.</h2></div><p>A behavior failure, playground regression, packaging failure, server regression, or broken documentation target can each block delivery.</p></div>
                 <div class="grid grid--two">
                     <article class="card"><span class="card__label">12 shared</span><h3>Queue behavior</h3><p>FIFO order, manual flow, stop and resume, context binding, additions while active, clear, contents, validation, errors, async release, and idle state.</p></article>
+                    <article class="card"><span class="card__label">7 playground</span><h3>Interactive controller</h3><p>FIFO presets, manual hand-offs, stop gates, custom task validation, state flags, clear and reset, and synchronized related code.</p></article>
                     <article class="card"><span class="card__label">6 package</span><h3>Published boundaries</h3><p>ESM, CommonJS, deep paths, classic browser global, stack behavior, and package metadata.</p></article>
                     <article class="card"><span class="card__label">3 server</span><h3>Local HTTP boundary</h3><p>Pages, modules, image types, missing files, malformed paths, and traversal protection.</p></article>
-                    <article class="card"><span class="card__label">9 documentation</span><h3>Site integrity</h3><p>Nine pages, required sections, every local target, local-only assets, image dimensions, testing attribution, workflow wiring, and JavaScript-only source.</p></article>
+                    <article class="card"><span class="card__label">9 documentation</span><h3>Site integrity</h3><p>Ten pages, required sections, every local target, local-only assets, image dimensions, testing attribution, workflow wiring, and JavaScript-only source.</p></article>
                 </div>
                 <div class="code-block"><pre><code>npm test
 npm run test:core
+npm run test:playground
 npm run test:package
 npm run test:server
 npm run test:docs</code></pre></div>
