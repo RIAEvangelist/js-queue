@@ -1188,6 +1188,39 @@ tbody tr:last-child td{
     border:0;
 }
 
+.test-group + .test-group{
+    margin-top:clamp(2.5rem,6vw,4.5rem);
+}
+
+.test-group h3{
+    margin:0 0 1rem;
+    color:var(--text);
+    font-size:clamp(1.2rem,2vw,1.55rem);
+}
+
+.test-index{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.7rem 2.5rem;
+    margin:0;
+    padding-left:1.5rem;
+}
+
+.test-index li{
+    min-width:0;
+    padding:.72rem .75rem .72rem .15rem;
+    border-bottom:1px solid var(--line);
+    color:var(--muted);
+    line-height:1.55;
+}
+
+.test-index li::marker{
+    color:var(--cyan);
+    font-family:var(--mono);
+    font-size:.78rem;
+    font-weight:800;
+}
+
 @media(max-width:68rem){
     .hero-grid,
     .section-heading,
@@ -1249,7 +1282,8 @@ tbody tr:last-child td{
     .grid--two,
     .method-grid,
     .playground-add,
-    .playground-results{
+    .playground-results,
+    .test-index{
         grid-template-columns:1fr;
     }
 

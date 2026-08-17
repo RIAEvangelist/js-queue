@@ -85,17 +85,20 @@ The runtime supports Node.js 12.22 and newer. The development suite uses `vanill
 
 ## Test and coverage evidence
 
-**Tested with [vanilla-test](https://riaevangelist.github.io/vanilla-test/).** The shared behavioral suite runs unchanged in Node and real Google Chrome. It covers FIFO ordering, manual flow, stop/resume gates, active-task additions, clearing, replacement contents, validation, thrown-task recovery, asynchronous hand-offs, and idle behavior.
+**Tested with [vanilla-test](https://riaevangelist.github.io/vanilla-test/).** The repository has 90 focused checks organized into four non-overlapping layers: [Unit](https://riaevangelist.github.io/js-queue/testing/unit/), [Functional](https://riaevangelist.github.io/js-queue/testing/functional/), [Integration](https://riaevangelist.github.io/js-queue/testing/integration/), and [Regression](https://riaevangelist.github.io/js-queue/testing/regression/). Queue-facing checks run unchanged in Node and real Google Chrome.
 
 <a href="https://riaevangelist.github.io/vanilla-test/"><img src="./assets/vanilla-test-header.png" width="520" alt="vanilla-test — native JavaScript testing for Node.js and browsers"></a>
 
 ```sh
 npm test
-npm run test:playground
+npm run test:unit
+npm run test:functional
+npm run test:integration
+npm run test:regression
 npm run coverage
 ```
 
-Both native V8 collectors enforce 100% statement, branch, function, and line coverage for the shipped ESM queue. Package tests independently verify ESM, CommonJS, classic-browser, and stack entry points. Server tests verify pages, content types, missing files, malformed URLs, and traversal protection. Documentation tests verify every page, local target, workflow, and generated header asset.
+The 10 Unit checks isolate API facts. The 30 Functional checks cover queue workflows and Playground behavior. The 26 Integration checks cover interacting queue operations, package formats, stack compatibility, and local HTTP delivery. The 24 Regression checks protect validation, recovery, documentation, artwork, and deployment wiring. Both native V8 collectors continue to enforce 100% statement, branch, function, and line coverage for the shipped ESM queue.
 
 [Node coverage report](https://riaevangelist.github.io/js-queue/reports/node/) · [Chrome coverage report](https://riaevangelist.github.io/js-queue/reports/chrome/)
 

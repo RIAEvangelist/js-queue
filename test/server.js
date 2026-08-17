@@ -28,54 +28,82 @@ function request(port,path){
     });
 }
 
-test('resolves valid site paths inside the canonical root',()=>{
+async function withServer(check){
+    const server=createSiteServer();
+    const port=await listen(server);
+    try{
+        await check(port);
+    }finally{
+        await close(server);
+    }
+}
+
+test('integration: server resolves the site root inside the canonical directory',()=>{
     equal(resolveRequest('/').endsWith('js-queue'),true);
+});
+
+test('integration: server resolves documentation route directories',()=>{
     equal(resolveRequest('/guide/').endsWith('guide'),true);
     equal(resolveRequest('/playground/').endsWith('playground'),true);
+});
+
+test('integration: server refuses encoded traversal outside the site root',()=>{
     equal(resolveRequest('/%2e%2e%2foutside.txt'),null);
 });
 
-test('serves pages, modules, and generated images with correct types',async()=>{
-    const server=createSiteServer();
-    const port=await listen(server);
-
-    try{
+test('integration: server returns HTML for overview and guide pages',async()=>{
+    await withServer(async port=>{
         const home=await request(port,'/');
         const guide=await request(port,'/guide/');
-        const playground=await request(port,'/playground/');
-        const module=await request(port,'/queue.js');
-        const playgroundModule=await request(port,'/assets/playground.js');
-        const image=await request(port,'/assets/js-queue-header.png');
-
         equal(home.status,200);
         equal(home.headers['content-type'],'text/html; charset=utf-8');
         equal(home.body.includes(Buffer.from('<title>js-queue')),true);
         equal(guide.status,200);
+        equal(guide.headers['content-type'],'text/html; charset=utf-8');
+    });
+});
+
+test('integration: server returns the playground page and code surface',async()=>{
+    await withServer(async port=>{
+        const playground=await request(port,'/playground/');
         equal(playground.status,200);
         equal(playground.headers['content-type'],'text/html; charset=utf-8');
         equal(playground.body.includes(Buffer.from('data-playground-code')),true);
-        equal(module.headers['content-type'],'text/javascript; charset=utf-8');
+    });
+});
+
+test('integration: server returns queue modules with JavaScript content types',async()=>{
+    await withServer(async port=>{
+        const queueModule=await request(port,'/queue.js');
+        const playgroundModule=await request(port,'/assets/playground.js');
+        equal(queueModule.status,200);
+        equal(queueModule.headers['content-type'],'text/javascript; charset=utf-8');
         equal(playgroundModule.status,200);
         equal(playgroundModule.headers['content-type'],'text/javascript; charset=utf-8');
         equal(playgroundModule.body.includes(Buffer.from('function createPlayground()')),true);
-        equal(image.headers['content-type'],'image/png');
-        equal(image.body.byteLength > 250000,true);
-    }finally{
-        await close(server);
-    }
+    });
 });
 
-test('rejects traversal and malformed paths while returning 404 for missing files',async()=>{
-    const server=createSiteServer();
-    const port=await listen(server);
+test('integration: server returns the substantial repository header as PNG',async()=>{
+    await withServer(async port=>{
+        const image=await request(port,'/assets/js-queue-header.png');
+        equal(image.status,200);
+        equal(image.headers['content-type'],'image/png');
+        equal(image.body.byteLength > 250000,true);
+    });
+});
 
-    try{
+test('integration: server distinguishes traversal and malformed URL failures',async()=>{
+    await withServer(async port=>{
         equal((await request(port,'/%2e%2e%2foutside.txt')).status,403);
         equal((await request(port,'/%E0%A4%A')).status,400);
+    });
+});
+
+test('integration: server returns 404 for a missing local target',async()=>{
+    await withServer(async port=>{
         equal((await request(port,'/not-here')).status,404);
-    }finally{
-        await close(server);
-    }
+    });
 });
 
 await run();

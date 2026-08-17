@@ -8,6 +8,7 @@ All notable changes to `js-queue` are documented here.
 
 - A dedicated browser Playground backed by the canonical queue module, deterministic FIFO controls, state and execution views, and related JavaScript that follows every activity.
 - A focused `vanilla-test` Playground controller suite and GitHub Pages deployment contracts for the new route and module.
+- Ninety non-overlapping `vanilla-test` checks organized into independently runnable Unit, Functional, Integration, and Regression layers, with a dedicated documentation page for every layer.
 
 ## 3.0.0 — 2026-08-16
 

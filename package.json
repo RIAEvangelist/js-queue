@@ -51,6 +51,10 @@
   },
   "scripts": {
     "test": "node ./scripts/test.js",
+    "test:unit": "node ./scripts/test.js unit",
+    "test:functional": "node ./scripts/test.js functional",
+    "test:integration": "node ./scripts/test.js integration",
+    "test:regression": "node ./scripts/test.js regression",
     "test:core": "node ./scripts/test.js core",
     "test:playground": "node ./scripts/test.js playground",
     "test:package": "node ./scripts/test.js package",

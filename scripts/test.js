@@ -3,13 +3,17 @@ import {fileURLToPath} from 'node:url';
 
 const selection=process.argv[2] || 'all';
 const suites={
-    all:['test/node.js','test/playground.js','test/package.js','test/server.js','test/docs.js'],
-    core:['test/node.js'],
-    playground:['test/playground.js'],
-    package:['test/package.js'],
-    server:['test/server.js'],
-    docs:['test/docs.js'],
-    legacy:['test/node.js','test/package.js']
+    all:[['test/node.js'],['test/playground.js'],['test/package.js'],['test/server.js'],['test/docs.js']],
+    unit:[['test/node.js','unit']],
+    functional:[['test/node.js','functional'],['test/playground.js']],
+    integration:[['test/node.js','integration'],['test/package.js'],['test/server.js']],
+    regression:[['test/node.js','regression'],['test/docs.js']],
+    core:[['test/node.js']],
+    playground:[['test/playground.js']],
+    package:[['test/package.js']],
+    server:[['test/server.js']],
+    docs:[['test/docs.js']],
+    legacy:[['test/node.js'],['test/package.js']]
 };
 
 if(!Object.prototype.hasOwnProperty.call(suites,selection)){
@@ -21,8 +25,8 @@ if(!Object.prototype.hasOwnProperty.call(suites,selection)){
         environment.JS_QUEUE_TEST_LEGACY='1';
     }
 
-    for(const file of suites[selection]){
-        const result=spawnSync(process.execPath,[file],{
+    for(const [file,...args] of suites[selection]){
+        const result=spawnSync(process.execPath,[file,...args],{
             cwd:fileURLToPath(new URL('../',import.meta.url)),
             env:environment,
             stdio:'inherit'

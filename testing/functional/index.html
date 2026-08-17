@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="The 30 focused Functional checks for js-queue workflows and its interactive Playground controller.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="Functional tests · js-queue">
+    <meta property="og:description" content="30 focused Functional checks for queue workflows and Playground behavior.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/testing/functional/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Functional tests · js-queue">
+    <meta name="twitter:description" content="30 focused Functional checks for queue workflows and Playground behavior.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/testing/functional/">
+    <link rel="stylesheet" href="../../assets/site.css">
+    <script type="module" src="../../assets/site.js"></script>
+    <title>Functional tests · js-queue</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../../">Overview</a><a href="../../guide/">Start</a><a href="../../api/">API</a><a href="../../patterns/">Patterns</a><a href="../../examples/">Examples</a><a href="../../playground/">Playground</a><a href="../" aria-current="page">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+
+    <main id="content">
+        <header id="functional" class="page-hero shell">
+            <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../../">Docs</a></li><li><a href="../">Testing</a></li><li>Functional</li></ol>
+            <p class="eyebrow">30 checks · visible behavior</p>
+            <h1>Run the workflow. <span>Observe the contract.</span></h1>
+            <p class="lede">Functional checks exercise the queue as a consumer does, then verify the Playground presents those same transitions, flags, traces, validation rules, and related code.</p>
+        </header>
+
+        <section id="cases" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">10 queue + 20 Playground</p><h2>All 30 Functional checks.</h2></div><p>The two groups share the FIFO model but own different outcomes, so no case is counted twice.</p></div>
+                <div class="test-group"><h3>Queue workflows · 10</h3><ol class="test-index">
+                    <li>autoRun starts newly added work synchronously</li>
+                    <li>cooperative tasks execute in first-in-first-out order</li>
+                    <li>disabling autoRun leaves a new batch pending</li>
+                    <li>manual next selects the oldest pending task</li>
+                    <li>cooperative hand-offs drain a manually started batch</li>
+                    <li>stop prevents automatic execution after add</li>
+                    <li>next while stopped preserves the oldest task</li>
+                    <li>opening the stop gate does not execute work by itself</li>
+                    <li>explicit next after stop release resumes FIFO execution</li>
+                    <li>each task receives its queue as this</li>
+                </ol></div>
+                <div class="test-group"><h3>Playground behavior · 20</h3><ol class="test-index">
+                    <li>playground cooperative preset exposes FIFO pending order</li>
+                    <li>playground cooperative next drains the complete trace</li>
+                    <li>playground manual next advances exactly one task</li>
+                    <li>playground manual hand-offs preserve FIFO order</li>
+                    <li>playground empty hand-off marks a manual queue idle</li>
+                    <li>playground stopped preset blocks next without consuming work</li>
+                    <li>playground stop release does not execute work by itself</li>
+                    <li>playground next after stop release drains FIFO work</li>
+                    <li>playground clear preserves flags and active trace</li>
+                    <li>playground reset restores constructor defaults</li>
+                    <li>playground custom tasks display oldest first</li>
+                    <li>playground rejects an empty custom label</li>
+                    <li>playground rejects a custom label over sixty characters</li>
+                    <li>playground rejects an unknown preset</li>
+                    <li>playground autoRun changes do not start existing work</li>
+                    <li>playground autoRun drains a new cooperative task</li>
+                    <li>playground autoRun leaves a new manual task active</li>
+                    <li>playground preset code describes the loaded queue</li>
+                    <li>playground added-task code matches its hand-off behavior</li>
+                    <li>playground queue controls expose their exact related code</li>
+                </ol></div>
+            </div>
+        </section>
+
+        <section id="run" class="section">
+            <div class="shell split"><div><p class="eyebrow">Run this layer</p><h2>Functional only, or inspect it live.</h2><div class="code-block"><pre><code>npm run test:functional
+npm run test:playground</code></pre></div><div class="actions"><a class="button button--primary" href="../../playground/">Open Playground</a></div></div><aside class="side-panel"><h2>Powered by vanilla-test</h2><p>The queue workflow checks run unchanged in Node and Chrome. Playground controller checks run as their own focused Node contract.</p><a class="button" href="https://riaevangelist.github.io/vanilla-test/">Open vanilla-test</a></aside></div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · 30 focused Functional checks</p><nav aria-label="Project links"><a href="../">Testing</a><a href="../unit/">Unit</a><a href="../integration/">Integration</a><a href="../regression/">Regression</a><a href="https://github.com/RIAEvangelist/js-queue/tree/main/test">Source</a></nav></div></footer>
+</body>
+</html>

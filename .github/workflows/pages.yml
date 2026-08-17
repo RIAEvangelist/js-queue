@@ -69,6 +69,10 @@ jobs:
             _site/stack \
             _site/migration \
             _site/testing \
+            _site/testing/unit \
+            _site/testing/functional \
+            _site/testing/integration \
+            _site/testing/regression \
             _site/assets \
             _site/reports/node \
             _site/reports/chrome
@@ -83,6 +87,10 @@ jobs:
           cp stack/index.html _site/stack/
           cp migration/index.html _site/migration/
           cp testing/index.html _site/testing/
+          cp testing/unit/index.html _site/testing/unit/
+          cp testing/functional/index.html _site/testing/functional/
+          cp testing/integration/index.html _site/testing/integration/
+          cp testing/regression/index.html _site/testing/regression/
           cp assets/site.css assets/site.js assets/playground.js assets/js-queue-header.png assets/vanilla-test-header.png _site/assets/
           cp --recursive coverage/node/. _site/reports/node/
           cp --recursive coverage/chrome/. _site/reports/chrome/
@@ -99,6 +107,10 @@ jobs:
             _site/stack/index.html \
             _site/migration/index.html \
             _site/testing/index.html \
+            _site/testing/unit/index.html \
+            _site/testing/functional/index.html \
+            _site/testing/integration/index.html \
+            _site/testing/regression/index.html \
             _site/assets/js-queue-header.png \
             _site/assets/playground.js \
             _site/assets/vanilla-test-header.png \
