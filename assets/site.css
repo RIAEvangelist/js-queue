@@ -523,6 +523,24 @@ button.button{
     font-size:.75rem;
 }
 
+.benchmark-grid{
+    display:grid;
+    gap:1rem;
+}
+
+.benchmark-figure{
+    width:min(100%,45rem);
+    margin:0 auto;
+}
+
+.benchmark-figure img{
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+}
+
 .code-block{
     position:relative;
     overflow:hidden;

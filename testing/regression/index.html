@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="The 24 focused Regression checks for js-queue validation, recovery, documentation integrity, and deployment gates.">
+    <meta name="description" content="The 25 focused Regression checks for js-queue validation, recovery, performance state, documentation integrity, and deployment gates.">
     <meta name="theme-color" content="#020817">
     <meta property="og:title" content="Regression tests · js-queue">
-    <meta property="og:description" content="24 focused Regression checks for validation, recovery, documentation integrity, and delivery gates.">
+    <meta property="og:description" content="25 focused Regression checks for validation, recovery, performance state, documentation integrity, and delivery gates.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://riaevangelist.github.io/js-queue/testing/regression/">
     <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Regression tests · js-queue">
-    <meta name="twitter:description" content="24 focused Regression checks for validation, recovery, documentation integrity, and delivery gates.">
+    <meta name="twitter:description" content="25 focused Regression checks for validation, recovery, performance state, documentation integrity, and delivery gates.">
     <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <link rel="canonical" href="https://riaevangelist.github.io/js-queue/testing/regression/">
     <link rel="stylesheet" href="../../assets/site.css">
@@ -21,19 +21,19 @@
 </head>
 <body>
     <a class="skip-link" href="#content">Skip to content</a>
-    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../../">Overview</a><a href="../../guide/">Start</a><a href="../../api/">API</a><a href="../../patterns/">Patterns</a><a href="../../examples/">Examples</a><a href="../../playground/">Playground</a><a href="../" aria-current="page">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../../">Overview</a><a href="../../guide/">Start</a><a href="../../api/">API</a><a href="../../patterns/">Patterns</a><a href="../../examples/">Examples</a><a href="../../playground/">Playground</a><a href="../../performance/">Performance</a><a href="../" aria-current="page">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
 
     <main id="content">
         <header id="regression" class="page-hero shell">
             <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../../">Docs</a></li><li><a href="../">Testing</a></li><li>Regression</li></ol>
-            <p class="eyebrow">24 checks · failures stay fixed</p>
+            <p class="eyebrow">25 checks · failures stay fixed</p>
             <h1>Protect the edge. <span>Preserve the evidence.</span></h1>
-            <p class="lede">Regression checks lock down atomic validation, task-error recovery, idle behavior, control flags, every documentation target, local artwork, vanilla-test attribution, and deployment wiring.</p>
+            <p class="lede">Regression checks lock down atomic validation, task-error recovery, idle behavior, control flags, the no-WeakMap performance contract, every documentation target, local artwork, vanilla-test attribution, and deployment wiring.</p>
         </header>
 
         <section id="cases" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">8 core + 16 documentation</p><h2>All 24 Regression checks.</h2></div><p>Core failure modes and repository evidence are kept separate so a broken edge never hides inside a broad success case.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">8 core + 17 repository</p><h2>All 25 Regression checks.</h2></div><p>Core failure modes and repository evidence are kept separate so a broken edge never hides inside a broad success case.</p></div>
                 <div class="test-group"><h3>Queue regressions · 8</h3><ol class="test-index">
                     <li>invalid add input rejects the entire batch atomically</li>
                     <li>non-array contents replacement preserves pending work</li>
@@ -44,8 +44,8 @@
                     <li>next on an empty queue is an idle no-op</li>
                     <li>clear preserves caller-controlled queue flags</li>
                 </ol></div>
-                <div class="test-group"><h3>Repository and documentation regressions · 16</h3><ol class="test-index">
-                    <li>documentation remains split into fourteen focused pages</li>
+                <div class="test-group"><h3>Repository and documentation regressions · 17</h3><ol class="test-index">
+                    <li>documentation remains split into fifteen focused pages</li>
                     <li>documentation pages retain their required short contracts</li>
                     <li>every documentation page links to the Playground route</li>
                     <li>every local page target and fragment resolves</li>
@@ -60,6 +60,7 @@
                     <li>vanilla-test and native coverage load every core layer</li>
                     <li>Playground page and controller retain safe module wiring</li>
                     <li>CI and Pages retain all delivery gates and curated assets</li>
+                    <li>modern queue runtimes do not restore WeakMap state</li>
                     <li>project remains JavaScript-only</li>
                 </ol></div>
             </div>
@@ -71,6 +72,6 @@ npm run test:docs</code></pre></div></div><aside class="side-panel"><h2>Powered 
         </section>
     </main>
 
-    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · 24 focused Regression checks</p><nav aria-label="Project links"><a href="../">Testing</a><a href="../unit/">Unit</a><a href="../functional/">Functional</a><a href="../integration/">Integration</a><a href="https://github.com/RIAEvangelist/js-queue/tree/main/test">Source</a></nav></div></footer>
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · 25 focused Regression checks</p><nav aria-label="Project links"><a href="../">Testing</a><a href="../unit/">Unit</a><a href="../functional/">Functional</a><a href="../integration/">Integration</a><a href="https://github.com/RIAEvangelist/js-queue/tree/main/test">Source</a></nav></div></footer>
 </body>
 </html>

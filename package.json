@@ -1,43 +1,44 @@
 {
   "name": "js-queue",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "A tiny FIFO task queue with explicit flow control for Node and browsers",
   "type": "module",
-  "main": "./queue.cjs",
+  "main": "./queue.js",
   "module": "./queue.js",
   "browser": "./queue.js",
   "exports": {
     ".": {
       "import": "./queue.js",
-      "require": "./queue.cjs",
+      "require": "./queue.js",
       "default": "./queue.js"
     },
     "./queue": {
       "import": "./queue.js",
-      "require": "./queue.cjs"
+      "require": "./queue.js"
     },
     "./queue.js": {
       "import": "./queue.js",
-      "require": "./queue.cjs"
+      "require": "./queue.js"
     },
     "./queue-vanilla.js": "./queue-vanilla.js",
     "./stack": {
       "import": "./stack.js",
-      "require": "./stack.cjs"
+      "require": "./stack.js"
     },
     "./stack.js": {
       "import": "./stack.js",
-      "require": "./stack.cjs"
+      "require": "./stack.js"
     },
     "./package.json": "./package.json"
   },
   "files": [
     "queue.js",
-    "queue.cjs",
     "queue-vanilla.js",
     "stack.js",
-    "stack.cjs",
     "assets/js-queue-header.png",
+    "assets/vanilla-test-header.png",
+    "assets/benchmark-construct.svg",
+    "assets/benchmark-tasks.svg",
     "README.md",
     "CHANGELOG.md",
     "MIGRATION.md",
@@ -47,7 +48,7 @@
     "./queue-vanilla.js"
   ],
   "engines": {
-    "node": ">=12.22.0"
+    "node": ">=22.13.0"
   },
   "scripts": {
     "test": "node ./scripts/test.js",
@@ -60,10 +61,10 @@
     "test:package": "node ./scripts/test.js package",
     "test:server": "node ./scripts/test.js server",
     "test:docs": "node ./scripts/test.js docs",
-    "test:legacy": "node ./scripts/test.js legacy",
     "coverage": "vanilla-test coverage",
     "coverage:node": "vanilla-test coverage node",
     "coverage:chrome": "vanilla-test coverage chrome",
+    "benchmark": "node --expose-gc ./scripts/benchmark.js",
     "start": "node ./scripts/serve.js",
     "check": "npm test && npm run coverage:node"
   },
@@ -89,7 +90,7 @@
   },
   "homepage": "https://riaevangelist.github.io/js-queue/",
   "dependencies": {
-    "easy-stack": "2.0.0"
+    "easy-stack": "2.1.0"
   },
   "devDependencies": {
     "vanilla-test": "2.1.1"

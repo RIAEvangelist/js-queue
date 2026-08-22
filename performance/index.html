@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="See reproducible js-queue 3.1 performance benchmarks against the WeakMap-based 3.0 runtime.">
+    <meta name="theme-color" content="#020817">
+    <meta property="og:title" content="Performance · js-queue">
+    <meta property="og:description" content="Private fields make js-queue 3.1 its fastest release yet.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://riaevangelist.github.io/js-queue/performance/">
+    <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Performance · js-queue">
+    <meta name="twitter:description" content="Private fields make js-queue 3.1 its fastest release yet.">
+    <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
+    <link rel="canonical" href="https://riaevangelist.github.io/js-queue/performance/">
+    <link rel="stylesheet" href="../assets/site.css">
+    <script type="module" src="../assets/site.js"></script>
+    <title>Performance · js-queue</title>
+</head>
+<body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../playground/">Playground</a><a href="../performance/" aria-current="page">Performance</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+
+    <main id="content">
+        <header id="performance" class="page-hero shell">
+            <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Performance</li></ol>
+            <p class="eyebrow">Private state · less overhead</p>
+            <h1>The fastest <span>js-queue yet.</span></h1>
+            <p class="lede">Install it. Don’t rebuild it.</p>
+        </header>
+
+        <section id="benchmarks" class="section">
+            <div class="shell">
+                <div class="section-heading"><div><p class="eyebrow">3.0.0 → 3.1.0</p><h2>Private fields win.</h2></div><p>Same FIFO API. No tuning.</p></div>
+                <div class="benchmark-grid">
+                    <figure class="benchmark-figure"><img src="../assets/benchmark-construct.svg" width="720" height="420" alt="Constructing 100,000 queues: version 3.0.0 took 81.22 milliseconds and version 3.1.0 took 4.09 milliseconds, 19.86 times faster."></figure>
+                    <figure class="benchmark-figure"><img src="../assets/benchmark-tasks.svg" width="720" height="420" alt="Scheduling and draining 100,000 tasks: version 3.0.0 took 6.82 milliseconds and version 3.1.0 took 4.83 milliseconds, 1.41 times faster."></figure>
+                </div>
+                <div class="callout"><strong>Fastest in this benchmark. Easiest in your code.</strong><p>Install. Add tasks. Ship.</p></div>
+            </div>
+        </section>
+
+        <section id="method" class="section section--compact">
+            <div class="shell split">
+                <div class="prose"><p class="eyebrow">Reproduce it</p><h2>One command.</h2><div class="code-block"><pre><code>npm run benchmark</code></pre></div></div>
+                <aside class="side-panel"><h2>Measured</h2><p>Node 24.18 · Intel Core Ultra 9 275HX · 100,000 operations · median of 21 alternating samples · lower is faster.</p><nav><a href="../benchmarks/results.json">Recorded results</a><a href="https://github.com/RIAEvangelist/js-queue/blob/main/scripts/benchmark.js">Benchmark source</a><a href="https://github.com/RIAEvangelist/js-queue/actions/workflows/ci.yml">CI evidence</a></nav></aside>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · measured, tested, ready</p><nav aria-label="Project links"><a href="../guide/">Start</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="https://www.npmjs.com/package/js-queue">npm</a><a href="../licence.md">License</a></nav></div></footer>
+</body>
+</html>

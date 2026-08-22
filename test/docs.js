@@ -10,6 +10,7 @@ const pageNames=[
     'browser/index.html',
     'examples/index.html',
     'playground/index.html',
+    'performance/index.html',
     'stack/index.html',
     'migration/index.html',
     'testing/index.html',
@@ -77,11 +78,11 @@ function targetExists(pageName,target){
     return fs.readFileSync(resolved,'utf8').includes(`id="${decodeURIComponent(fragment)}"`);
 }
 
-test('regression: documentation remains split into fourteen focused pages',()=>{
+test('regression: documentation remains split into fifteen focused pages',()=>{
     const missing=pageNames.filter(name=>!fs.existsSync(new URL(name,root)));
     deepEqual(missing,[]);
-    equal(pageNames.length,14);
-    equal(read('index.html').includes('<strong>14</strong><span>focused documentation pages</span>'),true);
+    equal(pageNames.length,15);
+    equal(read('index.html').includes('<strong>15</strong><span>focused documentation pages</span>'),true);
 });
 
 test('regression: documentation pages retain their required short contracts',()=>{
@@ -93,6 +94,7 @@ test('regression: documentation pages retain their required short contracts',()=
         'browser/index.html':['browser','esm','classic','serve'],
         'examples/index.html':['examples','live-demo','recipes'],
         'playground/index.html':['playground','controls','pending','code','trace'],
+        'performance/index.html':['performance','benchmarks','method'],
         'stack/index.html':['stack','entry','comparison'],
         'migration/index.html':['migration','changes','checklist'],
         'testing/index.html':['testing','suites','coverage','ci'],
@@ -151,9 +153,11 @@ test('regression: README begins with the generated local repository header',()=>
 
 test('regression: README links every primary focused documentation route',()=>{
     const readme=read('README.md');
-    for(const path of ['guide/','api/','patterns/','browser/','examples/','playground/','testing/']){
+    for(const path of ['guide/','api/','patterns/','browser/','examples/','playground/','performance/','testing/']){
         equal(readme.includes(`https://riaevangelist.github.io/js-queue/${path}`),true,`README omits ${path}.`);
     }
+    equal(readme.includes('./assets/benchmark-construct.svg'),true);
+    equal(readme.includes('./assets/benchmark-tasks.svg'),true);
 });
 
 test('regression: repository header remains a responsive panoramic PNG',()=>{
@@ -189,18 +193,18 @@ test('regression: repository and site visibly credit vanilla-test',()=>{
 
 test('regression: Testing page publishes all four non-overlapping layers',()=>{
     const testingPage=read('testing/index.html');
-    equal(testingPage.includes('90 focused checks'),true);
+    equal(testingPage.includes('92 focused checks'),true);
     equal(testingPage.includes('10 Unit'),true);
     equal(testingPage.includes('30 Functional'),true);
-    equal(testingPage.includes('26 Integration'),true);
-    equal(testingPage.includes('24 Regression'),true);
+    equal(testingPage.includes('27 Integration'),true);
+    equal(testingPage.includes('25 Regression'),true);
     equal(testingPage.includes('No duplicated cases.'),true);
 
     const layers={
         unit:{count:10,files:['test/unit.js'],page:'testing/unit/index.html'},
         functional:{count:30,files:['test/functional.js','test/playground.js'],page:'testing/functional/index.html'},
-        integration:{count:26,files:['test/integration.js','test/package.js','test/server.js'],page:'testing/integration/index.html'},
-        regression:{count:24,files:['test/regression.js','test/docs.js'],page:'testing/regression/index.html'}
+        integration:{count:27,files:['test/integration.js','test/package.js','test/server.js'],page:'testing/integration/index.html'},
+        regression:{count:25,files:['test/regression.js','test/docs.js'],page:'testing/regression/index.html'}
     };
     const allNames=[];
 
@@ -214,8 +218,8 @@ test('regression: Testing page publishes all four non-overlapping layers',()=>{
         }
     }
 
-    equal(allNames.length,90);
-    equal(new Set(allNames).size,90,'Test inventory contains duplicate names.');
+    equal(allNames.length,92);
+    equal(new Set(allNames).size,92,'Test inventory contains duplicate names.');
 });
 
 test('regression: package scripts expose every test layer independently',()=>{
@@ -263,14 +267,19 @@ test('regression: CI and Pages retain all delivery gates and curated assets',()=
     const pages=read('.github/workflows/pages.yml');
     equal(ci.includes('npm test'),true);
     equal(ci.includes('npm run coverage'),true);
+    equal(ci.includes('npm run benchmark --silent'),true);
     equal(ci.includes("VANILLA_TEST_CHROME_NO_SANDBOX: '1'"),true);
-    equal(ci.includes('NODE_ENV: production'),true);
-    equal(ci.includes('npm install --ignore-scripts --no-audit --no-fund --package-lock=false'),true);
+    equal(ci.includes("'22.13.0'"),true);
+    equal(ci.includes("'12.22.12'"),false);
     equal(pages.includes('workflow_run:'),true);
     equal(pages.includes("github.event.workflow_run.conclusion == 'success'"),true);
     equal(pages.includes('actions/deploy-pages'),true);
     equal(pages.includes('_site/assets/playground.js'),true);
     equal(pages.includes('_site/assets/vanilla-test-header.png'),true);
+    equal(pages.includes('_site/assets/benchmark-construct.svg'),true);
+    equal(pages.includes('_site/assets/benchmark-tasks.svg'),true);
+    equal(pages.includes('_site/performance/index.html'),true);
+    equal(pages.includes('_site/benchmarks/results.json'),true);
     equal(pages.includes('_site/reports/node/index.html'),true);
     equal(pages.includes('_site/reports/chrome/index.html'),true);
     for(const layer of ['unit','functional','integration','regression']){
@@ -278,6 +287,12 @@ test('regression: CI and Pages retain all delivery gates and curated assets',()=
     }
     for(const pageName of pageNames){
         equal(pages.includes(pageName.split('/')[0]),true,`Pages workflow omits ${pageName}.`);
+    }
+});
+
+test('regression: modern queue runtimes do not restore WeakMap state',()=>{
+    for(const file of ['queue.js','queue-vanilla.js']){
+        equal(read(file).includes('WeakMap'),false,`${file} restored WeakMap state.`);
     }
 });
 

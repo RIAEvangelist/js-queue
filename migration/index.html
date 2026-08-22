@@ -3,44 +3,44 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="Migrate js-queue version 2 applications to native ESM and compatibility entry points in version 3.">
+    <meta name="description" content="Move js-queue applications to version 3.1, Node 22.13, and one shared ESM/CommonJS runtime.">
     <meta name="theme-color" content="#020817">
-    <meta property="og:title" content="Version 3 migration · js-queue">
-    <meta property="og:description" content="Migrate js-queue version 2 applications to the modern version 3 package.">
+    <meta property="og:title" content="Version 3.1 migration · js-queue">
+    <meta property="og:description" content="Move js-queue applications to Node 22.13 and the shared version 3.1 runtime.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://riaevangelist.github.io/js-queue/migration/">
     <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Version 3 migration · js-queue">
-    <meta name="twitter:description" content="Migrate js-queue version 2 applications to the modern version 3 package.">
+    <meta name="twitter:title" content="Version 3.1 migration · js-queue">
+    <meta name="twitter:description" content="Move js-queue applications to Node 22.13 and the shared version 3.1 runtime.">
     <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <link rel="canonical" href="https://riaevangelist.github.io/js-queue/migration/">
     <link rel="stylesheet" href="../assets/site.css">
     <script type="module" src="../assets/site.js"></script>
-    <title>Version 3 migration · js-queue</title>
+    <title>Version 3.1 migration · js-queue</title>
 </head>
 <body>
     <a class="skip-link" href="#content">Skip to content</a>
-    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../playground/">Playground</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../playground/">Playground</a><a href="../performance/">Performance</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
 
     <main id="content">
         <header id="migration" class="page-hero shell">
             <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Migration</li></ol>
-            <p class="eyebrow">Version 2 → 3</p>
-            <h1>Modern modules. <span>Familiar flow.</span></h1>
-            <p class="lede">FIFO execution, automatic start, explicit <code>this.next()</code>, stop gates, clearing, CommonJS, classic scripts, and the stack path all remain available.</p>
+            <p class="eyebrow">Version 3.0 → 3.1</p>
+            <h1>Faster core. <span>Same flow.</span></h1>
+            <p class="lede">FIFO execution, explicit <code>this.next()</code>, CommonJS syntax, classic scripts, and the stack path remain available.</p>
         </header>
 
         <section id="changes" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">What changed</p><h2>Four boundaries to inspect.</h2></div><p>Most consumers can upgrade without rewriting task logic. Check loading, input values, subclassing, and the runtime baseline.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">What changed</p><h2>Two internals. One floor.</h2></div><p>Task logic stays the same. Upgrade Node, then install.</p></div>
                 <div class="grid grid--two">
-                    <article class="card"><span class="card__label">Modules</span><h3>ESM is native; CommonJS is conditional</h3><p><code>import Queue from 'js-queue'</code> and <code>require('js-queue')</code> each resolve to their native format.</p></article>
-                    <article class="card"><span class="card__label">Validation</span><h3>Tasks must be functions</h3><p><code>add()</code> and <code>contents</code> replacement reject invalid values before partially mutating the queue.</p></article>
-                    <article class="card"><span class="card__label">Classes</span><h3>Use <code>extends Queue</code></h3><p>Methods now live on the class prototype. Replace <code>MyQueue.prototype=new Queue</code> inheritance.</p></article>
-                    <article class="card"><span class="card__label">Runtime</span><h3>Node 12.22 or newer</h3><p>The ESM and conditional-export baseline replaces the historical Node 1 package declaration.</p></article>
+                    <article class="card"><span class="card__label">Modules</span><h3>One Node source</h3><p><code>import</code> and <code>require</code> both load <code>queue.js</code>. The duplicate CJS build is gone.</p></article>
+                    <article class="card"><span class="card__label">State</span><h3>Private fields</h3><p>Instance state no longer pays for external WeakMap lookups.</p></article>
+                    <article class="card"><span class="card__label">Runtime</span><h3>Node 22.13 or newer</h3><p>This floor supports warning-free synchronous CommonJS loading of the shared ES module.</p></article>
+                    <article class="card"><span class="card__label">Stack</span><h3>easy-stack 2.1</h3><p>The LIFO entry uses the same private-field and shared-module design.</p></article>
                 </div>
-                <div class="callout"><strong>Synchronous errors are now recoverable.</strong><p>The error still reaches the caller, while <code>running</code> resets and later work stays pending.</p></div>
+                <div class="callout"><strong>No queue API rewrite.</strong><p>Keep your imports, requires, task functions, and <code>this.next()</code> hand-offs.</p></div>
             </div>
         </section>
 
@@ -50,13 +50,11 @@
                     <p class="eyebrow">Upgrade checklist</p>
                     <h2>Verify the edges, then run.</h2>
                     <ul class="check-list">
-                        <li>Select ESM, CommonJS, or the classic browser file explicitly.</li>
-                        <li>Ensure every value passed to <code>add()</code> is a function.</li>
-                        <li>Use <code>class Name extends Queue</code> for custom queues.</li>
-                        <li>Do not depend on methods being enumerable own properties.</li>
-                        <li>Catch synchronous task errors at the execution boundary.</li>
-                        <li>Keep every intended hand-off at <code>this.next()</code>.</li>
-                        <li>Run the application integration suite on Node 12.22 or newer.</li>
+                        <li>Move production and CI to Node 22.13 or newer.</li>
+                        <li>Keep ESM imports or CommonJS requires unchanged.</li>
+                        <li>Keep classic browser pages on <code>queue-vanilla.js</code>.</li>
+                        <li>Run the application integration suite.</li>
+                        <li>Compare your workload with <code>npm run benchmark</code>.</li>
                     </ul>
                     <div class="actions"><a class="button button--primary" href="../MIGRATION.md">Read the full migration file</a><a class="button" href="../CHANGELOG.md">Open changelog</a></div>
                 </div>
@@ -65,6 +63,6 @@
         </section>
     </main>
 
-    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · migration guide</p><nav aria-label="Project links"><a href="../MIGRATION.md">Full guide</a><a href="../CHANGELOG.md">Changelog</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · migration guide</p><nav aria-label="Project links"><a href="../MIGRATION.md">Full guide</a><a href="../CHANGELOG.md">Changelog</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
 </body>
 </html>

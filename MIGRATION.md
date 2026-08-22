@@ -1,4 +1,21 @@
-# Migrating from js-queue 2 to 3
+# Migrating to js-queue 3.1
+
+Version 3.1 keeps the queue API and loading syntax while changing the runtime baseline and internal state implementation.
+
+## Move Node to 22.13 or newer
+
+Both `import` and `require` now load the same synchronous ES module. CommonJS syntax remains unchanged:
+
+```js
+const Queue=require('js-queue');
+const Stack=require('js-queue/stack');
+```
+
+Upgrade Node before installing js-queue 3.1. The package no longer ships duplicate `.cjs` runtime files or supports Node releases older than 22.13.
+
+The queue now stores private state directly on each instance instead of performing WeakMap lookups. The public `contents`, `size`, `running`, `autoRun`, and `stop` contracts are unchanged. Browser builds now require native private class fields.
+
+## Earlier migration: js-queue 2 to 3.0
 
 Version 3 keeps the explicit FIFO contract while modernizing modules, package boundaries, validation, testing, and documentation.
 
@@ -70,7 +87,7 @@ Promise rejections remain the task's responsibility. Use `try/finally` or `.fina
 
 ## Runtime baseline
 
-The package now requires Node.js 12.22 or newer. Development with `vanilla-test` requires Node.js 22.12 or newer. The shipped queue itself has no Node-only imports and runs as native JavaScript in modern browsers.
+Version 3.0 required Node.js 12.22 or newer. Its development suite used `vanilla-test` on Node.js 22.12 or newer. The shipped queue itself had no Node-only imports and ran as native JavaScript in modern browsers.
 
 ## Upgrade checklist
 

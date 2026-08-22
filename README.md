@@ -4,7 +4,7 @@
 
 A tiny first-in-first-out task queue with explicit flow control. Add functions, let the queue start automatically, and call `this.next()` when each task is ready to release the next one.
 
-[Documentation](https://riaevangelist.github.io/js-queue/) · [Quick start](https://riaevangelist.github.io/js-queue/guide/) · [API](https://riaevangelist.github.io/js-queue/api/) · [Patterns](https://riaevangelist.github.io/js-queue/patterns/) · [Browser use](https://riaevangelist.github.io/js-queue/browser/) · [Examples](https://riaevangelist.github.io/js-queue/examples/) · [Playground](https://riaevangelist.github.io/js-queue/playground/) · [Testing](https://riaevangelist.github.io/js-queue/testing/)
+[Documentation](https://riaevangelist.github.io/js-queue/) · [Quick start](https://riaevangelist.github.io/js-queue/guide/) · [API](https://riaevangelist.github.io/js-queue/api/) · [Patterns](https://riaevangelist.github.io/js-queue/patterns/) · [Browser use](https://riaevangelist.github.io/js-queue/browser/) · [Examples](https://riaevangelist.github.io/js-queue/examples/) · [Playground](https://riaevangelist.github.io/js-queue/playground/) · [Performance](https://riaevangelist.github.io/js-queue/performance/) · [Testing](https://riaevangelist.github.io/js-queue/testing/)
 
 [![CI](https://github.com/RIAEvangelist/js-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/RIAEvangelist/js-queue/actions/workflows/ci.yml)
 [![Pages](https://github.com/RIAEvangelist/js-queue/actions/workflows/pages.yml/badge.svg)](https://github.com/RIAEvangelist/js-queue/actions/workflows/pages.yml)
@@ -57,6 +57,16 @@ queue.add(function(){
 
 That explicit hand-off makes the same queue useful for synchronous steps, callback APIs, network work, connection gates, and manually controlled pipelines.
 
+## Performance
+
+**The fastest js-queue yet. Install it. Don’t rebuild it.**
+
+![Constructing 100,000 queues: js-queue 3.1.0 is 19.86 times faster than 3.0.0](./assets/benchmark-construct.svg)
+
+![Scheduling and draining 100,000 tasks: js-queue 3.1.0 is 1.41 times faster than 3.0.0](./assets/benchmark-tasks.svg)
+
+Node 24.18, 100,000 operations, median of 21 alternating samples. [Method and results](https://riaevangelist.github.io/js-queue/performance/). CI reruns the tagged comparison.
+
 ## Public surface
 
 | Member | Type | Purpose |
@@ -79,13 +89,13 @@ Every task receives the queue as `this`. Invalid tasks are rejected before any i
 | `js-queue` | ESM or CommonJS | Conditional primary entry. |
 | `js-queue/queue.js` | ESM or CommonJS | Compatibility path to the queue. |
 | `js-queue/queue-vanilla.js` | classic browser script | Publishes `globalThis.Queue`. |
-| `js-queue/stack` | ESM or CommonJS | The modernized `easy-stack` 2.0 LIFO entry. |
+| `js-queue/stack` | ESM or CommonJS | The modernized `easy-stack` 2.1 LIFO entry. |
 
-The runtime supports Node.js 12.22 and newer. The development suite uses `vanilla-test` 2.1.1 on Node.js 22.12 or newer, while a test-tooling-free compatibility runner executes all behavior and package contracts on older supported Node releases with production dependencies only.
+The runtime supports Node.js 22.13 and newer. Native ESM and CommonJS both load the same synchronous source files; no duplicate Node build is shipped.
 
 ## Test and coverage evidence
 
-**Tested with [vanilla-test](https://riaevangelist.github.io/vanilla-test/).** The repository has 90 focused checks organized into four non-overlapping layers: [Unit](https://riaevangelist.github.io/js-queue/testing/unit/), [Functional](https://riaevangelist.github.io/js-queue/testing/functional/), [Integration](https://riaevangelist.github.io/js-queue/testing/integration/), and [Regression](https://riaevangelist.github.io/js-queue/testing/regression/). Queue-facing checks run unchanged in Node and real Google Chrome.
+**Tested with [vanilla-test](https://riaevangelist.github.io/vanilla-test/).** The repository has 92 focused checks organized into four non-overlapping layers: [Unit](https://riaevangelist.github.io/js-queue/testing/unit/), [Functional](https://riaevangelist.github.io/js-queue/testing/functional/), [Integration](https://riaevangelist.github.io/js-queue/testing/integration/), and [Regression](https://riaevangelist.github.io/js-queue/testing/regression/). Queue-facing checks run unchanged in Node and real Google Chrome.
 
 <a href="https://riaevangelist.github.io/vanilla-test/"><img src="./assets/vanilla-test-header.png" width="520" alt="vanilla-test — native JavaScript testing for Node.js and browsers"></a>
 
@@ -98,15 +108,15 @@ npm run test:regression
 npm run coverage
 ```
 
-The 10 Unit checks isolate API facts. The 30 Functional checks cover queue workflows and Playground behavior. The 26 Integration checks cover interacting queue operations, package formats, stack compatibility, and local HTTP delivery. The 24 Regression checks protect validation, recovery, documentation, artwork, and deployment wiring. Both native V8 collectors continue to enforce 100% statement, branch, function, and line coverage for the shipped ESM queue.
+The 10 Unit checks isolate API facts. The 30 Functional checks cover queue workflows and Playground behavior. The 27 Integration checks cover interacting queue operations, package formats, benchmark evidence, stack compatibility, and local HTTP delivery. The 25 Regression checks protect validation, recovery, the no-WeakMap performance contract, documentation, artwork, and deployment wiring. Both native V8 collectors continue to enforce 100% statement, branch, function, and line coverage for the shipped ESM queue.
 
 [Node coverage report](https://riaevangelist.github.io/js-queue/reports/node/) · [Chrome coverage report](https://riaevangelist.github.io/js-queue/reports/chrome/)
 
-## Version 3
+## Version 3.1
 
-Version 3 adds native ESM, conditional CommonJS compatibility, validated task inputs, observable `size` and `running` state, recoverable synchronous errors, modern package boundaries, and the new documentation site. Existing `require('js-queue')`, `require('js-queue/stack.js')`, and classic `<script>` consumers have supported paths.
+Version 3.1 replaces WeakMap lookups with private instance fields, shares one Node source between `import` and `require`, and moves the runtime floor to Node 22.13. Existing `require('js-queue')` and `require('js-queue/stack.js')` syntax remains supported on that Node floor; `queue-vanilla.js` remains available to current browsers with native private fields.
 
-Read the [migration guide](./MIGRATION.md) and [changelog](./CHANGELOG.md) before upgrading an application that depends on constructor enumeration, non-function queue entries, or Node versions older than 12.22.
+Read the [migration guide](./MIGRATION.md) and [changelog](./CHANGELOG.md) before upgrading an application on Node versions older than 22.13.
 
 ## License
 

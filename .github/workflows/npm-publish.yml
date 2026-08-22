@@ -35,11 +35,14 @@ jobs:
       - name: Enforce Node coverage
         run: npm run coverage:node
 
+      - name: Preview packed package
+        run: npm pack --dry-run
+
       - name: Verify release tag matches package version
         shell: bash
         run: |
           PACKAGE_VERSION="$(node --print "JSON.parse(require('node:fs').readFileSync('package.json','utf8')).version")"
-          test "${GITHUB_REF_NAME#v}" = "$PACKAGE_VERSION"
+          test "$GITHUB_REF_NAME" = "$PACKAGE_VERSION"
 
       - name: Publish to npm with trusted publishing
         run: npm publish --access public

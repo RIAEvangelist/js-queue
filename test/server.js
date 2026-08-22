@@ -84,12 +84,16 @@ test('integration: server returns queue modules with JavaScript content types',a
     });
 });
 
-test('integration: server returns the substantial repository header as PNG',async()=>{
+test('integration: server returns repository artwork with image content types',async()=>{
     await withServer(async port=>{
-        const image=await request(port,'/assets/js-queue-header.png');
-        equal(image.status,200);
-        equal(image.headers['content-type'],'image/png');
-        equal(image.body.byteLength > 250000,true);
+        const header=await request(port,'/assets/js-queue-header.png');
+        const chart=await request(port,'/assets/benchmark-construct.svg');
+        equal(header.status,200);
+        equal(header.headers['content-type'],'image/png');
+        equal(header.body.byteLength > 250000,true);
+        equal(chart.status,200);
+        equal(chart.headers['content-type'],'image/svg+xml; charset=utf-8');
+        equal(chart.body.includes(Buffer.from('<svg')),true);
     });
 });
 

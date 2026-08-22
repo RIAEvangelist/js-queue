@@ -33,6 +33,7 @@
                 <a href="./patterns/">Patterns</a>
                 <a href="./examples/">Examples</a>
                 <a href="./playground/">Playground</a>
+                <a href="./performance/">Performance</a>
                 <a href="./testing/">Testing</a>
                 <a href="https://github.com/RIAEvangelist/js-queue">GitHub</a>
             </nav>
@@ -69,10 +70,10 @@
                     <p>Add functions in order. The queue starts when idle. Each function receives the queue as <code>this</code> and calls <code>this.next()</code> when it is ready to release the following item.</p>
                 </div>
                 <div class="metric-grid" aria-label="Project facts">
-                    <div class="metric"><strong>1</strong><span>tiny runtime dependency, for the legacy stack entry</span></div>
+                    <div class="metric"><strong>1</strong><span>tiny runtime dependency, for the optional stack entry</span></div>
                     <div class="metric"><strong>3</strong><span>loading styles: ESM, CommonJS, classic script</span></div>
                     <div class="metric"><strong>100%</strong><span>native V8 coverage gates on the queue core</span></div>
-                    <div class="metric"><strong>14</strong><span>focused documentation pages</span></div>
+                    <div class="metric"><strong>15</strong><span>focused documentation pages</span></div>
                 </div>
                 <div class="flow" aria-label="First-in-first-out execution flow">
                     <div class="flow__task">task 1</div><div class="flow__arrow" aria-hidden="true">→</div>
@@ -100,10 +101,11 @@
                     <a class="card card-link" href="./browser/"><span class="card__label">04 · Browser</span><strong>Use modules or a global script</strong><small>No bundle is required.</small></a>
                     <a class="card card-link" href="./examples/"><span class="card__label">05 · Examples</span><strong>Watch a queue execute</strong><small>Interactive FIFO demo and recipes.</small></a>
                     <a class="card card-link" href="./playground/"><span class="card__label">06 · Playground</span><strong>Control a real FIFO queue</strong><small>State, trace, and related code.</small></a>
-                    <a class="card card-link" href="./stack/"><span class="card__label">07 · Stack</span><strong>Choose FIFO or LIFO</strong><small>The modern easy-stack 2 entry.</small></a>
-                    <a class="card card-link" href="./migration/"><span class="card__label">08 · Upgrade</span><strong>Move from version 2 to 3</strong><small>Module paths and behavior changes.</small></a>
-                    <a class="card card-link" href="./testing/"><span class="card__label">09 · Evidence</span><strong>Inspect testing and coverage</strong><small>vanilla-test in Node and Chrome.</small></a>
-                    <a class="card card-link" href="https://www.npmjs.com/package/js-queue"><span class="card__label">10 · Package</span><strong>Open js-queue on npm</strong><small>Versions, downloads, and install metadata.</small></a>
+                    <a class="card card-link" href="./stack/"><span class="card__label">07 · Stack</span><strong>Choose FIFO or LIFO</strong><small>The modern easy-stack 2.1 entry.</small></a>
+                    <a class="card card-link" href="./performance/"><span class="card__label">08 · Speed</span><strong>See the benchmark</strong><small>Private fields, measured.</small></a>
+                    <a class="card card-link" href="./migration/"><span class="card__label">09 · Upgrade</span><strong>Move to version 3.1</strong><small>Runtime floor and shared modules.</small></a>
+                    <a class="card card-link" href="./testing/"><span class="card__label">10 · Evidence</span><strong>Inspect testing and coverage</strong><small>vanilla-test in Node and Chrome.</small></a>
+                    <a class="card card-link" href="https://www.npmjs.com/package/js-queue"><span class="card__label">11 · Package</span><strong>Open js-queue on npm</strong><small>Versions, downloads, and install metadata.</small></a>
                 </div>
             </div>
         </section>
@@ -111,7 +113,7 @@
 
     <footer class="site-footer">
         <div class="shell site-footer__inner">
-            <p>js-queue v3 · MIT licensed · explicit flow, no build</p>
+            <p>js-queue v3.1 · MIT licensed · explicit flow, no build</p>
             <nav aria-label="Project links"><a href="./migration/">Migration</a><a href="./CHANGELOG.md">Changelog</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="https://www.npmjs.com/package/js-queue">npm</a><a href="./licence.md">License</a></nav>
         </div>
     </footer>

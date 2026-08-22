@@ -12,7 +12,8 @@ const types=new Map([
     ['.js','text/javascript; charset=utf-8'],
     ['.json','application/json; charset=utf-8'],
     ['.md','text/markdown; charset=utf-8'],
-    ['.png','image/png']
+    ['.png','image/png'],
+    ['.svg','image/svg+xml; charset=utf-8']
 ]);
 
 function resolveRequest(requestURL){

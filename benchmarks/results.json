@@ -1,0 +1,28 @@
+{
+  "package": "js-queue",
+  "recorded": "2026-08-21",
+  "baseline": "3.0.0 WeakMap state",
+  "candidate": "3.1.0 private fields",
+  "methodology": "Median of 21 alternating samples; lower is faster.",
+  "runtime": "v24.18.0",
+  "platform": "win32 x64",
+  "processor": "Intel(R) Core(TM) Ultra 9 275HX",
+  "metrics": [
+    {
+      "label": "Construct instances",
+      "iterations": 100000,
+      "unit": "milliseconds",
+      "baseline": 81.22,
+      "candidate": 4.09,
+      "speedup": 19.86
+    },
+    {
+      "label": "Schedule and drain tasks",
+      "iterations": 100000,
+      "unit": "milliseconds",
+      "baseline": 6.82,
+      "candidate": 4.83,
+      "speedup": 1.41
+    }
+  ]
+}

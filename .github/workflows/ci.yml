@@ -45,8 +45,8 @@ jobs:
       - name: Run behavior, package, and documentation tests
         run: npm test
 
-  minimum-tooling:
-    name: vanilla-test minimum / Node 22.12
+  runtime-floor:
+    name: Runtime floor / Node 22.13
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -54,10 +54,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Set up Node.js 22.12
+      - name: Set up exact Node.js runtime floor
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          node-version: '22.12.0'
+          node-version: '22.13.0'
           cache: npm
 
       - name: Install dependencies
@@ -65,38 +65,6 @@ jobs:
 
       - name: Run full suite
         run: npm test
-
-  compatibility:
-    name: Runtime compatibility / Node ${{ matrix.node }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - '12.22.12'
-          - '18'
-          - '20'
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-
-      - name: Set up Node.js ${{ matrix.node }}
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-        with:
-          node-version: ${{ matrix.node }}
-
-      - name: Show runtime version
-        run: node --version
-
-      - name: Install production dependencies without modern test tooling
-        env:
-          NODE_ENV: production
-        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
-
-      - name: Run behavior and package contracts with the fallback harness
-        run: npm run test:legacy
 
   coverage:
     name: Native V8 coverage / Node 24 + Chrome
@@ -137,6 +105,41 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  benchmark:
+    name: Reproducible performance evidence / Node 24
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository and release tags
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tagged before-and-after benchmark
+        shell: bash
+        run: npm run benchmark --silent | tee benchmark-results.json
+
+      - name: Verify every measured workload improves
+        run: node --eval "const results=require('./benchmark-results.json'); if(results.metrics.length !== 2 || results.metrics.some(metric=>metric.candidate >= metric.baseline || metric.speedup <= 1)) process.exit(1);"
+
+      - name: Upload benchmark evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: benchmark-results
+          path: benchmark-results.json
+          if-no-files-found: error
+          retention-days: 14
+
   package-smoke:
     name: Packed npm artifact
     runs-on: ubuntu-latest
@@ -167,11 +170,12 @@ jobs:
           for REQUIRED_FILE in \
             package/package.json \
             package/queue.js \
-            package/queue.cjs \
             package/queue-vanilla.js \
             package/stack.js \
-            package/stack.cjs \
             package/assets/js-queue-header.png \
+            package/assets/vanilla-test-header.png \
+            package/assets/benchmark-construct.svg \
+            package/assets/benchmark-tasks.svg \
             package/README.md \
             package/CHANGELOG.md \
             package/MIGRATION.md \

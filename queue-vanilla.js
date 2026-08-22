@@ -1,7 +1,4 @@
 (function exposeQueue(root){
-    const queues=new WeakMap;
-    const states=new WeakMap;
-
     function validateTasks(tasks){
         const invalidIndex=tasks.findIndex(task=>typeof task !== 'function');
         if(invalidIndex !== -1){
@@ -10,18 +7,19 @@
     }
 
     class Queue{
+        #contents=[];
+        #running=false;
+
         constructor(){
-            queues.set(this,[]);
-            states.set(this,{running:false});
             this.autoRun=true;
             this.stop=false;
         }
 
         add(...tasks){
             validateTasks(tasks);
-            queues.get(this).push(...tasks);
+            this.#contents.push(...tasks);
 
-            if(!this.running && !this.stop && this.autoRun){
+            if(!this.#running && !this.stop && this.autoRun){
                 this.next();
             }
 
@@ -29,33 +27,29 @@
         }
 
         next(){
-            const queue=queues.get(this);
-            const state=states.get(this);
-
-            if(this.stop || queue.length === 0){
-                state.running=false;
+            if(this.stop || this.#contents.length === 0){
+                this.#running=false;
                 return;
             }
 
-            state.running=true;
-            const task=queue.shift();
+            this.#running=true;
+            const task=this.#contents.shift();
 
             try{
                 task.call(this);
             }catch(error){
-                state.running=false;
+                this.#running=false;
                 throw error;
             }
         }
 
         clear(){
-            const queue=[];
-            queues.set(this,queue);
-            return queue;
+            this.#contents=[];
+            return this.#contents;
         }
 
         get contents(){
-            return queues.get(this);
+            return this.#contents;
         }
 
         set contents(tasks){
@@ -64,15 +58,15 @@
             }
 
             validateTasks(tasks);
-            queues.set(this,tasks);
+            this.#contents=tasks;
         }
 
         get running(){
-            return states.get(this).running;
+            return this.#running;
         }
 
         get size(){
-            return queues.get(this).length;
+            return this.#contents.length;
         }
     }
 

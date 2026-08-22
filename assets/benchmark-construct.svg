@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="title description">
+  <title id="title">Time to construct 100,000 js-queue instances</title>
+  <desc id="description">Version 3.0.0 using WeakMap state took 81.22 milliseconds. Version 3.1.0 using private fields took 4.09 milliseconds, 19.86 times faster. Lower is faster.</desc>
+  <rect width="720" height="420" rx="24" fill="#061126"/>
+  <rect x="1" y="1" width="718" height="418" rx="23" fill="none" stroke="#28516d" stroke-width="2"/>
+  <g font-family="Inter,Segoe UI,Arial,sans-serif">
+    <text x="28" y="46" fill="#f4f8ff" font-size="25" font-weight="700">Construct 100,000 queues</text>
+    <text x="692" y="46" fill="#69efff" font-size="24" font-weight="700" text-anchor="end">19.86× faster</text>
+    <text x="28" y="76" fill="#8fa7bf" font-size="16">Node 24.18 · median of 21 · lower is faster</text>
+
+    <text x="28" y="141" fill="#ffcc76" font-size="18" font-weight="700">3.0.0 · WeakMap</text>
+    <rect x="182" y="112" width="378" height="44" rx="6" fill="#ffb23f"/>
+    <text x="574" y="141" fill="#f4f8ff" font-size="18" font-weight="700">81.22 ms</text>
+
+    <text x="28" y="224" fill="#9af5ff" font-size="18" font-weight="700">3.1.0 · private</text>
+    <rect x="182" y="195" width="20" height="44" rx="6" fill="#54e8ff"/>
+    <text x="216" y="224" fill="#f4f8ff" font-size="18" font-weight="700">4.09 ms</text>
+
+    <line x1="182" y1="298" x2="647" y2="298" stroke="#41627b" stroke-width="2"/>
+    <g fill="#8fa7bf" font-size="13" text-anchor="middle">
+      <text x="182" y="324">0</text>
+      <text x="275" y="324">20</text>
+      <text x="368" y="324">40</text>
+      <text x="461" y="324">60</text>
+      <text x="554" y="324">80</text>
+      <text x="647" y="324">100</text>
+    </g>
+    <text x="414" y="353" fill="#8fa7bf" font-size="14" text-anchor="middle">milliseconds</text>
+    <text x="28" y="389" fill="#f4f8ff" font-size="17" font-weight="700">Private fields remove per-instance WeakMap setup.</text>
+  </g>
+</svg>

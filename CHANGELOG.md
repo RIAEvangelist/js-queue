@@ -4,11 +4,26 @@ All notable changes to `js-queue` are documented here.
 
 ## Unreleased
 
+## 3.1.0 — 2026-08-21
+
 ### Added
 
 - A dedicated browser Playground backed by the canonical queue module, deterministic FIFO controls, state and execution views, and related JavaScript that follows every activity.
 - A focused `vanilla-test` Playground controller suite and GitHub Pages deployment contracts for the new route and module.
-- Ninety non-overlapping `vanilla-test` checks organized into independently runnable Unit, Functional, Integration, and Regression layers, with a dedicated documentation page for every layer.
+- Ninety-two non-overlapping `vanilla-test` checks organized into independently runnable Unit, Functional, Integration, and Regression layers, with a dedicated documentation page for every layer.
+- Reproducible WeakMap-versus-private-field benchmarks, two compact charts, and a focused Performance page.
+
+### Changed
+
+- Replace queue WeakMap state with private instance fields while preserving the public FIFO contract.
+- Resolve native ESM and CommonJS consumers through the same synchronous `queue.js` and `stack.js` sources.
+- Raise the supported runtime floor to Node.js 22.13 and verify that exact release in CI.
+- Update the stack entry to `easy-stack` 2.1.0.
+
+### Removed
+
+- Remove the duplicate `queue.cjs` and `stack.cjs` Node builds.
+- Remove pre-22 compatibility jobs and their fallback test command.
 
 ## 3.0.0 — 2026-08-16
 

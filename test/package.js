@@ -62,6 +62,7 @@ test('integration: package primary ESM entry exports and executes Queue',async()
 test('integration: package primary CommonJS entry exports and executes Queue',()=>{
     const required=require('js-queue');
     equal(required,required.Queue);
+    equal(required,require('../queue.js'));
     deepEqual(exerciseQueue(required),{order:['a','b'],running:false,size:0});
 });
 
@@ -72,6 +73,7 @@ test('integration: package ESM queue deep path remains executable',async()=>{
 
 test('integration: package CommonJS queue deep path remains executable',()=>{
     const required=require('js-queue/queue.js');
+    equal(required,require('js-queue'));
     deepEqual(exerciseQueue(required),{order:['a','b'],running:false,size:0});
 });
 
@@ -82,10 +84,11 @@ test('integration: package ESM stack entry preserves LIFO order',async()=>{
 
 test('integration: package CommonJS stack entry preserves LIFO order',()=>{
     const required=require('js-queue/stack.js');
+    equal(required,require('../stack.js'));
     deepEqual(exerciseStackOrder(required),[3,2,1]);
 });
 
-test('integration: package ESM stack exposes the easy-stack 2 state contract',async()=>{
+test('integration: package ESM stack exposes the easy-stack 2.1 state contract',async()=>{
     const imported=await import('js-queue/stack');
     deepEqual(exerciseStackState(imported.default),{
         clearedIsStack:true,
@@ -98,7 +101,7 @@ test('integration: package ESM stack exposes the easy-stack 2 state contract',as
     });
 });
 
-test('integration: package CommonJS stack exposes the easy-stack 2 state contract',()=>{
+test('integration: package CommonJS stack exposes the easy-stack 2.1 state contract',()=>{
     const required=require('js-queue/stack');
     deepEqual(exerciseStackState(required),{
         clearedIsStack:true,
@@ -124,11 +127,11 @@ test('integration: package classic global executes the FIFO contract',()=>{
 });
 
 test('integration: package metadata pins supported runtimes and dependencies',()=>{
-    equal(packageData.version,'3.0.0');
-    equal(packageData.engines.node,'>=12.22.0');
-    equal(packageData.dependencies['easy-stack'],'2.0.0');
-    equal(packageLock.packages[''].dependencies['easy-stack'],'2.0.0');
-    equal(packageLock.packages['node_modules/easy-stack'].version,'2.0.0');
+    equal(packageData.version,'3.1.0');
+    equal(packageData.engines.node,'>=22.13.0');
+    equal(packageData.dependencies['easy-stack'],'2.1.0');
+    equal(packageLock.packages[''].dependencies['easy-stack'],'2.1.0');
+    equal(packageLock.packages['node_modules/easy-stack'].version,'2.1.0');
     equal(packageData.devDependencies['vanilla-test'],'2.1.1');
 });
 
@@ -137,10 +140,31 @@ test('integration: package metadata exposes the supported public surface',()=>{
     equal(packageData.type,'module');
     deepEqual(packageData.sideEffects,['./queue-vanilla.js']);
     equal(packageData.exports['.'].import,'./queue.js');
-    equal(packageData.exports['.'].require,'./queue.cjs');
+    equal(packageData.exports['.'].require,'./queue.js');
     equal(packageData.exports['./stack'].import,'./stack.js');
-    equal(packageData.exports['./stack'].require,'./stack.cjs');
+    equal(packageData.exports['./stack'].require,'./stack.js');
     equal(packageData.homepage,'https://riaevangelist.github.io/js-queue/');
+});
+
+test('integration: benchmark evidence matches the tagged baseline and chart claims',()=>{
+    const results=JSON.parse(fs.readFileSync(new URL('../benchmarks/results.json',import.meta.url),'utf8'));
+    const script=fs.readFileSync(new URL('../scripts/benchmark.js',import.meta.url),'utf8');
+    const constructionChart=fs.readFileSync(new URL('../assets/benchmark-construct.svg',import.meta.url),'utf8');
+    const taskChart=fs.readFileSync(new URL('../assets/benchmark-tasks.svg',import.meta.url),'utf8');
+
+    equal(packageData.scripts.benchmark,'node --expose-gc ./scripts/benchmark.js');
+    equal(script.includes("const baselineVersion='3.0.0'"),true);
+    equal(script.includes('constructionSink=queues'),true);
+    equal(script.includes('measured.checksum !== iterations'),true);
+    equal(results.baseline,'3.0.0 WeakMap state');
+    equal(results.candidate,'3.1.0 private fields');
+    equal(results.metrics.length,2);
+    for(const metric of results.metrics){
+        equal(metric.candidate < metric.baseline,true,`${metric.label} did not improve.`);
+        equal(metric.speedup > 1,true,`${metric.label} is not faster.`);
+    }
+    equal(constructionChart.includes(`${results.metrics[0].speedup}× faster`),true);
+    equal(taskChart.includes(`${results.metrics[1].speedup}× faster`),true);
 });
 
 run().then(result=>{

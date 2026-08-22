@@ -12,23 +12,17 @@ const suites={
     playground:[['test/playground.js']],
     package:[['test/package.js']],
     server:[['test/server.js']],
-    docs:[['test/docs.js']],
-    legacy:[['test/node.js'],['test/package.js']]
+    docs:[['test/docs.js']]
 };
 
 if(!Object.prototype.hasOwnProperty.call(suites,selection)){
     console.error(`Unknown test selection: ${selection}`);
     process.exitCode=2;
 }else{
-    const environment={...process.env};
-    if(selection === 'legacy'){
-        environment.JS_QUEUE_TEST_LEGACY='1';
-    }
-
     for(const [file,...args] of suites[selection]){
         const result=spawnSync(process.execPath,[file,...args],{
             cwd:fileURLToPath(new URL('../',import.meta.url)),
-            env:environment,
+            env:process.env,
             stdio:'inherit'
         });
 

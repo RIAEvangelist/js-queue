@@ -3,6 +3,7 @@ import {deepEqual,equal,test} from './harness.js';
 
 test('unit: default and named exports identify one Queue class',()=>{
     equal(Queue,NamedQueue);
+    equal(Queue.Queue,Queue);
 });
 
 test('unit: constructor enables automatic execution by default',()=>{

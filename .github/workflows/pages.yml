@@ -66,6 +66,7 @@ jobs:
             _site/browser \
             _site/examples \
             _site/playground \
+            _site/performance \
             _site/stack \
             _site/migration \
             _site/testing \
@@ -74,6 +75,7 @@ jobs:
             _site/testing/integration \
             _site/testing/regression \
             _site/assets \
+            _site/benchmarks \
             _site/reports/node \
             _site/reports/chrome
 
@@ -84,6 +86,7 @@ jobs:
           cp browser/index.html _site/browser/
           cp examples/index.html examples/demo.js _site/examples/
           cp playground/index.html _site/playground/
+          cp performance/index.html _site/performance/
           cp stack/index.html _site/stack/
           cp migration/index.html _site/migration/
           cp testing/index.html _site/testing/
@@ -91,7 +94,8 @@ jobs:
           cp testing/functional/index.html _site/testing/functional/
           cp testing/integration/index.html _site/testing/integration/
           cp testing/regression/index.html _site/testing/regression/
-          cp assets/site.css assets/site.js assets/playground.js assets/js-queue-header.png assets/vanilla-test-header.png _site/assets/
+          cp assets/site.css assets/site.js assets/playground.js assets/js-queue-header.png assets/vanilla-test-header.png assets/benchmark-construct.svg assets/benchmark-tasks.svg _site/assets/
+          cp benchmarks/results.json _site/benchmarks/
           cp --recursive coverage/node/. _site/reports/node/
           cp --recursive coverage/chrome/. _site/reports/chrome/
 
@@ -104,6 +108,7 @@ jobs:
             _site/examples/index.html \
             _site/examples/demo.js \
             _site/playground/index.html \
+            _site/performance/index.html \
             _site/stack/index.html \
             _site/migration/index.html \
             _site/testing/index.html \
@@ -114,6 +119,9 @@ jobs:
             _site/assets/js-queue-header.png \
             _site/assets/playground.js \
             _site/assets/vanilla-test-header.png \
+            _site/assets/benchmark-construct.svg \
+            _site/assets/benchmark-tasks.svg \
+            _site/benchmarks/results.json \
             _site/queue.js \
             _site/reports/node/index.html \
             _site/reports/chrome/index.html \

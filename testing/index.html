@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="Explore js-queue's 90 focused vanilla-test checks across Unit, Functional, Integration, and Regression layers.">
+    <meta name="description" content="Explore js-queue's 92 focused vanilla-test checks across Unit, Functional, Integration, and Regression layers.">
     <meta name="theme-color" content="#020817">
     <meta property="og:title" content="Testing and coverage · js-queue">
-    <meta property="og:description" content="90 focused vanilla-test checks across Unit, Functional, Integration, and Regression layers.">
+    <meta property="og:description" content="92 focused vanilla-test checks across Unit, Functional, Integration, and Regression layers.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://riaevangelist.github.io/js-queue/testing/">
     <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Testing and coverage · js-queue">
-    <meta name="twitter:description" content="90 focused vanilla-test checks across Unit, Functional, Integration, and Regression layers.">
+    <meta name="twitter:description" content="92 focused vanilla-test checks across Unit, Functional, Integration, and Regression layers.">
     <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <link rel="canonical" href="https://riaevangelist.github.io/js-queue/testing/">
     <link rel="stylesheet" href="../assets/site.css">
@@ -21,7 +21,7 @@
 </head>
 <body>
     <a class="skip-link" href="#content">Skip to content</a>
-    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../playground/">Playground</a><a href="../testing/" aria-current="page">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
+    <header class="site-header"><div class="shell site-header__inner"><a class="brand" href="../" aria-label="js-queue home"><span class="brand__mark" aria-hidden="true">Q→</span><span>js-queue</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="top-nav">Menu</button><nav id="top-nav" class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a href="../guide/">Start</a><a href="../api/">API</a><a href="../patterns/">Patterns</a><a href="../examples/">Examples</a><a href="../playground/">Playground</a><a href="../performance/">Performance</a><a href="../testing/" aria-current="page">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a></nav></div></header>
 
     <main id="content">
         <header id="testing" class="page-hero shell">
@@ -37,12 +37,12 @@
 
         <section id="suites" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">90 focused checks</p><h2>Four independent layers.</h2></div><p>Each check owns one behavior or boundary. Open a layer to see every named case without turning this overview into a long test log.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">92 focused checks</p><h2>Four independent layers.</h2></div><p>Each check owns one behavior or boundary. Open a layer to see every named case without turning this overview into a long test log.</p></div>
                 <div class="grid grid--two">
                     <a class="card card-link" href="./unit/"><span class="card__label">10 Unit</span><h3>One API fact at a time</h3><p>Exports, defaults, isolated storage, return values, task references, size, and contents replacement.</p><small>See all 10 checks →</small></a>
                     <a class="card card-link" href="./functional/"><span class="card__label">30 Functional</span><h3>Observable queue workflows</h3><p>FIFO flow, manual release, stop gates, task context, Playground controls, validation, state, trace, and related code.</p><small>See all 30 checks →</small></a>
-                    <a class="card card-link" href="./integration/"><span class="card__label">26 Integration</span><h3>Boundaries working together</h3><p>Active-task interactions, asynchronous release, ESM, CommonJS, stack, browser global, metadata, local HTTP, and media types.</p><small>See all 26 checks →</small></a>
-                    <a class="card card-link" href="./regression/"><span class="card__label">24 Regression</span><h3>Failures that stay fixed</h3><p>Atomic validation, thrown-task recovery, idle no-ops, documentation links, local assets, testing attribution, and deployment gates.</p><small>See all 24 checks →</small></a>
+                    <a class="card card-link" href="./integration/"><span class="card__label">27 Integration</span><h3>Boundaries working together</h3><p>Active-task interactions, asynchronous release, ESM, CommonJS, stack, browser global, metadata, benchmark evidence, local HTTP, and media types.</p><small>See all 27 checks →</small></a>
+                    <a class="card card-link" href="./regression/"><span class="card__label">25 Regression</span><h3>Failures that stay fixed</h3><p>Atomic validation, thrown-task recovery, the no-WeakMap runtime contract, documentation links, local assets, testing attribution, and deployment gates.</p><small>See all 25 checks →</small></a>
                 </div>
                 <div class="code-block"><pre><code>npm test
 npm run test:unit
@@ -72,12 +72,12 @@ npm run coverage:chrome</code></pre></div>
 
         <section id="ci" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">Delivery gates</p><h2>Compatibility and package shape are explicit.</h2></div><p>CI runs modern <code>vanilla-test</code> suites across platforms, a fallback harness with production dependencies only on older supported Node releases, native coverage in Chrome, and a packed-artifact install check. Pages deploys only after that <code>main</code> run succeeds.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">Delivery gates</p><h2>Runtime and package shape are explicit.</h2></div><p>CI runs <code>vanilla-test</code> across platforms and the exact Node floor, collects native Chrome coverage, reproduces the benchmark, and installs the packed artifact. Pages deploys only after that <code>main</code> run succeeds.</p></div>
                 <div class="table-wrap"><table><caption>Continuous integration jobs</caption><thead><tr><th scope="col">Gate</th><th scope="col">Runtimes</th><th scope="col">Proves</th></tr></thead><tbody>
                     <tr><td>Platforms</td><td>Node 24 · Linux, macOS, Windows</td><td>The full suite behaves consistently across operating systems.</td></tr>
-                    <tr><td>Minimum</td><td>Node 22.12</td><td>The <code>vanilla-test</code> development baseline remains valid.</td></tr>
-                    <tr><td>Compatibility</td><td>Node 12.22, 18, 20</td><td>All behavior and package contracts pass without loading modern test tooling.</td></tr>
+                    <tr><td>Runtime floor</td><td>Node 22.13</td><td>ESM and synchronous CommonJS share one source without warnings.</td></tr>
                     <tr><td>Coverage</td><td>Node 24 + Chrome Stable</td><td>Both native V8 collectors satisfy every 100% gate.</td></tr>
+                    <tr><td>Benchmark</td><td>Node 24</td><td>The tagged 3.0.0 baseline and private-field runtime are measured again.</td></tr>
                     <tr><td>Package</td><td>Node 24</td><td>The tarball installs and resolves ESM, CommonJS, browser, and stack files.</td></tr>
                 </tbody></table></div>
                 <div class="actions"><a class="button button--primary" href="https://github.com/RIAEvangelist/js-queue/actions/workflows/ci.yml">Open CI runs</a><a class="button" href="https://github.com/RIAEvangelist/js-queue/tree/main/test">Read test source</a></div>
@@ -85,6 +85,6 @@ npm run coverage:chrome</code></pre></div>
         </section>
     </main>
 
-    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3 · verified with vanilla-test</p><nav aria-label="Project links"><a href="../api/">API</a><a href="../examples/">Examples</a><a href="../migration/">Migration</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · verified with vanilla-test</p><nav aria-label="Project links"><a href="../api/">API</a><a href="../examples/">Examples</a><a href="../migration/">Migration</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
 </body>
 </html>
