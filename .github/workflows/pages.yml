@@ -77,10 +77,11 @@ jobs:
             _site/testing/regression \
             _site/assets \
             _site/benchmarks \
+            _site/node_modules/easy-stack \
             _site/reports/node \
             _site/reports/chrome
 
-          cp index.html queue.js queue-vanilla.js package.json CHANGELOG.md MIGRATION.md licence.md .nojekyll _site/
+          cp index.html queue.js queue-vanilla.js stack.js package.json CHANGELOG.md MIGRATION.md licence.md .nojekyll _site/
           cp guide/index.html _site/guide/
           cp api/index.html _site/api/
           cp patterns/index.html _site/patterns/
@@ -98,6 +99,7 @@ jobs:
           cp testing/regression/index.html _site/testing/regression/
           cp assets/site.css assets/site.js assets/playground.js assets/js-queue-header.png assets/vanilla-test-header.png assets/benchmark-construct.svg assets/benchmark-tasks.svg _site/assets/
           cp benchmarks/results.json _site/benchmarks/
+          cp node_modules/easy-stack/stack.js _site/node_modules/easy-stack/
           cp --recursive coverage/node/. _site/reports/node/
           cp --recursive coverage/chrome/. _site/reports/chrome/
 
@@ -126,12 +128,25 @@ jobs:
             _site/assets/benchmark-tasks.svg \
             _site/benchmarks/results.json \
             _site/queue.js \
+            _site/stack.js \
+            _site/node_modules/easy-stack/stack.js \
             _site/reports/node/index.html \
             _site/reports/chrome/index.html \
             _site/.nojekyll
           do
             test -f "$REQUIRED_PATH"
           done
+
+          for IMPORT_MAP_PAGE in _site/examples/index.html _site/playground/index.html
+          do
+            grep --fixed-strings --quiet '<script type="importmap">' "$IMPORT_MAP_PAGE"
+            grep --fixed-strings --quiet '"js-queue": "../queue.js"' "$IMPORT_MAP_PAGE"
+            grep --fixed-strings --quiet '"easy-stack": "../node_modules/easy-stack/stack.js"' "$IMPORT_MAP_PAGE"
+          done
+
+          grep --fixed-strings --quiet "import Queue from 'js-queue';" _site/examples/demo.js
+          grep --fixed-strings --quiet "import Queue from 'js-queue';" _site/assets/playground.js
+          grep --fixed-strings --quiet "import Stack from 'easy-stack';" _site/stack.js
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6

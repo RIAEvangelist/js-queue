@@ -1,4 +1,4 @@
-import Queue from '../queue.js';
+import Queue from 'js-queue';
 import {deepEqual,equal,test} from './harness.js';
 
 test('functional: autoRun starts newly added work synchronously',()=>{

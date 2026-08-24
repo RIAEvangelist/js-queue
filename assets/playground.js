@@ -1,4 +1,4 @@
-import Queue from '../queue.js';
+import Queue from 'js-queue';
 
 const presets=Object.freeze({
     cooperative:Object.freeze({
@@ -39,7 +39,7 @@ function codeForTask(label,autoHandoff){
 
 function codeForPreset(preset){
     const lines=[
-        "import Queue from '../queue.js';",
+        "import Queue from 'js-queue';",
         '',
         'const queue=new Queue;',
         `queue.autoRun=${preset.autoRun};`,

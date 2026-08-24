@@ -18,6 +18,10 @@
     ],
     "imports": {
       "ansi-colors-es6": "./node_modules/ansi-colors-es6/index.js",
+      "easy-stack": "./node_modules/easy-stack/stack.js",
+      "js-queue": "./queue.js",
+      "js-queue/stack": "./stack.js",
+      "js-queue/stack.js": "./stack.js",
       "strong-type": "./node_modules/strong-type/index.js",
       "vanilla-test": "./node_modules/vanilla-test/index.js"
     },

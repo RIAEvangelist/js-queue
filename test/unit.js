@@ -1,4 +1,4 @@
-import Queue, {Queue as NamedQueue} from '../queue.js';
+import Queue, {Queue as NamedQueue} from 'js-queue';
 import {deepEqual,equal,test} from './harness.js';
 
 test('unit: default and named exports identify one Queue class',()=>{

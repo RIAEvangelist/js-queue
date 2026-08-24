@@ -1,4 +1,4 @@
-import Queue from '../queue.js';
+import Queue from 'js-queue';
 import {deepEqual,equal,test} from './harness.js';
 
 test('integration: work added by an active task joins the FIFO tail',()=>{

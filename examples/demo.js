@@ -1,4 +1,4 @@
-import Queue from '../queue.js';
+import Queue from 'js-queue';
 
 const root=document.querySelector('[data-queue-demo]');
 

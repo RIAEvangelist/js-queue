@@ -1,4 +1,5 @@
-import Queue from '../queue.js';
+import Queue from 'js-queue';
+import Stack from 'js-queue/stack';
 import {deepEqual,equal,test,throws} from './harness.js';
 
 test('behavioral: serial jobs do not overlap before each owner releases the queue',()=>{
@@ -173,4 +174,32 @@ test('behavioral: pending work can be reprioritized before dispatch',()=>{
     deepEqual(events,['urgent','routine']);
     equal(queue.running,false);
     equal(queue.size,0);
+});
+
+test('behavioral: given the native no-bundler entry when declared work runs then observable orders complete',()=>{
+    const queue=new Queue;
+    const stack=new Stack;
+    const fifo=[];
+    const lifo=[];
+
+    queue.autoRun=false;
+    stack.autoRun=false;
+    queue.add(
+        function(){ fifo.push('first'); this.next(); },
+        function(){ fifo.push('second'); this.next(); }
+    );
+    stack.add(
+        function(){ lifo.push('first'); this.next(); },
+        function(){ lifo.push('second'); this.next(); }
+    );
+
+    queue.next();
+    stack.next();
+
+    deepEqual(fifo,['first','second']);
+    deepEqual(lifo,['second','first']);
+    equal(queue.running,false);
+    equal(queue.size,0);
+    equal(stack.running,false);
+    equal(stack.size,0);
 });

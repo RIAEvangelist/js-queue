@@ -17,6 +17,15 @@
     <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <link rel="canonical" href="https://riaevangelist.github.io/js-queue/playground/">
     <link rel="stylesheet" href="../assets/site.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "js-queue": "../queue.js",
+            "js-queue/": "../",
+            "easy-stack": "../node_modules/easy-stack/stack.js"
+        }
+    }
+    </script>
     <script type="module" src="../assets/site.js"></script>
     <script type="module" src="../assets/playground.js"></script>
     <title>Playground · js-queue</title>
@@ -30,7 +39,7 @@
             <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Playground</li></ol>
             <p class="eyebrow">Browser playground</p>
             <h1>Operate the queue <span>one transition at a time.</span></h1>
-            <p class="lede">This lab imports the deployed <code>queue.js</code> module. Load a FIFO scenario, change its state, and inspect the exact code behind the latest activity.</p>
+            <p class="lede">This lab imports the deployed package by its bare name through the explicit import map above, so it works with bundlers and without a bundler. Load a FIFO scenario, change its state, and inspect the exact code behind the latest activity.</p>
         </header>
 
         <div class="shell playground-page" data-playground>
@@ -131,6 +140,6 @@
         </div>
     </main>
 
-    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · interactive FIFO playground</p><nav aria-label="Project links"><a href="../examples/">Examples</a><a href="../api/">API</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · works with bundlers and without a bundler.</p><nav aria-label="Project links"><a href="../examples/">Examples</a><a href="../api/">API</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
 </body>
 </html>

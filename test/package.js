@@ -127,7 +127,7 @@ test('integration: package classic global executes the FIFO contract',()=>{
 });
 
 test('integration: package metadata pins supported runtimes and dependencies',()=>{
-    equal(packageData.version,'3.1.0');
+    equal(packageData.version,'3.1.1');
     equal(packageData.engines.node,'>=22.13.0');
     equal(packageData.dependencies['easy-stack'],'2.1.0');
     equal(packageLock.packages[''].dependencies['easy-stack'],'2.1.0');
@@ -138,6 +138,7 @@ test('integration: package metadata pins supported runtimes and dependencies',()
 test('integration: package metadata exposes the supported public surface',()=>{
     equal(packageData.author,'Brandon Nozaki Miller');
     equal(packageData.type,'module');
+    equal(packageData.browser,'./queue.js');
     deepEqual(packageData.sideEffects,['./queue-vanilla.js']);
     equal(packageData.exports['.'].import,'./queue.js');
     equal(packageData.exports['.'].require,'./queue.js');

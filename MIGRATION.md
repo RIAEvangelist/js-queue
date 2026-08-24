@@ -21,6 +21,8 @@ Version 3 keeps the explicit FIFO contract while modernizing modules, package bo
 
 ## Choose an entry point
 
+`js-queue` works with bundlers and without a bundler. Bundlers resolve the bare imports below normally. Native browser ESM needs the complete import map shown in the [browser guide](./browser/index.html), placed before the module script; it does not need a build, transpiler, or bundler.
+
 New ESM code should import the primary package:
 
 ```js
@@ -50,6 +52,8 @@ For a classic browser script, continue loading the dedicated global build:
 ```
 
 Do not load the ESM `queue.js` file as a classic script. Use `<script type="module">` for ESM or `queue-vanilla.js` for the global constructor.
+
+Import-map paths are relative to the HTML document. Serve the application over HTTP(S), ensure the server exposes the mapped package files, and do not use `file://`. If npm nests a conflicting `easy-stack`, use the browser guide's scoped map so imports originating inside `js-queue` resolve its declared nested version.
 
 ## Check task values
 

@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="The 27 focused Integration checks for js-queue interactions, package formats, benchmark evidence, stack compatibility, and local HTTP delivery.">
+    <meta name="description" content="The 28 focused Integration checks for js-queue interactions, package formats, packed dependency conflicts, benchmark evidence, stack compatibility, and local HTTP delivery.">
     <meta name="theme-color" content="#020817">
     <meta property="og:title" content="Integration tests · js-queue">
-    <meta property="og:description" content="27 focused Integration checks across queue interactions, package formats, benchmark evidence, and local HTTP delivery.">
+    <meta property="og:description" content="28 focused Integration checks across queue interactions, package formats, dependency conflicts, benchmark evidence, and local HTTP delivery.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://riaevangelist.github.io/js-queue/testing/integration/">
     <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Integration tests · js-queue">
-    <meta name="twitter:description" content="27 focused Integration checks across queue interactions, package formats, benchmark evidence, and local HTTP delivery.">
+    <meta name="twitter:description" content="28 focused Integration checks across queue interactions, package formats, dependency conflicts, benchmark evidence, and local HTTP delivery.">
     <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <link rel="canonical" href="https://riaevangelist.github.io/js-queue/testing/integration/">
     <link rel="stylesheet" href="../../assets/site.css">
@@ -26,14 +26,14 @@
     <main id="content">
         <header id="integration" class="page-hero shell">
             <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../../">Docs</a></li><li><a href="../">Testing</a></li><li>Integration</li></ol>
-            <p class="eyebrow">27 checks · connected boundaries</p>
+            <p class="eyebrow">28 checks · connected boundaries</p>
             <h1>Join the surfaces. <span>Verify the seams.</span></h1>
-            <p class="lede">Integration checks cover APIs working together, asynchronous release, every supported package format, the easy-stack entry, classic-browser use, metadata, and the local documentation server.</p>
+            <p class="lede">Integration checks cover APIs working together, asynchronous release, every supported package format, a packed consumer with a conflicting dependency, the easy-stack entry, classic-browser use, metadata, and the local documentation server.</p>
         </header>
 
         <section id="cases" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">5 interactions + 13 package + 9 server</p><h2>All 27 Integration checks.</h2></div><p>Each group owns a different seam: internal API composition, published consumption, or HTTP delivery.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">5 interactions + 14 package + 9 server</p><h2>All 28 Integration checks.</h2></div><p>Each group owns a different seam: internal API composition, published consumption, or HTTP delivery.</p></div>
                 <div class="test-group"><h3>Queue interactions · 5</h3><ol class="test-index">
                     <li>work added by an active task joins the FIFO tail</li>
                     <li>an active task can stop the next hand-off</li>
@@ -41,7 +41,7 @@
                     <li>clear inside an active task removes only pending work</li>
                     <li>an asynchronous callback releases the next FIFO task</li>
                 </ol></div>
-                <div class="test-group"><h3>Package and evidence boundaries · 13</h3><ol class="test-index">
+                <div class="test-group"><h3>Package and evidence boundaries · 14</h3><ol class="test-index">
                     <li>package primary ESM entry exports and executes Queue</li>
                     <li>package primary CommonJS entry exports and executes Queue</li>
                     <li>package ESM queue deep path remains executable</li>
@@ -55,6 +55,7 @@
                     <li>package metadata pins supported runtimes and dependencies</li>
                     <li>package metadata exposes the supported public surface</li>
                     <li>benchmark evidence matches the tagged baseline and chart claims</li>
+                    <li>packed consumer keeps the declared nested easy-stack across every stack module path</li>
                 </ol></div>
                 <div class="test-group"><h3>Local HTTP boundary · 9</h3><ol class="test-index">
                     <li>server resolves the site root inside the canonical directory</li>
@@ -73,10 +74,11 @@
         <section id="run" class="section">
             <div class="shell split"><div><p class="eyebrow">Run this layer</p><h2>All seams, or one boundary.</h2><div class="code-block"><pre><code>npm run test:integration
 npm run test:package
+npm run test:consumer
 npm run test:server</code></pre></div></div><aside class="side-panel"><h2>Powered by vanilla-test</h2><p>Integration results use the same concise vanilla-test reporting while keeping package and server setup in isolated processes.</p><a class="button" href="https://riaevangelist.github.io/vanilla-test/">Open vanilla-test</a></aside></div>
         </section>
     </main>
 
-    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · 27 focused Integration checks</p><nav aria-label="Project links"><a href="../">Testing</a><a href="../unit/">Unit</a><a href="../functional/">Functional</a><a href="../behavioral/">Behavioral</a><a href="../regression/">Regression</a><a href="https://github.com/RIAEvangelist/js-queue/tree/main/test">Source</a></nav></div></footer>
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · works with bundlers and without a bundler.</p><nav aria-label="Project links"><a href="../">Testing</a><a href="../unit/">Unit</a><a href="../functional/">Functional</a><a href="../behavioral/">Behavioral</a><a href="../regression/">Regression</a><a href="https://github.com/RIAEvangelist/js-queue/tree/main/test">Source</a></nav></div></footer>
 </body>
 </html>

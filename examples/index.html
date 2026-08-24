@@ -16,6 +16,15 @@
     <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <link rel="canonical" href="https://riaevangelist.github.io/js-queue/examples/">
     <link rel="stylesheet" href="../assets/site.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "js-queue": "../queue.js",
+            "js-queue/": "../",
+            "easy-stack": "../node_modules/easy-stack/stack.js"
+        }
+    }
+    </script>
     <script type="module" src="../assets/site.js"></script>
     <script type="module" src="./demo.js"></script>
     <title>Examples · js-queue</title>
@@ -29,7 +38,7 @@
             <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Examples</li></ol>
             <p class="eyebrow">Exact runtime source</p>
             <h1>Watch explicit flow <span>stay ordered.</span></h1>
-            <p class="lede">This page imports the published <code>queue.js</code> directly. Run it, pause the release gate, resume, or clear pending work.</p>
+            <p class="lede">This page imports <code>js-queue</code> by its bare package name through the import map above: it works with bundlers and without a bundler. Run it, pause the release gate, resume, or clear pending work.</p>
         </header>
 
         <section id="live-demo" class="section section--compact">
@@ -74,6 +83,6 @@ ready.then(()=>{
         </section>
     </main>
 
-    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · live examples</p><nav aria-label="Project links"><a href="../patterns/">Patterns</a><a href="../api/">API</a><a href="../browser/">Browser</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · works with bundlers and without a bundler.</p><nav aria-label="Project links"><a href="../patterns/">Patterns</a><a href="../api/">API</a><a href="../browser/">Browser</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
 </body>
 </html>

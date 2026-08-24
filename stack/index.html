@@ -33,7 +33,7 @@
 
         <section id="entry" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">Load it explicitly</p><h2>The stack stays a separate contract.</h2></div><p>The queue core is FIFO. Import the stack entry only when the most recently added task should execute first.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">Load it explicitly</p><h2>The stack stays a separate contract.</h2></div><p>The queue core is FIFO. Import the stack entry only when the most recently added task should execute first. It works with bundlers and without a bundler; native browser ESM maps both <code>js-queue/stack</code> and its bare <code>easy-stack</code> dependency as shown in the <a href="../browser/#esm">Browser guide</a>.</p></div>
                 <div class="grid grid--two">
                     <article class="card"><span class="card__label">ESM</span><h3>Native import</h3><div class="code-block"><pre><code>import Stack from 'js-queue/stack';</code></pre></div></article>
                     <article class="card"><span class="card__label">CommonJS</span><h3>Conditional require</h3><div class="code-block"><pre><code>const Stack=require('js-queue/stack.js');</code></pre></div></article>
@@ -62,6 +62,6 @@ stack.next(); // third runs first</code></pre></div>
         </section>
     </main>
 
-    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · LIFO compatibility</p><nav aria-label="Project links"><a href="../guide/">Queue start</a><a href="../api/">Queue API</a><a href="https://github.com/RIAEvangelist/easy-stack">easy-stack</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · works with bundlers and without a bundler.</p><nav aria-label="Project links"><a href="../guide/">Queue start</a><a href="../api/">Queue API</a><a href="https://github.com/RIAEvangelist/easy-stack">easy-stack</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
 </body>
 </html>

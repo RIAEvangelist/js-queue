@@ -33,17 +33,49 @@
 
         <section id="esm" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">Native ESM</p><h2>Import the source directly.</h2></div><p>Serve the files over HTTP and load the checked-in module with <code>type="module"</code>. A bundler is optional, not required.</p></div>
-                <div class="code-block"><pre><code>&lt;script type="module"&gt;
-    import Queue from './node_modules/js-queue/queue.js';
+                <div class="section-heading"><div><p class="eyebrow">Native ESM</p><h2>Use the bare package name.</h2></div><p><code>js-queue</code> works with bundlers and without a bundler. Bundlers resolve bare imports normally; native browser ESM resolves them through a standard import map with no build or transpilation step.</p></div>
+                <p>For the normal npm layout, where <code>easy-stack</code> is hoisted, put this complete import map before the module script:</p>
+                <div class="code-block"><pre><code>&lt;script type="importmap"&gt;
+{
+  "imports": {
+    "js-queue": "./node_modules/js-queue/queue.js",
+    "js-queue/": "./node_modules/js-queue/",
+    "js-queue/stack": "./node_modules/js-queue/stack.js",
+    "js-queue/stack.js": "./node_modules/js-queue/stack.js",
+    "easy-stack": "./node_modules/easy-stack/stack.js"
+  }
+}
+&lt;/script&gt;
+&lt;script type="module"&gt;
+  import Queue from 'js-queue';
+  import Stack from 'js-queue/stack';
 
-    const queue=new Queue;
-    queue.add(function(){
-        document.body.dataset.ready='true';
-        this.next();
-    });
+  const queue=new Queue;
+  const stack=new Stack;
 &lt;/script&gt;</code></pre></div>
-                <div class="callout"><strong>Package-name imports need a resolver.</strong><p>Inside a browser, use a relative file URL as above, an import map, or the package support built into your existing bundler.</p></div>
+                <p>If the application has a conflicting root <code>easy-stack</code> and npm nests js-queue's exact dependency, use this complete scoped map instead:</p>
+                <div class="code-block"><pre><code>&lt;script type="importmap"&gt;
+{
+  "imports": {
+    "js-queue": "./node_modules/js-queue/queue.js",
+    "js-queue/": "./node_modules/js-queue/",
+    "js-queue/stack": "./node_modules/js-queue/stack.js",
+    "js-queue/stack.js": "./node_modules/js-queue/stack.js",
+    "easy-stack": "./node_modules/easy-stack/stack.js"
+  },
+  "scopes": {
+    "./node_modules/js-queue/": {
+      "easy-stack": "./node_modules/js-queue/node_modules/easy-stack/stack.js"
+    }
+  }
+}
+&lt;/script&gt;
+&lt;script type="module"&gt;
+  import Stack from 'js-queue/stack';
+
+  const stack=new Stack;
+&lt;/script&gt;</code></pre></div>
+                <div class="callout"><strong>The scope preserves dependency ownership.</strong><p>Node and bundlers resolve <code>easy-stack</code> from the importing <code>js-queue</code> package. The browser scope applies the same boundary instead of accidentally selecting a conflicting consumer-root copy.</p></div>
             </div>
         </section>
 
@@ -65,7 +97,7 @@
 
         <section id="serve" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">Local development</p><h2>Use HTTP, not <code>file:</code>.</h2></div><p>Browser module security rules are designed around origins. This repository includes a dependency-free static server for docs and examples.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">Local development</p><h2>Use HTTP(S), not <code>file://</code>.</h2></div><p>Every import-map path is relative to the HTML document, and the server must expose each mapped package file. Browser module security rules are designed around origins, so <code>file://</code> is not supported. This repository includes a dependency-free static server for docs and examples.</p></div>
                 <div class="code-block"><pre><code>npm start
 # open http://127.0.0.1:8000/examples/</code></pre></div>
                 <div class="page-next"><p>The live example imports the exact ESM queue published by this site.</p><a class="button button--primary" href="../examples/">Open live example</a></div>
@@ -73,6 +105,6 @@
         </section>
     </main>
 
-    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · browser loading</p><nav aria-label="Project links"><a href="../guide/">Start</a><a href="../examples/">Examples</a><a href="../migration/">Migration</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · works with bundlers and without a bundler.</p><nav aria-label="Project links"><a href="../guide/">Start</a><a href="../examples/">Examples</a><a href="../migration/">Migration</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
 </body>
 </html>

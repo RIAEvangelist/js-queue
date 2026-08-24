@@ -53,6 +53,7 @@
                         <li>Move production and CI to Node 22.13 or newer.</li>
                         <li>Keep ESM imports or CommonJS requires unchanged.</li>
                         <li>Keep classic browser pages on <code>queue-vanilla.js</code>.</li>
+                        <li>For native browser ESM, keep the complete import map before the module script and add the scoped dependency map when npm nests a conflict.</li>
                         <li>Run the application integration suite.</li>
                         <li>Compare your workload with <code>npm run benchmark</code>.</li>
                     </ul>
@@ -63,6 +64,6 @@
         </section>
     </main>
 
-    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · migration guide</p><nav aria-label="Project links"><a href="../MIGRATION.md">Full guide</a><a href="../CHANGELOG.md">Changelog</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
+    <footer class="site-footer"><div class="shell site-footer__inner"><p>js-queue v3.1 · works with bundlers and without a bundler.</p><nav aria-label="Project links"><a href="../MIGRATION.md">Full guide</a><a href="../CHANGELOG.md">Changelog</a><a href="../testing/">Testing</a><a href="https://github.com/RIAEvangelist/js-queue">GitHub</a><a href="../licence.md">License</a></nav></div></footer>
 </body>
 </html>

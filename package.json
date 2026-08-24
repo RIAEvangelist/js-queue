@@ -1,6 +1,6 @@
 {
   "name": "js-queue",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "A tiny FIFO task queue with explicit flow control for Node and browsers",
   "type": "module",
   "main": "./queue.js",
@@ -60,6 +60,7 @@
     "test:core": "node ./scripts/test.js core",
     "test:playground": "node ./scripts/test.js playground",
     "test:package": "node ./scripts/test.js package",
+    "test:consumer": "node ./scripts/test.js consumer",
     "test:server": "node ./scripts/test.js server",
     "test:docs": "node ./scripts/test.js docs",
     "coverage": "vanilla-test coverage",

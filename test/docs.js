@@ -111,6 +111,37 @@ test('regression: documentation pages retain their required short contracts',()=
         const missing=ids.filter(id=>!source.includes(`id="${id}"`));
         deepEqual(missing,[],`${name} is missing required sections.`);
     }
+
+    const browserClaim='works with bundlers and without a bundler.';
+    for(const pageName of pageNames){
+        equal(read(pageName).includes(browserClaim),true,`${pageName} omits the browser contract.`);
+    }
+    for(const documentName of ['README.md','MIGRATION.md','CHANGELOG.md']){
+        equal(read(documentName).includes(browserClaim),true,`${documentName} omits the browser contract.`);
+    }
+
+    const readme=read('README.md');
+    const browserGuide=read('browser/index.html');
+    for(const source of [readme,browserGuide]){
+        for(const mapping of [
+            './node_modules/js-queue/queue.js',
+            './node_modules/js-queue/',
+            './node_modules/js-queue/stack.js',
+            './node_modules/easy-stack/stack.js',
+            './node_modules/js-queue/node_modules/easy-stack/stack.js'
+        ]){
+            equal(source.includes(mapping),true,`Browser documentation omits ${mapping}.`);
+        }
+        equal(source.includes('"scopes"'),true,'Browser documentation omits the nested dependency scope.');
+        equal(source.includes('file://'),true,'Browser documentation omits the unsupported file URL boundary.');
+        equal(source.includes('HTTP(S)'),true,'Browser documentation omits the HTTP(S) requirement.');
+    }
+    equal((readme.match(/<script type="importmap">/g) || []).length,2);
+    equal((browserGuide.match(/&lt;script type="importmap"&gt;/g) || []).length,2);
+    equal(/<script type="importmap">[\s\S]*?<\/script>[\s\S]*?<script type="module">/.test(readme),true);
+    equal(/&lt;script type="importmap"&gt;[\s\S]*?&lt;\/script&gt;[\s\S]*?&lt;script type="module"&gt;/.test(browserGuide),true);
+    equal(read('stack.js').startsWith("import Stack from 'easy-stack';"),true);
+    equal(/from ['"]\.\.\/easy-stack/.test(read('stack.js')),false);
 });
 
 test('regression: every documentation page links to the Playground route',()=>{
@@ -195,19 +226,19 @@ test('regression: repository and site visibly credit vanilla-test',()=>{
 
 test('regression: Testing page publishes all five non-overlapping layers',()=>{
     const testingPage=read('testing/index.html');
-    equal(testingPage.includes('100 focused checks'),true);
+    equal(testingPage.includes('102 focused checks'),true);
     equal(testingPage.includes('10 Unit'),true);
     equal(testingPage.includes('30 Functional'),true);
-    equal(testingPage.includes('8 Behavioral'),true);
-    equal(testingPage.includes('27 Integration'),true);
+    equal(testingPage.includes('9 Behavioral'),true);
+    equal(testingPage.includes('28 Integration'),true);
     equal(testingPage.includes('25 Regression'),true);
     equal(testingPage.includes('No duplicated cases.'),true);
 
     const layers={
         unit:{count:10,files:['test/unit.js'],page:'testing/unit/index.html'},
         functional:{count:30,files:['test/functional.js','test/playground.js'],page:'testing/functional/index.html'},
-        behavioral:{count:8,files:['test/behavioral.js'],page:'testing/behavioral/index.html'},
-        integration:{count:27,files:['test/integration.js','test/package.js','test/server.js'],page:'testing/integration/index.html'},
+        behavioral:{count:9,files:['test/behavioral.js'],page:'testing/behavioral/index.html'},
+        integration:{count:28,files:['test/integration.js','test/package.js','test/consumer.js','test/server.js'],page:'testing/integration/index.html'},
         regression:{count:25,files:['test/regression.js','test/docs.js'],page:'testing/regression/index.html'}
     };
     const allNames=[];
@@ -222,8 +253,8 @@ test('regression: Testing page publishes all five non-overlapping layers',()=>{
         }
     }
 
-    equal(allNames.length,100);
-    equal(new Set(allNames).size,100,'Test inventory contains duplicate names.');
+    equal(allNames.length,102);
+    equal(new Set(allNames).size,102,'Test inventory contains duplicate names.');
 });
 
 test('regression: package scripts expose every test layer independently',()=>{
@@ -243,6 +274,9 @@ test('regression: package scripts expose every test layer independently',()=>{
     for(const file of ['test/unit.js','test/functional.js','test/behavioral.js','test/integration.js','test/regression.js']){
         equal(fs.existsSync(new URL(file,root)),true,`${file} is missing.`);
     }
+    equal(packageData.scripts['test:consumer'],'node ./scripts/test.js consumer');
+    equal(runner.includes("consumer:[['test/consumer.js']]"),true);
+    equal(fs.existsSync(new URL('test/consumer.js',root)),true);
 });
 
 test('regression: vanilla-test and native coverage load every core layer',()=>{
@@ -253,24 +287,57 @@ test('regression: vanilla-test and native coverage load every core layer',()=>{
     equal(packageData.scripts.coverage,'vanilla-test coverage');
     equal(config.entry,'./test/CI.js');
     equal(read('test/harness.js').includes("import('vanilla-test')"),true);
+    deepEqual({
+        easyStack:config.chrome.imports['easy-stack'],
+        queue:config.chrome.imports['js-queue'],
+        stack:config.chrome.imports['js-queue/stack'],
+        stackFile:config.chrome.imports['js-queue/stack.js']
+    },{
+        easyStack:'./node_modules/easy-stack/stack.js',
+        queue:'./queue.js',
+        stack:'./stack.js',
+        stackFile:'./stack.js'
+    });
     for(const layer of ['unit','functional','behavioral','integration','regression']){
         equal(sharedEntry.includes(`import './${layer}.js';`),true,`Coverage entry omits ${layer}.`);
     }
+    for(const file of ['test/unit.js','test/functional.js','test/behavioral.js','test/integration.js','test/regression.js']){
+        const source=read(file);
+        equal(source.includes("from 'js-queue'"),true,`${file} does not use package self-resolution.`);
+        equal(source.includes("from '../queue.js'"),false,`${file} restored a relative queue import.`);
+    }
+    equal(read('test/behavioral.js').includes("import Stack from 'js-queue/stack';"),true);
 });
 
 test('regression: Playground page and controller retain safe module wiring',()=>{
     const page=read('playground/index.html');
     const source=read('assets/playground.js');
+    const examplePage=read('examples/index.html');
+    const exampleSource=read('examples/demo.js');
+    for(const browserPage of [page,examplePage]){
+        const importMapIndex=browserPage.indexOf('<script type="importmap">');
+        const moduleIndex=browserPage.indexOf('<script type="module"');
+        equal(importMapIndex >= 0,true);
+        equal(importMapIndex < moduleIndex,true,'The import map must precede every module script.');
+        equal(browserPage.includes('"js-queue": "../queue.js"'),true);
+        equal(browserPage.includes('"js-queue/": "../"'),true);
+        equal(browserPage.includes('"easy-stack": "../node_modules/easy-stack/stack.js"'),true);
+    }
     equal(page.includes('<script type="module" src="../assets/playground.js"></script>'),true);
     equal(page.includes('data-playground-code'),true);
-    equal(source.startsWith("import Queue from '../queue.js';"),true);
+    equal(source.startsWith("import Queue from 'js-queue';"),true);
+    equal(source.includes("\"import Queue from 'js-queue';\""),true);
+    equal(exampleSource.startsWith("import Queue from 'js-queue';"),true);
     equal(/\beval\s*\(|new\s+Function\b|\.innerHTML\s*=|set(?:Timeout|Interval)\s*\(/.test(source),false);
 });
 
 test('regression: CI and Pages retain all delivery gates and curated assets',()=>{
     const ci=read('.github/workflows/ci.yml');
     const pages=read('.github/workflows/pages.yml');
+    const publisher=read('.github/workflows/npm-publish.yml');
     equal(ci.includes('npm test'),true);
+    equal(ci.includes('npm audit --audit-level=high'),true);
+    equal(ci.includes('npm run test:consumer'),true);
     equal(ci.includes('npm run coverage'),true);
     equal(ci.includes('npm run benchmark --silent'),true);
     equal(ci.includes("VANILLA_TEST_CHROME_NO_SANDBOX: '1'"),true);
@@ -285,6 +352,11 @@ test('regression: CI and Pages retain all delivery gates and curated assets',()=
     equal(pages.includes('_site/assets/benchmark-tasks.svg'),true);
     equal(pages.includes('_site/performance/index.html'),true);
     equal(pages.includes('_site/benchmarks/results.json'),true);
+    equal(pages.includes('_site/stack.js'),true);
+    equal(pages.includes('_site/node_modules/easy-stack/stack.js'),true);
+    equal(pages.includes('IMPORT_MAP_PAGE'),true);
+    equal(pages.includes("import Queue from 'js-queue';"),true);
+    equal(pages.includes("import Stack from 'easy-stack';"),true);
     equal(pages.includes('_site/reports/node/index.html'),true);
     equal(pages.includes('_site/reports/chrome/index.html'),true);
     for(const layer of ['unit','functional','behavioral','integration','regression']){
@@ -293,6 +365,12 @@ test('regression: CI and Pages retain all delivery gates and curated assets',()=
     for(const pageName of pageNames){
         equal(pages.includes(pageName.split('/')[0]),true,`Pages workflow omits ${pageName}.`);
     }
+    equal(publisher.includes('workflow_dispatch:'),true);
+    equal(publisher.includes('EXPECTED_COMMIT'),true);
+    equal(publisher.includes('test "$ACTUAL_COMMIT" = "$EXPECTED_COMMIT"'),true);
+    equal(publisher.includes('npm audit --audit-level=high'),true);
+    equal(publisher.includes('npm publish --access public'),true);
+    equal(publisher.includes('REGISTRY_GIT_HEAD'),true);
 });
 
 test('regression: modern queue runtimes do not restore WeakMap state',()=>{

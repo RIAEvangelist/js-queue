@@ -43,6 +43,61 @@ CommonJS remains supported:
 const Queue=require('js-queue');
 ```
 
+## Browser ESM: bundler or no bundler
+
+`js-queue` works with bundlers and without a bundler. Bundlers resolve the bare package imports normally. Native browser ESM uses a standard import map and runs the same JavaScript directly, with no build or transpilation step.
+
+For a normal npm layout where `easy-stack` is hoisted, place this complete import map before the module script:
+
+```html
+<script type="importmap">
+{
+  "imports": {
+    "js-queue": "./node_modules/js-queue/queue.js",
+    "js-queue/": "./node_modules/js-queue/",
+    "js-queue/stack": "./node_modules/js-queue/stack.js",
+    "js-queue/stack.js": "./node_modules/js-queue/stack.js",
+    "easy-stack": "./node_modules/easy-stack/stack.js"
+  }
+}
+</script>
+<script type="module">
+  import Queue from 'js-queue';
+  import Stack from 'js-queue/stack';
+
+  const queue=new Queue;
+  const stack=new Stack;
+</script>
+```
+
+If npm nests `easy-stack` because the application installs a conflicting root version, use this complete scoped map instead. Its scope preserves the dependency boundary that Node and bundlers apply to imports originating inside `js-queue`:
+
+```html
+<script type="importmap">
+{
+  "imports": {
+    "js-queue": "./node_modules/js-queue/queue.js",
+    "js-queue/": "./node_modules/js-queue/",
+    "js-queue/stack": "./node_modules/js-queue/stack.js",
+    "js-queue/stack.js": "./node_modules/js-queue/stack.js",
+    "easy-stack": "./node_modules/easy-stack/stack.js"
+  },
+  "scopes": {
+    "./node_modules/js-queue/": {
+      "easy-stack": "./node_modules/js-queue/node_modules/easy-stack/stack.js"
+    }
+  }
+}
+</script>
+<script type="module">
+  import Stack from 'js-queue/stack';
+
+  const stack=new Stack;
+</script>
+```
+
+Every import-map URL is relative to the HTML document. Serve the application over HTTP(S), and configure that server to expose the mapped `node_modules` files. `file://` is not a supported loading path. See the [browser guide](https://riaevangelist.github.io/js-queue/browser/) for the classic-script option and live no-bundler examples.
+
 ## The flow contract
 
 `js-queue` does not guess when a task is complete. A task releases the next item by calling `this.next()`—immediately, from a callback, or after an awaited operation.
@@ -95,7 +150,7 @@ The runtime supports Node.js 22.13 and newer. Native ESM and CommonJS both load 
 
 ## Test and coverage evidence
 
-**Tested with [vanilla-test](https://riaevangelist.github.io/vanilla-test/).** The repository has 100 focused checks organized into five non-overlapping layers: [Unit](https://riaevangelist.github.io/js-queue/testing/unit/), [Functional](https://riaevangelist.github.io/js-queue/testing/functional/), [Behavioral](https://riaevangelist.github.io/js-queue/testing/behavioral/), [Integration](https://riaevangelist.github.io/js-queue/testing/integration/), and [Regression](https://riaevangelist.github.io/js-queue/testing/regression/). Queue-facing checks run unchanged in Node and real Google Chrome.
+**Tested with [vanilla-test](https://riaevangelist.github.io/vanilla-test/).** The repository has 102 focused checks organized into five non-overlapping layers: [Unit](https://riaevangelist.github.io/js-queue/testing/unit/), [Functional](https://riaevangelist.github.io/js-queue/testing/functional/), [Behavioral](https://riaevangelist.github.io/js-queue/testing/behavioral/), [Integration](https://riaevangelist.github.io/js-queue/testing/integration/), and [Regression](https://riaevangelist.github.io/js-queue/testing/regression/). Forty-two shared checks import the package by its bare name and run unchanged in Node and real Google Chrome; Chrome resolves those imports through the checked-in import-map configuration.
 
 <a href="https://riaevangelist.github.io/vanilla-test/"><img src="./assets/vanilla-test-header.png" width="520" alt="vanilla-test — native JavaScript testing for Node.js and browsers"></a>
 
@@ -106,10 +161,11 @@ npm run test:functional
 npm run test:behavioral
 npm run test:integration
 npm run test:regression
+npm run test:consumer
 npm run coverage
 ```
 
-The 10 Unit checks isolate API facts. The 30 Functional checks cover queue workflows and Playground behavior. The 8 Behavioral checks verify complete consumer outcomes across explicit hand-offs, gates, recovery policies, stale-reference isolation, independent queues, and reprioritization. The 27 Integration checks cover interacting queue operations, package formats, benchmark evidence, stack compatibility, and local HTTP delivery. The 25 Regression checks protect validation, recovery, the no-WeakMap performance contract, documentation, artwork, and deployment wiring. Both native V8 collectors continue to enforce 100% statement, branch, function, and line coverage for the shipped ESM queue.
+The 10 Unit checks isolate API facts. The 30 Functional checks cover queue workflows and Playground behavior. The 9 Behavioral checks verify complete consumer outcomes across explicit hand-offs, gates, recovery policies, stale-reference isolation, independent queues, reprioritization, and native no-bundler loading. The 28 Integration checks cover interacting queue operations, package formats, a poisoned packed-consumer dependency conflict, benchmark evidence, stack compatibility, and local HTTP delivery. The 25 Regression checks protect validation, recovery, the no-WeakMap performance contract, import maps, documentation, artwork, and deployment wiring. Both native V8 collectors continue to enforce 100% statement, branch, function, and line coverage for the shipped ESM queue.
 
 [Node coverage report](https://riaevangelist.github.io/js-queue/reports/node/) · [Chrome coverage report](https://riaevangelist.github.io/js-queue/reports/chrome/)
 

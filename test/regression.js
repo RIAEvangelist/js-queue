@@ -1,4 +1,4 @@
-import Queue from '../queue.js';
+import Queue from 'js-queue';
 import {deepEqual,equal,test,throws} from './harness.js';
 
 test('regression: invalid add input rejects the entire batch atomically',()=>{

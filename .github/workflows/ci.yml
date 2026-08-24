@@ -158,6 +158,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit the complete dependency tree
+        run: npm audit --audit-level=high
+
+      - name: Verify packed dependency ownership under a root conflict
+        run: npm run test:consumer
+
       - name: Pack, inspect, install, and execute the artifact
         shell: bash
         run: |

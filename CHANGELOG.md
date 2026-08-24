@@ -4,9 +4,19 @@ All notable changes to `js-queue` are documented here.
 
 ## Unreleased
 
+## 3.1.1 — 2026-08-23
+
 ### Added
 
-- Eight consumer-level Behavioral scenarios, an independent `test:behavioral` command, shared Node and Chrome coverage wiring, and a dedicated published test inventory.
+- Nine consumer-level Behavioral scenarios, an independent `test:behavioral` command, shared Node and Chrome coverage wiring, and a dedicated published test inventory.
+- Native-browser acceptance evidence in real Chrome for the bare `js-queue` and `js-queue/stack` imports plus the internal bare `easy-stack` dependency.
+- A packed-consumer conflict test that poisons an incompatible root `easy-stack` and proves the declared nested `2.1.0` executes through every ESM and CommonJS stack path.
+
+### Changed
+
+- Browser documentation, examples, Playground, testing, migration, and site guidance now state that js-queue works with bundlers and without a bundler.
+- Publish the complete normal-layout and conflicting nested-dependency import maps, including the scoped mapping that preserves the package dependency boundary.
+- Deploy and statically verify the explicit import maps and all mapped JavaScript files used by the live no-bundler examples.
 
 ## 3.1.0 — 2026-08-21
 

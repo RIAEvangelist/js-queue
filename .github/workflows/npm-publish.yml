@@ -1,6 +1,16 @@
 name: Publish npm package
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Exact numeric package version to publish
+        required: true
+        type: string
+      commit:
+        description: Exact 40-character commit to publish
+        required: true
+        type: string
   release:
     types:
       - published
@@ -11,13 +21,16 @@ permissions:
 
 jobs:
   publish:
-    name: Verify and publish release
+    name: Verify and publish exact package commit
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
-      - name: Check out repository
+      - name: Check out the authorized commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.commit || github.event.release.tag_name }}
+          fetch-depth: 0
 
       - name: Set up Node.js 24
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
@@ -26,8 +39,38 @@ jobs:
           registry-url: https://registry.npmjs.org/
           package-manager-cache: false
 
+      - name: Verify exact numeric version and commit
+        id: exact
+        shell: bash
+        env:
+          EXPECTED_COMMIT: ${{ inputs.commit }}
+          EXPECTED_VERSION: ${{ inputs.version }}
+          RELEASE_NAME: ${{ github.event.release.name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          PACKAGE_VERSION="$(node --print "JSON.parse(require('node:fs').readFileSync('package.json','utf8')).version")"
+          ACTUAL_COMMIT="$(git rev-parse HEAD)"
+
+          [[ "$PACKAGE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          [[ "$ACTUAL_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+
+          if [ "$GITHUB_EVENT_NAME" = 'workflow_dispatch' ]; then
+            [[ "$EXPECTED_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+            test "$ACTUAL_COMMIT" = "$EXPECTED_COMMIT"
+            test "$PACKAGE_VERSION" = "$EXPECTED_VERSION"
+          else
+            test "$PACKAGE_VERSION" = "$RELEASE_TAG"
+            test "$PACKAGE_VERSION" = "$RELEASE_NAME"
+          fi
+
+          echo "version=$PACKAGE_VERSION" >> "$GITHUB_OUTPUT"
+          echo "commit=$ACTUAL_COMMIT" >> "$GITHUB_OUTPUT"
+
       - name: Install dependencies
         run: npm ci
+
+      - name: Audit dependency tree
+        run: npm audit --audit-level=high
 
       - name: Run full test suite
         run: npm test
@@ -38,11 +81,51 @@ jobs:
       - name: Preview packed package
         run: npm pack --dry-run
 
-      - name: Verify release tag matches package version
+      - name: Inspect immutable registry slot
+        id: registry
         shell: bash
+        env:
+          PACKAGE_COMMIT: ${{ steps.exact.outputs.commit }}
+          PACKAGE_VERSION: ${{ steps.exact.outputs.version }}
         run: |
-          PACKAGE_VERSION="$(node --print "JSON.parse(require('node:fs').readFileSync('package.json','utf8')).version")"
-          test "$GITHUB_REF_NAME" = "$PACKAGE_VERSION"
+          set +e
+          REGISTRY_VERSION="$(npm view "js-queue@$PACKAGE_VERSION" version 2>registry-error.txt)"
+          STATUS=$?
+          set -e
+
+          if [ "$STATUS" -eq 0 ]; then
+            test "$REGISTRY_VERSION" = "$PACKAGE_VERSION"
+            REGISTRY_GIT_HEAD="$(npm view "js-queue@$PACKAGE_VERSION" gitHead)"
+            test "$REGISTRY_GIT_HEAD" = "$PACKAGE_COMMIT"
+            echo 'publish=false' >> "$GITHUB_OUTPUT"
+          elif grep --quiet 'E404' registry-error.txt; then
+            echo 'publish=true' >> "$GITHUB_OUTPUT"
+          else
+            cat registry-error.txt
+            exit "$STATUS"
+          fi
 
       - name: Publish to npm with trusted publishing
+        if: steps.registry.outputs.publish == 'true'
         run: npm publish --access public
+
+      - name: Verify immutable registry artifact
+        shell: bash
+        env:
+          PACKAGE_COMMIT: ${{ steps.exact.outputs.commit }}
+          PACKAGE_VERSION: ${{ steps.exact.outputs.version }}
+        run: |
+          REGISTRY_GIT_HEAD=''
+          for ATTEMPT in 1 2 3 4 5 6 7 8 9 10 11 12
+          do
+            REGISTRY_GIT_HEAD="$(npm view "js-queue@$PACKAGE_VERSION" gitHead 2>/dev/null || true)"
+            if [ "$REGISTRY_GIT_HEAD" = "$PACKAGE_COMMIT" ]; then
+              break
+            fi
+            sleep 5
+          done
+
+          test "$REGISTRY_GIT_HEAD" = "$PACKAGE_COMMIT"
+          REGISTRY_INTEGRITY="$(npm view "js-queue@$PACKAGE_VERSION" dist.integrity)"
+          test -n "$REGISTRY_INTEGRITY"
+          echo "Verified js-queue@$PACKAGE_VERSION at $PACKAGE_COMMIT ($REGISTRY_INTEGRITY)" >> "$GITHUB_STEP_SUMMARY"

@@ -75,9 +75,16 @@ test('integration: server returns the playground page and code surface',async()=
 test('integration: server returns queue modules with JavaScript content types',async()=>{
     await withServer(async port=>{
         const queueModule=await request(port,'/queue.js');
+        const stackModule=await request(port,'/stack.js');
+        const easyStackModule=await request(port,'/node_modules/easy-stack/stack.js');
         const playgroundModule=await request(port,'/assets/playground.js');
         equal(queueModule.status,200);
         equal(queueModule.headers['content-type'],'text/javascript; charset=utf-8');
+        equal(stackModule.status,200);
+        equal(stackModule.headers['content-type'],'text/javascript; charset=utf-8');
+        equal(stackModule.body.includes(Buffer.from("import Stack from 'easy-stack';")),true);
+        equal(easyStackModule.status,200);
+        equal(easyStackModule.headers['content-type'],'text/javascript; charset=utf-8');
         equal(playgroundModule.status,200);
         equal(playgroundModule.headers['content-type'],'text/javascript; charset=utf-8');
         equal(playgroundModule.body.includes(Buffer.from('function createPlayground()')),true);
