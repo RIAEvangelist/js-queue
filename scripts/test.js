@@ -6,6 +6,7 @@ const suites={
     all:[['test/node.js'],['test/playground.js'],['test/package.js'],['test/server.js'],['test/docs.js']],
     unit:[['test/node.js','unit']],
     functional:[['test/node.js','functional'],['test/playground.js']],
+    behavioral:[['test/node.js','behavioral']],
     integration:[['test/node.js','integration'],['test/package.js'],['test/server.js']],
     regression:[['test/node.js','regression'],['test/docs.js']],
     core:[['test/node.js']],

@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="Explore js-queue's 92 focused vanilla-test checks across Unit, Functional, Integration, and Regression layers.">
+    <meta name="description" content="Explore js-queue's 100 focused vanilla-test checks across Unit, Functional, Behavioral, Integration, and Regression layers.">
     <meta name="theme-color" content="#020817">
     <meta property="og:title" content="Testing and coverage · js-queue">
-    <meta property="og:description" content="92 focused vanilla-test checks across Unit, Functional, Integration, and Regression layers.">
+    <meta property="og:description" content="100 focused vanilla-test checks across Unit, Functional, Behavioral, Integration, and Regression layers.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://riaevangelist.github.io/js-queue/testing/">
     <meta property="og:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Testing and coverage · js-queue">
-    <meta name="twitter:description" content="92 focused vanilla-test checks across Unit, Functional, Integration, and Regression layers.">
+    <meta name="twitter:description" content="100 focused vanilla-test checks across Unit, Functional, Behavioral, Integration, and Regression layers.">
     <meta name="twitter:image" content="https://riaevangelist.github.io/js-queue/assets/js-queue-header.png">
     <link rel="canonical" href="https://riaevangelist.github.io/js-queue/testing/">
     <link rel="stylesheet" href="../assets/site.css">
@@ -27,8 +27,8 @@
         <header id="testing" class="page-hero shell">
             <ol class="crumbs" aria-label="Breadcrumb"><li><a href="../">Docs</a></li><li>Testing</li></ol>
             <p class="eyebrow">Small checks · clear ownership</p>
-            <h1>Four layers. <span>Ninety checks.</span></h1>
-            <p class="lede"><code>vanilla-test</code> 2.1.1 runs focused Unit, Functional, Integration, and Regression checks. No duplicated cases. The queue-facing layers run unchanged in Node and real Google Chrome.</p>
+            <h1>Five layers. <span>One hundred checks.</span></h1>
+            <p class="lede"><code>vanilla-test</code> 2.1.1 runs focused Unit, Functional, Behavioral, Integration, and Regression checks. No duplicated cases. The queue-facing layers run unchanged in Node and real Google Chrome.</p>
             <aside class="testing-brand" aria-label="Testing framework">
                 <a class="testing-brand__art" href="https://riaevangelist.github.io/vanilla-test/" aria-label="Open the vanilla-test documentation"><img src="../assets/vanilla-test-header.png" width="1983" height="793" alt="vanilla-test — native JavaScript testing for Node.js and browsers"></a>
                 <div class="testing-brand__copy"><p class="eyebrow">Repository standard</p><p><strong>Tested with vanilla-test.</strong> Web-standard JavaScript runs unchanged in Node and a real browser, with native V8 coverage from both.</p></div>
@@ -37,16 +37,18 @@
 
         <section id="suites" class="section">
             <div class="shell">
-                <div class="section-heading"><div><p class="eyebrow">92 focused checks</p><h2>Four independent layers.</h2></div><p>Each check owns one behavior or boundary. Open a layer to see every named case without turning this overview into a long test log.</p></div>
+                <div class="section-heading"><div><p class="eyebrow">100 focused checks</p><h2>Five independent layers.</h2></div><p>Each check owns one behavior or boundary. Open a layer to see every named case without turning this overview into a long test log.</p></div>
                 <div class="grid grid--two">
                     <a class="card card-link" href="./unit/"><span class="card__label">10 Unit</span><h3>One API fact at a time</h3><p>Exports, defaults, isolated storage, return values, task references, size, and contents replacement.</p><small>See all 10 checks →</small></a>
                     <a class="card card-link" href="./functional/"><span class="card__label">30 Functional</span><h3>Observable queue workflows</h3><p>FIFO flow, manual release, stop gates, task context, Playground controls, validation, state, trace, and related code.</p><small>See all 30 checks →</small></a>
+                    <a class="card card-link" href="./behavioral/"><span class="card__label">8 Behavioral</span><h3>Complete consumer outcomes</h3><p>Serialized ownership, dependency gates, producer rejection, stale-reference-safe clearing, recovery, explicit release, independent queues, and reprioritization.</p><small>See all 8 checks →</small></a>
                     <a class="card card-link" href="./integration/"><span class="card__label">27 Integration</span><h3>Boundaries working together</h3><p>Active-task interactions, asynchronous release, ESM, CommonJS, stack, browser global, metadata, benchmark evidence, local HTTP, and media types.</p><small>See all 27 checks →</small></a>
                     <a class="card card-link" href="./regression/"><span class="card__label">25 Regression</span><h3>Failures that stay fixed</h3><p>Atomic validation, thrown-task recovery, the no-WeakMap runtime contract, documentation links, local assets, testing attribution, and deployment gates.</p><small>See all 25 checks →</small></a>
                 </div>
                 <div class="code-block"><pre><code>npm test
 npm run test:unit
 npm run test:functional
+npm run test:behavioral
 npm run test:integration
 npm run test:regression
 npm run test:core

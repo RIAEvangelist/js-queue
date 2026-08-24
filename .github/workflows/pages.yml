@@ -72,6 +72,7 @@ jobs:
             _site/testing \
             _site/testing/unit \
             _site/testing/functional \
+            _site/testing/behavioral \
             _site/testing/integration \
             _site/testing/regression \
             _site/assets \
@@ -92,6 +93,7 @@ jobs:
           cp testing/index.html _site/testing/
           cp testing/unit/index.html _site/testing/unit/
           cp testing/functional/index.html _site/testing/functional/
+          cp testing/behavioral/index.html _site/testing/behavioral/
           cp testing/integration/index.html _site/testing/integration/
           cp testing/regression/index.html _site/testing/regression/
           cp assets/site.css assets/site.js assets/playground.js assets/js-queue-header.png assets/vanilla-test-header.png assets/benchmark-construct.svg assets/benchmark-tasks.svg _site/assets/
@@ -114,6 +116,7 @@ jobs:
             _site/testing/index.html \
             _site/testing/unit/index.html \
             _site/testing/functional/index.html \
+            _site/testing/behavioral/index.html \
             _site/testing/integration/index.html \
             _site/testing/regression/index.html \
             _site/assets/js-queue-header.png \

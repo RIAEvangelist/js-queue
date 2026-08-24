@@ -16,6 +16,7 @@ const pageNames=[
     'testing/index.html',
     'testing/unit/index.html',
     'testing/functional/index.html',
+    'testing/behavioral/index.html',
     'testing/integration/index.html',
     'testing/regression/index.html'
 ];
@@ -78,11 +79,11 @@ function targetExists(pageName,target){
     return fs.readFileSync(resolved,'utf8').includes(`id="${decodeURIComponent(fragment)}"`);
 }
 
-test('regression: documentation remains split into fifteen focused pages',()=>{
+test('regression: documentation remains split into sixteen focused pages',()=>{
     const missing=pageNames.filter(name=>!fs.existsSync(new URL(name,root)));
     deepEqual(missing,[]);
-    equal(pageNames.length,15);
-    equal(read('index.html').includes('<strong>15</strong><span>focused documentation pages</span>'),true);
+    equal(pageNames.length,16);
+    equal(read('index.html').includes('<strong>16</strong><span>focused documentation pages</span>'),true);
 });
 
 test('regression: documentation pages retain their required short contracts',()=>{
@@ -100,6 +101,7 @@ test('regression: documentation pages retain their required short contracts',()=
         'testing/index.html':['testing','suites','coverage','ci'],
         'testing/unit/index.html':['unit','cases','run'],
         'testing/functional/index.html':['functional','cases','run'],
+        'testing/behavioral/index.html':['behavioral','cases','run'],
         'testing/integration/index.html':['integration','cases','run'],
         'testing/regression/index.html':['regression','cases','run']
     };
@@ -191,11 +193,12 @@ test('regression: repository and site visibly credit vanilla-test',()=>{
     equal(testingPage.includes('../assets/vanilla-test-header.png'),true);
 });
 
-test('regression: Testing page publishes all four non-overlapping layers',()=>{
+test('regression: Testing page publishes all five non-overlapping layers',()=>{
     const testingPage=read('testing/index.html');
-    equal(testingPage.includes('92 focused checks'),true);
+    equal(testingPage.includes('100 focused checks'),true);
     equal(testingPage.includes('10 Unit'),true);
     equal(testingPage.includes('30 Functional'),true);
+    equal(testingPage.includes('8 Behavioral'),true);
     equal(testingPage.includes('27 Integration'),true);
     equal(testingPage.includes('25 Regression'),true);
     equal(testingPage.includes('No duplicated cases.'),true);
@@ -203,6 +206,7 @@ test('regression: Testing page publishes all four non-overlapping layers',()=>{
     const layers={
         unit:{count:10,files:['test/unit.js'],page:'testing/unit/index.html'},
         functional:{count:30,files:['test/functional.js','test/playground.js'],page:'testing/functional/index.html'},
+        behavioral:{count:8,files:['test/behavioral.js'],page:'testing/behavioral/index.html'},
         integration:{count:27,files:['test/integration.js','test/package.js','test/server.js'],page:'testing/integration/index.html'},
         regression:{count:25,files:['test/regression.js','test/docs.js'],page:'testing/regression/index.html'}
     };
@@ -218,8 +222,8 @@ test('regression: Testing page publishes all four non-overlapping layers',()=>{
         }
     }
 
-    equal(allNames.length,92);
-    equal(new Set(allNames).size,92,'Test inventory contains duplicate names.');
+    equal(allNames.length,100);
+    equal(new Set(allNames).size,100,'Test inventory contains duplicate names.');
 });
 
 test('regression: package scripts expose every test layer independently',()=>{
@@ -228,6 +232,7 @@ test('regression: package scripts expose every test layer independently',()=>{
     const scripts={
         'test:unit':'node ./scripts/test.js unit',
         'test:functional':'node ./scripts/test.js functional',
+        'test:behavioral':'node ./scripts/test.js behavioral',
         'test:integration':'node ./scripts/test.js integration',
         'test:regression':'node ./scripts/test.js regression'
     };
@@ -235,7 +240,7 @@ test('regression: package scripts expose every test layer independently',()=>{
         equal(packageData.scripts[name],command);
         equal(runner.includes(name.split(':')[1]),true);
     }
-    for(const file of ['test/unit.js','test/functional.js','test/integration.js','test/regression.js']){
+    for(const file of ['test/unit.js','test/functional.js','test/behavioral.js','test/integration.js','test/regression.js']){
         equal(fs.existsSync(new URL(file,root)),true,`${file} is missing.`);
     }
 });
@@ -248,7 +253,7 @@ test('regression: vanilla-test and native coverage load every core layer',()=>{
     equal(packageData.scripts.coverage,'vanilla-test coverage');
     equal(config.entry,'./test/CI.js');
     equal(read('test/harness.js').includes("import('vanilla-test')"),true);
-    for(const layer of ['unit','functional','integration','regression']){
+    for(const layer of ['unit','functional','behavioral','integration','regression']){
         equal(sharedEntry.includes(`import './${layer}.js';`),true,`Coverage entry omits ${layer}.`);
     }
 });
@@ -282,7 +287,7 @@ test('regression: CI and Pages retain all delivery gates and curated assets',()=
     equal(pages.includes('_site/benchmarks/results.json'),true);
     equal(pages.includes('_site/reports/node/index.html'),true);
     equal(pages.includes('_site/reports/chrome/index.html'),true);
-    for(const layer of ['unit','functional','integration','regression']){
+    for(const layer of ['unit','functional','behavioral','integration','regression']){
         equal(pages.includes(`_site/testing/${layer}/index.html`),true,`Pages workflow omits testing/${layer}.`);
     }
     for(const pageName of pageNames){

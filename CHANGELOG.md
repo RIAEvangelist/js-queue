@@ -4,6 +4,10 @@ All notable changes to `js-queue` are documented here.
 
 ## Unreleased
 
+### Added
+
+- Eight consumer-level Behavioral scenarios, an independent `test:behavioral` command, shared Node and Chrome coverage wiring, and a dedicated published test inventory.
+
 ## 3.1.0 — 2026-08-21
 
 ### Added

@@ -2,6 +2,7 @@ const selection=process.argv[2] || 'all';
 const files={
     unit:'./unit.js',
     functional:'./functional.js',
+    behavioral:'./behavioral.js',
     integration:'./integration.js',
     regression:'./regression.js'
 };

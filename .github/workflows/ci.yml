@@ -42,7 +42,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run behavior, package, and documentation tests
+      - name: Run unit, functional, behavioral, integration, regression, package, and documentation tests
         run: npm test
 
   runtime-floor:

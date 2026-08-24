@@ -95,7 +95,7 @@ The runtime supports Node.js 22.13 and newer. Native ESM and CommonJS both load 
 
 ## Test and coverage evidence
 
-**Tested with [vanilla-test](https://riaevangelist.github.io/vanilla-test/).** The repository has 92 focused checks organized into four non-overlapping layers: [Unit](https://riaevangelist.github.io/js-queue/testing/unit/), [Functional](https://riaevangelist.github.io/js-queue/testing/functional/), [Integration](https://riaevangelist.github.io/js-queue/testing/integration/), and [Regression](https://riaevangelist.github.io/js-queue/testing/regression/). Queue-facing checks run unchanged in Node and real Google Chrome.
+**Tested with [vanilla-test](https://riaevangelist.github.io/vanilla-test/).** The repository has 100 focused checks organized into five non-overlapping layers: [Unit](https://riaevangelist.github.io/js-queue/testing/unit/), [Functional](https://riaevangelist.github.io/js-queue/testing/functional/), [Behavioral](https://riaevangelist.github.io/js-queue/testing/behavioral/), [Integration](https://riaevangelist.github.io/js-queue/testing/integration/), and [Regression](https://riaevangelist.github.io/js-queue/testing/regression/). Queue-facing checks run unchanged in Node and real Google Chrome.
 
 <a href="https://riaevangelist.github.io/vanilla-test/"><img src="./assets/vanilla-test-header.png" width="520" alt="vanilla-test — native JavaScript testing for Node.js and browsers"></a>
 
@@ -103,12 +103,13 @@ The runtime supports Node.js 22.13 and newer. Native ESM and CommonJS both load 
 npm test
 npm run test:unit
 npm run test:functional
+npm run test:behavioral
 npm run test:integration
 npm run test:regression
 npm run coverage
 ```
 
-The 10 Unit checks isolate API facts. The 30 Functional checks cover queue workflows and Playground behavior. The 27 Integration checks cover interacting queue operations, package formats, benchmark evidence, stack compatibility, and local HTTP delivery. The 25 Regression checks protect validation, recovery, the no-WeakMap performance contract, documentation, artwork, and deployment wiring. Both native V8 collectors continue to enforce 100% statement, branch, function, and line coverage for the shipped ESM queue.
+The 10 Unit checks isolate API facts. The 30 Functional checks cover queue workflows and Playground behavior. The 8 Behavioral checks verify complete consumer outcomes across explicit hand-offs, gates, recovery policies, stale-reference isolation, independent queues, and reprioritization. The 27 Integration checks cover interacting queue operations, package formats, benchmark evidence, stack compatibility, and local HTTP delivery. The 25 Regression checks protect validation, recovery, the no-WeakMap performance contract, documentation, artwork, and deployment wiring. Both native V8 collectors continue to enforce 100% statement, branch, function, and line coverage for the shipped ESM queue.
 
 [Node coverage report](https://riaevangelist.github.io/js-queue/reports/node/) · [Chrome coverage report](https://riaevangelist.github.io/js-queue/reports/chrome/)
 
